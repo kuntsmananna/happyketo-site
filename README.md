@@ -11,11 +11,12 @@ Static rebuild of the Happy Keto Wix site: **Astro 7 + Tailwind CSS 4**, Hebrew 
 | `npm run build` | Static build → `dist/` and `.vercel/output/` |
 | `npm run preview` | Preview the production build |
 | `npm run check` | Type-check `.astro`/TS files and content schemas |
-| `npm run scrape` | (stage 2) Import posts + images from the Wix site into `src/content/` |
+| `npm run scrape` | Import posts + images from the Wix site into `src/content/` (`--force` overwrites, `--refresh` refetches, `--only=<slug>`) |
+| `npm run scrape:verify` | Check that no text of the original posts was lost |
 
 ## Environment
 
-Copy `.env.example` → `.env` and set `PUBLIC_WEB3FORMS_KEY` (get one free at web3forms.com with the email that should receive form submissions). Set the same variable in the Vercel project settings.
+Forms use Web3Forms. The (public) access key lives in `src/data/site.ts`; `PUBLIC_WEB3FORMS_KEY` in `.env` or Vercel overrides it.
 
 ## Structure
 
@@ -24,19 +25,20 @@ src/
   content.config.ts     content collections: recipes, blog
   content/recipes/      one .md per recipe (frontmatter: title, description, category[], prepTime, ingredients[], instructions[], image…)
   content/blog/         articles
-  assets/recipes/       images (optimized at build time)
+  assets/posts/         post images (optimized at build time)
   data/                 site.ts (contact, nav), categories.ts, faq.ts
   layouts/              BaseLayout.astro (lang="he" dir="rtl", SEO meta)
   components/           UI components
   pages/                routes
   styles/global.css     Tailwind + design tokens
-scripts/scrape/         Wix → Markdown migration script
+scripts/scrape/         Wix → Markdown migration (see docs/migration-report.md)
+public/videos/          looping MP4s (converted GIFs) and post videos
 ```
 
 ## Roadmap
 
 1. ✅ Project setup (Astro, Tailwind, Vercel adapter, content schema, design tokens)
-2. Scraper: migrate ~130 Wix posts + images
+2. ✅ Scraper: 127 Wix posts + 162 images migrated ([report](docs/migration-report.md))
 3. UI components (Header, Hero, Services, FAQ, Footer, RecipeCard, RecipeFilter)
 4. Homepage + recipe/blog/challenge/contact pages, Recipe JSON-LD
 5. `vercel.json` (headers, 301 redirects from old Wix URLs), deploy, DNS for happyketoforme.com

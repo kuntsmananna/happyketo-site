@@ -5,7 +5,7 @@
  * and for 301 redirects. `wixPage` is the old Wix landing page for that category.
  */
 export const recipeCategories = [
-  { slug: 'paleo', label: 'פליאו', wix: [], wixPage: '/paleo-recipes' },
+  { slug: 'paleo', label: 'פליאו', wix: ['low-carb'], wixPage: '/paleo-recipes' },
   { slug: 'pastry', label: 'מאפים', wix: ['מאפים'], wixPage: '/pastry-recipes' },
   { slug: 'meat', label: 'בשר', wix: ['בשר'], wixPage: '/meat-recipes' },
   { slug: 'fish', label: 'דגים', wix: ['דגים'], wixPage: '/fish-recipes' },

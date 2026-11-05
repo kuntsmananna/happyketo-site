@@ -27,8 +27,13 @@ const recipes = defineCollection({
       prepTime: z.number().int().positive().optional(),
       cookTime: z.number().int().positive().optional(),
       servings: z.string().optional(),
-      ingredients: z.array(z.string()).default([]),
-      instructions: z.array(z.string()).default([]),
+      /** Grouped so sub-sections ("לרוטב", "יבשים"/"רטובים") survive; title is omitted for a single plain group. */
+      ingredients: z
+        .array(z.object({ title: z.string().optional(), items: z.array(z.string()).min(1) }))
+        .default([]),
+      instructions: z
+        .array(z.object({ title: z.string().optional(), steps: z.array(z.string()).min(1) }))
+        .default([]),
     }),
 });
 

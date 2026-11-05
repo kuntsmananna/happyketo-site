@@ -17,6 +17,15 @@ export const site = {
   healthDisclaimer: 'אתר זה הוא למידע בלבד ואין לראות בו ייעוץ רפואי.',
 } as const;
 
+/**
+ * Web3Forms (https://web3forms.com). The access key is public by design (it is sent
+ * from the browser), so it is safe to commit. PUBLIC_WEB3FORMS_KEY overrides it.
+ */
+export const forms = {
+  endpoint: 'https://api.web3forms.com/submit',
+  accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'cd1ca8aa-feae-486b-816e-7182af47e400',
+} as const;
+
 export type NavItem = { label: string; href: string; children?: NavItem[] };
 
 /** Mirrors the original Wix menu. */
