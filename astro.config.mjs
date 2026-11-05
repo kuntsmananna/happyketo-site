@@ -17,7 +17,7 @@ export default defineConfig({
     webAnalytics: { enabled: true },
   }),
 
-  integrations: [sitemap()],
+  integrations: [sitemap({ filter: (page) => !/\/thanks\/?$/.test(page) })],
 
   image: {
     // Allows optimizing remote Wix images during migration; local assets are preferred.
