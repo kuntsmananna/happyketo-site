@@ -25,7 +25,7 @@ const imageFor = (slug: string) => images[`/src/assets/favorites/${slug}.webp`]?
         favoriteGroups.map((g) => (
           <a
             href={`#${g.id}`}
-            class="rounded-full border border-olive-200 bg-white px-4 py-2 text-sm font-medium text-cocoa-800 transition-colors hover:border-olive-400"
+            class="inline-flex min-h-11 items-center rounded-full border border-olive-200 bg-white px-4 py-2 text-sm font-medium text-cocoa-800 transition-colors hover:border-olive-400"
           >
             {g.title}
           </a>
@@ -34,7 +34,7 @@ const imageFor = (slug: string) => images[`/src/assets/favorites/${slug}.webp`]?
     </nav>
   </PageHero>
 
-  <div class="container-page py-10 sm:py-14">
+  <div class="container-page section-y-sm">
     <p class="mb-10 rounded-[var(--radius-card)] bg-cream-100 p-4 text-sm leading-relaxed text-cocoa-700">
       <strong class="font-medium">גילוי נאות:</strong> הקישורים לחנות הם קישורי שותפים. אם תרכשו דרכם, ייתכן שאקבל עמלה קטנה – ללא
       עלות נוספת עבורכם. אני ממליצה רק על מוצרים שאני משתמשת בהם בעצמי.
@@ -46,7 +46,7 @@ const imageFor = (slug: string) => images[`/src/assets/favorites/${slug}.webp`]?
         return (
           <section id={group.id} class="mb-14 scroll-mt-28" aria-labelledby={`${group.id}-title`}>
             <div class="mb-6">
-              <h2 id={`${group.id}-title`} class="text-3xl">{group.title}</h2>
+              <h2 id={`${group.id}-title`} class="h-section">{group.title}</h2>
               <p class="mt-1 text-cocoa-600">{group.intro}</p>
             </div>
             <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -84,7 +84,7 @@ const imageFor = (slug: string) => images[`/src/assets/favorites/${slug}.webp`]?
                         </p>
                       </details>
                       <div class="mt-auto pt-4">
-                        <a href={item.href} target="_blank" rel="sponsored noopener" class="btn-primary py-2 text-sm">
+                        <a href={item.href} target="_blank" rel="sponsored noopener" class="btn-primary btn-sm">
                           לרכישה ב-iHerb
                           <Icon name="arrow" size={16} />
                         </a>

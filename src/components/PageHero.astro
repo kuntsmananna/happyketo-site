@@ -15,11 +15,11 @@ const { title, eyebrow, intro, breadcrumbs, tone = 'sage' } = Astro.props;
 
 <section class:list={['relative overflow-hidden', tone === 'sage' ? 'bg-sage-50' : 'bg-cream-100']}>
   <div aria-hidden="true" class="pointer-events-none absolute -end-24 -top-24 size-72 rounded-full bg-olive-100/50 blur-3xl"></div>
-  <div class="container-page relative py-10 sm:py-14">
+  <div class="container-page relative section-y-sm">
     {breadcrumbs && <div class="mb-6"><Breadcrumbs items={breadcrumbs} /></div>}
-    {eyebrow && <p class="mb-2 font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">{eyebrow}</span></p>}
-    <h1 class="max-w-3xl text-4xl leading-tight sm:text-5xl">{title}</h1>
-    {intro && <p class="mt-4 max-w-2xl text-lg leading-relaxed text-cocoa-700">{intro}</p>}
+    {eyebrow && <p class="eyebrow"><span dir="ltr">{eyebrow}</span></p>}
+    <h1 class="h-display max-w-3xl">{title}</h1>
+    {intro && <p class="lead mt-4 max-w-2xl">{intro}</p>}
     <slot />
   </div>
 </section>

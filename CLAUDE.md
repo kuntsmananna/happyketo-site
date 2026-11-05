@@ -12,7 +12,15 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 ## Conventions
 - All user-facing copy is **Hebrew**; `<html lang="he" dir="rtl">` is set in `BaseLayout.astro`.
 - Use **logical** Tailwind utilities (`ps-/pe-/ms-/me-/start-/end-/text-start`), never `pl-/pr-/left-/right-`.
-- Colors: `olive-*`, `sage-*`, `cream-*`, `cocoa-*` tokens only. Shared utilities: `container-page`, `btn-primary`, `btn-secondary`, `card`.
+- Colors: `olive-*`, `sage-*`, `cream-*`, `cocoa-*` tokens only (cocoa-500 is the lightest brown allowed for text: ≥ 4.5:1).
+- Design system utilities in `src/styles/global.css` – use them instead of ad-hoc sizes:
+  - Type: `h-display` (page h1), `h-section` (h2), `h-card` (h3), `lead` (intro paragraph), `eyebrow` (Latin label; wrap the text in `<span dir="ltr">`).
+  - Spacing: `section-y` / `section-y-sm`; layout: `container-page`.
+  - Buttons: `btn-primary`, `btn-secondary`, `btn-sm` (all ≥ 44px tall). Surfaces: `card`, `card-interactive`.
+  - Forms: `input-field` (+ `input-pill` for single-line pill inputs), `field-label`; errors show via `:user-invalid`.
+- Images: give `<Image>` the displayed aspect via `width`/`height` + `fit="cover"` and realistic `sizes`, so generated files are cropped to what is shown. Images are optimized at build time (adapter `imageService: false`).
+- Font: Rubik is self-hosted from `@fontsource-variable/rubik` via Astro's fonts API (local provider, Hebrew + Latin faces); don't add Google Fonts links.
+- Hebrew next to an LTR inline element (phone, email) across a line break loses its space in compressed HTML: add `{' '}` explicitly.
 - Import alias `@/` → `src/`.
 - Site constants (phone, email, nav, social) live in `src/data/site.ts`; recipe categories (+ Wix slug mapping) in `src/data/categories.ts`; FAQ text in `src/data/faq.ts`. Don't hardcode these in components.
 - Recipe URLs keep the original Hebrew Wix slugs: `/post/<slug>` → `/recipes/<slug>` or `/blog/<slug>` (301 in `vercel.json`).

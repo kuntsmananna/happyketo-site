@@ -50,14 +50,14 @@ const related = all
             </ul>
           )
         }
-        <h1 class="text-4xl leading-tight sm:text-5xl">{title}</h1>
+        <h1 class="h-display">{title}</h1>
         <p class="mt-4 text-sm text-cocoa-600">
           אנה קונצמן רוזנברג · <time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time>
         </p>
       </div>
     </header>
 
-    <div class="container-page max-w-4xl py-10 sm:py-14">
+    <div class="container-page max-w-4xl section-y-sm">
       {
         image && (
           <Image
@@ -88,9 +88,9 @@ const related = all
     </div>
   </article>
 
-  <section class="bg-cream-100 py-14" aria-labelledby="related-title">
+  <section class="bg-cream-100 section-y-sm" aria-labelledby="related-title">
     <div class="container-page">
-      <h2 id="related-title" class="mb-8 text-3xl">עוד מהבלוג</h2>
+      <h2 id="related-title" class="mb-8 h-section">עוד מהבלוג</h2>
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {related.map((p) => <PostCard post={p} />)}
       </div>

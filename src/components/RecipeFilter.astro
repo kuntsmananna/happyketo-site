@@ -32,7 +32,7 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
       id="recipe-search"
       type="search"
       placeholder="חיפוש מתכון… (למשל: עוגה, סלמון, לחם)"
-      class="input-field w-full bg-white ps-11"
+      class="input-field input-pill w-full ps-11"
       data-filter-search
     />
   </div>
@@ -46,10 +46,10 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
               href={c.href}
               data-filter-category={c.slug}
               aria-current={c.slug === active ? 'page' : undefined}
-              class="inline-flex items-center gap-1.5 rounded-full border border-olive-200 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-cocoa-800 transition-colors hover:border-olive-400 aria-[current]:border-olive-600 aria-[current]:bg-olive-600 aria-[current]:text-cream-50"
+              class="group inline-flex min-h-11 items-center gap-1.5 rounded-full border border-olive-200 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-cocoa-800 transition-colors hover:border-olive-400 aria-[current]:border-olive-600 aria-[current]:bg-olive-600 aria-[current]:text-cream-50"
             >
               {c.label}
-              <span class="text-xs opacity-70">{c.count}</span>
+              <span class="text-xs text-cocoa-500 group-aria-[current]:text-cream-100">{c.count}</span>
             </a>
           </li>
         ))

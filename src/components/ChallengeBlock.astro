@@ -1,26 +1,32 @@
 ---
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
+import Perks from './Perks.astro';
 import tacos from '@/assets/home/challenge-lettuce-tacos.jpg';
 import salmon from '@/assets/home/challenge-salmon.jpg';
 
-const perks = ['קיטו צעד אחרי צעד', 'מתאים לחיים האמיתיים', 'לא סופרים קלוריות'];
 ---
 
-<section class="py-16 sm:py-24" aria-labelledby="challenge-title">
+<section class="section-y" aria-labelledby="challenge-title">
   <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
     <div class="relative order-2 mx-auto grid w-full max-w-lg grid-cols-2 gap-4 lg:order-1">
       <Image
         src={tacos}
         alt="טאקו בעלי חסה במילוי עוף ואבוקדו"
-        widths={[320, 480, 640]}
+        width={600}
+        height={800}
+        fit="cover"
+        widths={[240, 360, 480, 600]}
         sizes="(min-width: 1024px) 16rem, 45vw"
         class="aspect-[3/4] w-full rounded-[var(--radius-card)] object-cover shadow-[var(--shadow-card)]"
       />
       <Image
         src={salmon}
         alt="סלמון ברוטב קארי וקוקוס במחבת"
-        widths={[320, 480, 640]}
+        width={600}
+        height={800}
+        fit="cover"
+        widths={[240, 360, 480, 600]}
         sizes="(min-width: 1024px) 16rem, 45vw"
         class="mt-12 aspect-[3/4] w-full rounded-[var(--radius-card)] object-cover shadow-[var(--shadow-card)]"
       />
@@ -30,27 +36,16 @@ const perks = ['קיטו צעד אחרי צעד', 'מתאים לחיים האמ�
     </div>
 
     <div class="order-1 lg:order-2">
-      <p class="mb-2 font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">Going Keto</span></p>
-      <h2 id="challenge-title" class="text-3xl sm:text-4xl">אתגר 4 שבועות</h2>
-      <p class="mt-5 text-lg leading-relaxed text-cocoa-700">
+      <p class="eyebrow"><span dir="ltr">Going Keto</span></p>
+      <h2 id="challenge-title" class="h-section">אתגר 4 שבועות</h2>
+      <p class="lead mt-5">
         מעבר לתזונה קטוגנית בשיטה הדרגתית וטעימה (לא תאמינו עד כמה), אפשרית וקלה להתמדה לסופרמן וסופרוומן המג׳נגלים
         בין עבודה, משפחה, חוגים, נסיעות, חופשות, מסעדות, סופי שבוע, אירוח… או בקיצור… החיים.
       </p>
       <p class="mt-4 text-lg leading-relaxed text-cocoa-700">
         עם הנחיות פשוטות שאפשר לשלב ולתרגל ביום יום העמוס. אהה, ולא סופרים קלוריות!
       </p>
-      <ul class="mt-6 grid gap-3 sm:grid-cols-3">
-        {
-          perks.map((p) => (
-            <li class="flex items-center gap-2 rounded-2xl bg-sage-50 px-4 py-3 font-medium text-olive-800">
-              <span class="grid size-7 place-items-center rounded-full bg-olive-600 text-cream-50">
-                <Icon name="check" size={16} />
-              </span>
-              {p}
-            </li>
-          ))
-        }
-      </ul>
+      <Perks class="mt-6" />
       <a href="/challenge" class="btn-primary mt-8 px-8 text-lg">
         לפרטים והרשמה
         <Icon name="arrow" size={20} />

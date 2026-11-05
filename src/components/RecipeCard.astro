@@ -17,7 +17,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 <article
-  class="card group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_16px_40px_-12px_rgb(58_42_32/0.28)]"
+  class="card card-interactive group relative flex flex-col overflow-hidden [contain-intrinsic-size:auto_26rem] [content-visibility:auto]"
   data-recipe-card
   data-categories={category.join(' ')}
   data-search={`${title} ${description}`}
@@ -28,7 +28,10 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
         <Image
           src={image}
           alt=""
-          widths={[320, 480, 640, 800]}
+          width={900}
+          height={675}
+          fit="cover"
+          widths={[360, 480, 640, 720, 900]}
           sizes="(min-width: 1280px) 22rem, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
           class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
           loading={eager ? 'eager' : 'lazy'}
@@ -57,7 +60,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
         ))
       }
     </ul>
-    <Heading class="text-lg leading-snug">
+    <Heading class="text-lg leading-snug font-bold">
       <a href={recipeUrl(recipe)} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
         {title}
       </a>

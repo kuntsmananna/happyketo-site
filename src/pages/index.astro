@@ -19,12 +19,12 @@ const latest = (await getRecipes()).filter((r) => r.data.image).slice(0, 6);
   <AboutBlock />
   <ServiceCards />
 
-  <section class="bg-cream-100 py-16 sm:py-24" aria-labelledby="latest-title">
+  <section class="bg-cream-100 section-y" aria-labelledby="latest-title">
     <div class="container-page">
       <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p class="mb-1 font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">Tasty Keto</span></p>
-          <h2 id="latest-title" class="text-3xl sm:text-4xl">מתכונים חדשים מהמטבח</h2>
+          <p class="eyebrow"><span dir="ltr">Tasty Keto</span></p>
+          <h2 id="latest-title" class="h-section">מתכונים חדשים מהמטבח</h2>
         </div>
         <a href="/recipes" class="inline-flex items-center gap-1.5 font-medium text-olive-700 hover:text-olive-900">
           לכל המתכונים

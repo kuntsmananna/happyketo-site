@@ -13,7 +13,7 @@ interface Props {
 const { recipes, all, active } = Astro.props;
 ---
 
-<section class="container-page py-10 sm:py-14">
+<section class="container-page section-y-sm">
   <RecipeFilter target="recipe-list" counts={countByCategory(all)} total={all.length} active={active} />
   <div id="recipe-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
     {recipes.map((recipe, i) => <RecipeCard recipe={recipe} eager={i < 3} headingLevel={2} />)}

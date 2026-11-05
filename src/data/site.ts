@@ -26,12 +26,13 @@ export const forms = {
   accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'cd1ca8aa-feae-486b-816e-7182af47e400',
 } as const;
 
-export type NavItem = { label: string; href: string; children?: NavItem[] };
+/** `cta`: shown as the header's call-to-action button instead of a plain link. */
+export type NavItem = { label: string; href: string; cta?: boolean; children?: NavItem[] };
 
 /** Mirrors the original Wix menu. */
 export const nav: NavItem[] = [
   { label: 'עמוד הבית', href: '/' },
-  { label: 'אתגר קיטו', href: '/challenge' },
+  { label: 'אתגר קיטו', href: '/challenge', cta: true },
   {
     label: 'מתכונים',
     href: '/recipes',

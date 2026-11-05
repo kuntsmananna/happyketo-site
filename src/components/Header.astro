@@ -7,9 +7,16 @@ import logo from '@/assets/brand/sticker-happy-keto.png';
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === href;
 const isSection = (href: string) => href !== '/' && (path === href || path.startsWith(href + '/'));
+const active = (href: string) => isCurrent(href) || isSection(href);
+const cta = nav.find((i) => i.cta);
+const linkBase = 'rounded-full transition-colors hover:bg-olive-50 hover:text-olive-700';
+const linkActive = 'bg-olive-50 font-medium text-olive-800';
 ---
 
-<header class="sticky top-0 z-40 print:hidden border-b border-olive-100/80 bg-cream-50/90 backdrop-blur-md">
+<header
+  class="sticky top-0 z-40 border-b border-olive-100/80 bg-cream-50/90 backdrop-blur-md transition-shadow duration-300 data-[scrolled]:shadow-[0_6px_24px_-12px_rgb(58_42_32/0.25)] print:hidden"
+  data-site-header
+>
   <div class="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
     <a href="/" class="flex items-center gap-2.5 rounded-full" aria-label={`${site.name} – לעמוד הבית`}>
       <Image src={logo} alt="" width={48} height={55} class="size-10 object-contain lg:size-12" loading="eager" />
@@ -18,25 +25,22 @@ const isSection = (href: string) => href !== '/' && (path === href || path.start
 
     <!-- Desktop navigation -->
     <nav aria-label="ניווט ראשי" class="hidden lg:block">
-      <ul class="flex items-center gap-0.5 text-[0.95rem]">
+      <ul class="flex items-center gap-1 text-[0.95rem]">
         {
-          nav.map((item) =>
+          nav.filter((item) => !item.cta).map((item) =>
             item.children ? (
               <li class="group relative" data-dropdown>
                 <div class="flex items-center">
                   <a
                     href={item.href}
-                    class:list={[
-                      'rounded-full py-2 ps-3 pe-1 transition-colors hover:text-olive-600',
-                      isSection(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-800',
-                    ]}
+                    class:list={['py-2 ps-3 pe-1', linkBase, active(item.href) ? linkActive : 'text-cocoa-800']}
                     aria-current={isCurrent(item.href) ? 'page' : undefined}
                   >
                     {item.label}
                   </a>
                   <button
                     type="button"
-                    class="rounded-full p-1.5 text-cocoa-600 transition-colors hover:text-olive-600"
+                    class="rounded-full p-2 text-cocoa-600 transition-colors hover:bg-olive-50 hover:text-olive-700"
                     aria-expanded="false"
                     aria-controls="nav-dropdown-recipes"
                     aria-label={`תת-תפריט ${item.label}`}
@@ -71,16 +75,22 @@ const isSection = (href: string) => href !== '/' && (path === href || path.start
               <li>
                 <a
                   href={item.href}
-                  class:list={[
-                    'block rounded-full px-3 py-2 transition-colors hover:text-olive-600',
-                    isCurrent(item.href) || isSection(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-800',
-                  ]}
+                  class:list={['block px-3 py-2', linkBase, active(item.href) ? linkActive : 'text-cocoa-800']}
                   aria-current={isCurrent(item.href) ? 'page' : undefined}
                 >
                   {item.label}
                 </a>
               </li>
             ),
+          )
+        }
+        {
+          cta && (
+            <li class="ms-2">
+              <a href={cta.href} class="btn-primary btn-sm" aria-current={isCurrent(cta.href) ? 'page' : undefined}>
+                {cta.label}
+              </a>
+            </li>
           )
         }
       </ul>
@@ -115,7 +125,7 @@ const isSection = (href: string) => href !== '/' && (path === href || path.start
               href={item.href}
               class:list={[
                 'block py-3',
-                isCurrent(item.href) || isSection(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-900',
+                active(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-900',
               ]}
               aria-current={isCurrent(item.href) ? 'page' : undefined}
             >
@@ -128,7 +138,7 @@ const isSection = (href: string) => href !== '/' && (path === href || path.start
                     <a
                       href={child.href}
                       class:list={[
-                        'block rounded-full border px-3.5 py-1.5 text-sm transition-colors',
+                        'inline-flex min-h-11 items-center rounded-full border px-4 text-sm transition-colors',
                         isCurrent(child.href)
                           ? 'border-olive-600 bg-olive-600 text-cream-50'
                           : 'border-olive-200 bg-white text-cocoa-800 hover:border-olive-400',
@@ -145,19 +155,35 @@ const isSection = (href: string) => href !== '/' && (path === href || path.start
         ))
       }
     </ul>
-    <div class="container-page flex gap-3 pb-6">
-      <a href={site.contact.phoneHref} class="btn-secondary flex-1 py-2.5 text-base">
+    <div class="container-page grid gap-3 pb-6">
+      {
+        cta && (
+          <a href={cta.href} class="btn-primary w-full">
+            הצטרפו לאתגר 4 השבועות
+            <Icon name="arrow" size={18} />
+          </a>
+        )
+      }
+      <div class="flex gap-3">
+      <a href={site.contact.phoneHref} class="btn-secondary flex-1 text-base">
         <Icon name="phone" size={18} />
-        {site.contact.phone}
+        <span dir="ltr">{site.contact.phone}</span>
       </a>
-      <a href={site.social[0].href} class="btn-secondary px-3.5 py-2.5" aria-label="Instagram" rel="noopener" target="_blank">
+      <a href={site.social[0].href} class="btn-secondary px-3.5" aria-label="Instagram" rel="noopener" target="_blank">
         <Icon name="instagram" size={20} />
       </a>
+      </div>
     </div>
   </nav>
 </header>
 
 <script>
+  // Soft shadow once the page is scrolled (marks the header's edge over content).
+  const header = document.querySelector<HTMLElement>('[data-site-header]');
+  const onScroll = () => header?.toggleAttribute('data-scrolled', scrollY > 8);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.querySelector<HTMLElement>('[data-menu]');
   const label = toggle?.querySelector('[data-menu-label]');

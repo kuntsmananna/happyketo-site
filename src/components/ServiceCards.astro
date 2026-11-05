@@ -43,10 +43,10 @@ const cards = [
 ];
 ---
 
-<section class="py-16 sm:py-24" aria-labelledby="services-title">
+<section class="section-y" aria-labelledby="services-title">
   <div class="container-page">
     <div class="mx-auto mb-12 max-w-2xl text-center">
-      <h2 id="services-title" class="text-3xl sm:text-4xl">מה מחכה לכם ב-Happy Keto</h2>
+      <h2 id="services-title" class="h-section">מה מחכה לכם ב-Happy Keto</h2>
       <p class="mt-4 text-lg text-cocoa-700">אוכל טבעי, מתכונים, ידע וכל מה שצריך כדי שקיטו ירגיש כמו הבית.</p>
     </div>
 
@@ -56,21 +56,21 @@ const cards = [
         <Image
           src={rooftopDay}
           alt="ארוחת טעימות על גג ביפו בשעות היום"
-          widths={[320, 480, 720]}
+          widths={[240, 360, 480, 720]}
           sizes="(min-width: 1024px) 18rem, 50vw"
           class="aspect-[3/4] size-full object-cover lg:aspect-auto"
         />
         <Image
           src={rooftopNight}
           alt="שולחן ארוך עם נרות על הגג בערב"
-          widths={[320, 480, 720]}
+          widths={[240, 360, 480, 720]}
           sizes="(min-width: 1024px) 18rem, 50vw"
           class="aspect-[3/4] size-full object-cover lg:aspect-auto"
         />
       </div>
       <div class="flex flex-col justify-center p-7 sm:p-10">
-        <p class="mb-2 font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">Keto Cuisine</span></p>
-        <h3 class="text-2xl sm:text-3xl">ארוחה על הגג הכי יפה ביפו</h3>
+        <p class="eyebrow"><span dir="ltr">Keto Cuisine</span></p>
+        <h3 class="text-2xl leading-snug sm:text-3xl">ארוחה על הגג הכי יפה ביפו</h3>
         <p class="mt-3 text-lg text-cocoa-700">❤️ ארוחת טעימות ממטבח קטן ואהבה גדולה.</p>
         <p class="mt-1 text-cocoa-700">אוכל טבעי ומקומי, ללא סוכר, ללא קמח ודגנים.</p>
         <ul class="mt-5 space-y-2">
@@ -91,18 +91,21 @@ const cards = [
       </div>
     </article>
 
-    <div class="grid gap-8 md:grid-cols-3">
+    <div class="grid gap-6 lg:grid-cols-3 lg:gap-8">
       {
         cards.map((c) => (
-          <article class="card group relative flex flex-col overflow-hidden">
-            <div class:list={['relative overflow-hidden', c.contain ? 'bg-white' : 'bg-sage-100']}>
+          <article class="card card-interactive group relative flex flex-col overflow-hidden sm:flex-row lg:flex-col">
+            <div class:list={['relative shrink-0 overflow-hidden sm:w-2/5 lg:w-auto', c.contain ? 'bg-white' : 'bg-sage-100']}>
               <Image
                 src={c.image}
                 alt={c.alt}
+                width={720}
+                height={540}
+                fit={c.contain ? 'contain' : 'cover'}
                 widths={[360, 540, 720]}
-                sizes="(min-width: 768px) 30vw, 92vw"
+                sizes="(min-width: 1024px) 30vw, (min-width: 640px) 38vw, 92vw"
                 class:list={[
-                  'aspect-[4/3] w-full transition-transform duration-500 group-hover:scale-105',
+                  'aspect-[4/3] w-full transition-transform duration-500 group-hover:scale-105 sm:h-full lg:h-auto',
                   c.contain ? 'object-contain p-6' : 'object-cover',
                 ]}
               />
@@ -110,9 +113,9 @@ const cards = [
                 <Image src={c.sticker} alt="" width={140} class="absolute bottom-3 end-3 w-24 drop-shadow-md" />
               )}
             </div>
-            <div class="flex flex-1 flex-col p-6">
-              <p class="mb-1 text-sm font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">{c.eyebrow}</span></p>
-              <h3 class="text-xl">{c.title}</h3>
+            <div class="flex flex-1 flex-col justify-center p-6 lg:justify-start">
+              <p class="eyebrow"><span dir="ltr">{c.eyebrow}</span></p>
+              <h3 class="h-card">{c.title}</h3>
               <p class="mt-2 flex-1 text-cocoa-700">{c.text}</p>
               <a
                 href={c.href}

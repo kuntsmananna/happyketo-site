@@ -74,8 +74,8 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
               ))
             }
           </ul>
-          <h1 class="text-4xl leading-tight sm:text-5xl">{title}</h1>
-          {description && description !== title && <p class="mt-4 max-w-2xl text-lg leading-relaxed text-cocoa-700">{description}</p>}
+          <h1 class="h-display">{title}</h1>
+          {description && description !== title && <p class="lead mt-4 max-w-2xl">{description}</p>}
 
           <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-cocoa-600">
             {
@@ -92,14 +92,14 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
           <div class="mt-6 flex flex-wrap gap-3 print:hidden">
             {
               hasRecipe && (
-                <a href="#recipe" class="btn-primary py-2.5">
+                <a href="#recipe" class="btn-primary btn-sm">
                   למתכון
                   <Icon name="chevron" size={18} />
                 </a>
               )
             }
-            <button type="button" class="btn-secondary bg-white py-2.5" data-print>הדפסה</button>
-            <a href={whatsapp} class="btn-secondary bg-white py-2.5" target="_blank" rel="noopener">
+            <button type="button" class="btn-secondary btn-sm" data-print>הדפסה</button>
+            <a href={whatsapp} class="btn-secondary btn-sm" target="_blank" rel="noopener">
               <Icon name="whatsapp" size={18} />
               שיתוף
             </a>
@@ -111,8 +111,11 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
             <Image
               src={image}
               alt={imageAlt ?? title}
-              widths={[480, 720, 960, 1280]}
-              sizes="(min-width: 1024px) 28rem, 92vw"
+              width={1024}
+              height={1280}
+              fit="cover"
+              widths={[360, 480, 720, 1024]}
+              sizes="(min-width: 1024px) 28rem, (min-width: 448px) 28rem, 92vw"
               class="mx-auto aspect-[4/5] w-full max-w-md rounded-[2rem] object-cover shadow-[var(--shadow-card)] print:max-w-xs"
               loading="eager"
               fetchpriority="high"
@@ -122,7 +125,7 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
       </div>
     </header>
 
-    <div class="container-page max-w-4xl py-10 sm:py-14">
+    <div class="container-page max-w-4xl section-y-sm">
       <Prose>
         <SplitContent>
           <Content />
@@ -136,7 +139,7 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
     related.length > 0 && (
       <section class="bg-cream-100 py-14 print:hidden" aria-labelledby="related-title">
         <div class="container-page">
-          <h2 id="related-title" class="mb-8 text-3xl">עוד מתכונים שתאהבו</h2>
+          <h2 id="related-title" class="mb-8 h-section">עוד מתכונים שתאהבו</h2>
           <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((r) => <RecipeCard recipe={r} />)}
           </div>

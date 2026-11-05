@@ -27,7 +27,7 @@ const channels = [
     breadcrumbs={[{ label: 'יצירת קשר' }]}
   />
 
-  <section class="container-page grid items-start gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.4fr]">
+  <section class="container-page grid items-start gap-10 section-y-sm lg:grid-cols-[1fr_1.4fr]">
     <div class="space-y-4">
       <h2 class="text-2xl">ניתן ליצור איתי קשר בכמה דרכים</h2>
       <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
@@ -55,7 +55,7 @@ const channels = [
       </ul>
 
       <div class="rounded-[var(--radius-card)] bg-cream-100 p-6">
-        <p class="text-sm font-medium tracking-[0.12em] text-cocoa-500"><span dir="ltr">Keto Cuisine</span></p>
+        <p class="eyebrow"><span dir="ltr">Keto Cuisine</span></p>
         <h2 class="mt-1 text-xl">ארוחה על הגג הכי יפה ביפו</h2>
         <p class="mt-2 leading-relaxed text-cocoa-700">
           ארועים לחברות וארגונים, חגיגות משפחתיות וימי הולדת ומסיבות רווקות. התפריט יותאם באופן אישי לאופי הארוע (לקבוצות מעל 10
@@ -68,26 +68,26 @@ const channels = [
       <h2 class="text-2xl">כתבו לי</h2>
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
-          <label for="ct-name" class="mb-1.5 block font-medium">שם *</label>
-          <input id="ct-name" name="name" required autocomplete="name" class="input-field w-full rounded-2xl" />
+          <label for="ct-name" class="field-label">שם *</label>
+          <input id="ct-name" name="name" required autocomplete="name" class="input-field w-full" />
         </div>
         <div>
-          <label for="ct-phone" class="mb-1.5 block font-medium">טלפון <span class="font-normal text-cocoa-500">(לא חובה)</span></label>
-          <input id="ct-phone" name="טלפון" type="tel" autocomplete="tel" dir="ltr" class="input-field w-full rounded-2xl text-end" />
+          <label for="ct-phone" class="field-label">טלפון <span class="font-normal text-cocoa-500">(לא חובה)</span></label>
+          <input id="ct-phone" name="טלפון" type="tel" autocomplete="tel" dir="ltr" class="input-field w-full text-end" />
         </div>
       </div>
       <div>
-        <label for="ct-email" class="mb-1.5 block font-medium">אימייל *</label>
-        <input id="ct-email" name="email" type="email" required autocomplete="email" dir="ltr" class="input-field w-full rounded-2xl text-end" />
+        <label for="ct-email" class="field-label">אימייל *</label>
+        <input id="ct-email" name="email" type="email" required autocomplete="email" dir="ltr" class="input-field w-full text-end" />
       </div>
       <div>
-        <label for="ct-topic" class="mb-1.5 block font-medium">נושא</label>
-        <select id="ct-topic" name="נושא" class="input-field w-full rounded-2xl" data-topic>
+        <label for="ct-topic" class="field-label">נושא</label>
+        <select id="ct-topic" name="נושא" class="input-field w-full" data-topic>
           {topics.map((t) => <option value={t.label} data-key={t.value}>{t.label}</option>)}
         </select>
       </div>
       <div>
-        <label for="ct-message" class="mb-1.5 block font-medium">הודעה *</label>
+        <label for="ct-message" class="field-label">הודעה *</label>
         <textarea id="ct-message" name="הודעה" rows="5" required class="input-field w-full resize-y rounded-2xl"></textarea>
       </div>
       <button type="submit" class="btn-primary w-full text-lg">שליחה</button>

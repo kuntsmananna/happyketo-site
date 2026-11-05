@@ -18,7 +18,7 @@ const posts = await getPosts();
     intro="כל מה שחשוב לדעת לתהליך מוצלח במעבר לתזונה טבעית קטוגנית."
     breadcrumbs={[{ label: 'בלוג' }]}
   />
-  <section class="container-page py-10 sm:py-14">
+  <section class="container-page section-y-sm">
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
       {posts.map((post, i) => <PostCard post={post} eager={i < 3} headingLevel={2} />)}
     </div>

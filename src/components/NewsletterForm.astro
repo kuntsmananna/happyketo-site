@@ -4,13 +4,13 @@ import Web3Form from './Web3Form.astro';
 import sticker from '@/assets/brand/sticker-happy-keto.png';
 ---
 
-<section class="py-16 sm:py-20" aria-labelledby="newsletter-title">
+<section class="section-y" aria-labelledby="newsletter-title">
   <div class="container-page">
     <div class="relative overflow-hidden rounded-[2rem] bg-olive-700 px-6 py-12 text-center text-cream-50 sm:px-12">
       <div aria-hidden="true" class="pointer-events-none absolute -end-16 -top-16 size-64 rounded-full bg-olive-500/40 blur-2xl"></div>
       <Image src={sticker} alt="" width={120} class="absolute -bottom-4 start-4 hidden w-24 rotate-[-12deg] opacity-90 sm:block" />
 
-      <h2 id="newsletter-title" class="relative text-3xl text-cream-50 sm:text-4xl">תשארו בקשר!</h2>
+      <h2 id="newsletter-title" class="h-section relative text-cream-50">תשארו בקשר!</h2>
       <p class="relative mx-auto mt-3 max-w-lg text-lg text-cream-100">
         לחדשות ועדכונים נא השאירו פרטים, מבטיחה לא לחפור ;)
       </p>
@@ -22,7 +22,7 @@ import sticker from '@/assets/brand/sticker-happy-keto.png';
       >
         <div class="flex flex-col gap-3 sm:flex-row">
           <label class="sr-only" for="nl-name">שם</label>
-          <input id="nl-name" name="name" type="text" required autocomplete="given-name" placeholder="שם" class="input-field sm:flex-1" />
+          <input id="nl-name" name="name" type="text" required autocomplete="given-name" placeholder="שם" class="input-field input-pill sm:flex-1" />
           <label class="sr-only" for="nl-email">אימייל</label>
           <input
             id="nl-email"
@@ -32,9 +32,9 @@ import sticker from '@/assets/brand/sticker-happy-keto.png';
             autocomplete="email"
             placeholder="אימייל"
             dir="ltr"
-            class="input-field text-end placeholder:text-end sm:flex-[1.4]"
+            class="input-field input-pill text-end placeholder:text-end sm:flex-[1.4]"
           />
-          <button type="submit" class="btn bg-cream-50 px-8 text-olive-800 hover:bg-white">הצטרפות</button>
+          <button type="submit" class="btn bg-cream-50 px-8 text-olive-800 hover:bg-white active:bg-cream-100">הצטרפות</button>
         </div>
       </Web3Form>
     </div>
