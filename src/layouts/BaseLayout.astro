@@ -1,0 +1,75 @@
+---
+import '@/styles/global.css';
+import { site } from '@/data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Absolute or root-relative image URL for social previews. */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  ogImage = '/og-default.jpg',
+  ogType = 'website',
+  noindex = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${site.name}` : site.title;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImageUrl = new URL(ogImage, Astro.site);
+---
+
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#627232" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap"
+    />
+
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-olive-700 focus:px-4 focus:py-2 focus:text-cream-50"
+    >
+      דילוג לתוכן הראשי
+    </a>
+
+    <slot name="header" />
+
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+
+    <slot name="footer" />
+  </body>
+</html>

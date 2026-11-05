@@ -1,0 +1,100 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+ * Happy Keto design tokens — warm, clean, appetizing.
+ * Olive / sage greens, cream backgrounds, soft cocoa browns.
+ * Use logical utilities (ps-*, pe-*, ms-*, me-*, start-*, end-*, text-start) so RTL works naturally.
+ */
+@theme {
+  --font-sans: "Rubik", "Heebo", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+
+  --color-olive-50: #f6f7ee;
+  --color-olive-100: #eaedd8;
+  --color-olive-200: #d5dbb3;
+  --color-olive-300: #b8c385;
+  --color-olive-400: #9aab5d;
+  --color-olive-500: #7d8f41;
+  --color-olive-600: #627232;
+  --color-olive-700: #4b5729;
+  --color-olive-800: #3e4725;
+  --color-olive-900: #353d22;
+
+  --color-sage-50: #f4f7f3;
+  --color-sage-100: #e5ece2;
+  --color-sage-200: #cbd9c6;
+  --color-sage-300: #a7bfa0;
+  --color-sage-400: #81a078;
+  --color-sage-500: #62835a;
+  --color-sage-600: #4d6847;
+  --color-sage-700: #3f543b;
+
+  --color-cream-50: #fffdf8;
+  --color-cream-100: #fdf8ec;
+  --color-cream-200: #f8eed6;
+  --color-cream-300: #f1e0b8;
+
+  --color-cocoa-300: #c9a98c;
+  --color-cocoa-400: #b08866;
+  --color-cocoa-500: #8f6a4c;
+  --color-cocoa-600: #74543c;
+  --color-cocoa-700: #5c4231;
+  --color-cocoa-800: #4a3628;
+  --color-cocoa-900: #3a2a20;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px rgb(58 42 32 / 0.06), 0 8px 24px -8px rgb(58 42 32 / 0.12);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-cream-50 text-cocoa-900 font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-olive-800 font-bold text-balance;
+  }
+
+  a {
+    @apply underline-offset-4;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-olive-500;
+  }
+}
+
+/* Custom utilities (Tailwind v4: @utility so they can be @apply-ed and used with variants). */
+@utility container-page {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 font-medium transition-colors duration-200;
+}
+
+@utility btn-primary {
+  @apply btn bg-olive-600 text-cream-50 hover:bg-olive-700;
+}
+
+@utility btn-secondary {
+  @apply btn border border-olive-600 text-olive-700 hover:bg-olive-50;
+}
+
+@utility card {
+  @apply rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)];
+}

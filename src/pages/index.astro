@@ -1,0 +1,31 @@
+---
+// Stage 1 placeholder — replaced by the full homepage in stage 4.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout>
+  <section class="bg-sage-50">
+    <div class="container-page py-24 text-center">
+      <p class="mb-3 font-medium tracking-widest text-cocoa-500">HAPPY KETO</p>
+      <h1 class="text-4xl sm:text-5xl">תזונה קטוגנית טבעית, פשוטה וטעימה</h1>
+      <p class="mx-auto mt-5 max-w-xl text-lg text-cocoa-700">
+        בלי שעות במטבח, בלי ספירת קלוריות ובלי לוותר על אוכל טעים!
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/challenge" class="btn-primary">לאתגר 4 השבועות</a>
+        <a href="/recipes" class="btn-secondary">למתכונים</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <div class="card mx-auto max-w-md p-8 text-center">
+      <h2 class="text-2xl">האתר החדש בבנייה</h2>
+      <p class="mt-3 text-cocoa-700">
+        בינתיים אפשר ליצור קשר:
+        <a class="text-olive-700 underline" href={site.contact.phoneHref}>{site.contact.phone}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

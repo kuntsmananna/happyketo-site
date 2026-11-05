@@ -1,0 +1,33 @@
+{
+  "name": "happyketo",
+  "version": "0.1.0",
+  "description": "Happy Keto — אתר תזונה קטוגנית (Astro + Tailwind, Vercel)",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "astro": "astro",
+    "scrape": "node scripts/scrape/index.mjs"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vercel": "^11.0.19",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.4",
+    "astro": "^7.4.6",
+    "tailwindcss": "^4.3.4",
+    "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "cheerio": "^1.2.0",
+    "p-limit": "^7.3.3",
+    "turndown": "^7.2.5"
+  },
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12"
+  }
+}

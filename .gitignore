@@ -1,0 +1,29 @@
+# build output
+dist/
+.vercel/
+.output/
+
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+*.log
+
+# environment
+.env
+.env.*
+!.env.example
+
+# scraper scratch output (raw HTML cache, reports)
+scripts/scrape/.cache/
+scripts/scrape/report.json
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
