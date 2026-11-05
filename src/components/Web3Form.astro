@@ -1,0 +1,75 @@
+---
+/**
+ * Form posting to Web3Forms. Works without JS (POST + redirect to /thanks);
+ * with JS it submits via fetch and shows the result inline.
+ * Put the fields in the default slot; give the submit button type="submit".
+ */
+import { forms, site } from '@/data/site';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Omit<HTMLAttributes<'form'>, 'action' | 'method'> {
+  /** Email subject — lets Anna tell the forms apart in her inbox. */
+  subject: string;
+  successMessage?: string;
+}
+
+const { subject, successMessage = 'תודה! הפרטים התקבלו ואחזור אליכם בהקדם ❤️', class: className, ...rest } = Astro.props;
+---
+
+<form action={forms.endpoint} method="POST" class:list={['relative', className]} data-web3form data-success={successMessage} {...rest}>
+  <input type="hidden" name="access_key" value={forms.accessKey} />
+  <input type="hidden" name="subject" value={subject} />
+  <input type="hidden" name="from_name" value="Happy Keto – אתר" />
+  <input type="hidden" name="redirect" value={`${site.url}/thanks`} />
+  <!-- Honeypot: real people never see or tick this. -->
+  <input type="checkbox" name="botcheck" class="hidden" style="display: none" tabindex="-1" autocomplete="off" />
+  <slot />
+  <p data-form-status role="status" aria-live="polite" class="mt-3 hidden rounded-xl px-4 py-3 text-sm font-medium"></p>
+</form>
+
+<script>
+  const STATUS = {
+    success: 'block bg-sage-100 text-sage-700',
+    error: 'block bg-red-50 text-red-800',
+  };
+
+  document.querySelectorAll<HTMLFormElement>('form[data-web3form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+    const show = (kind: keyof typeof STATUS, text: string) => {
+      status.className = `mt-3 rounded-xl px-4 py-3 text-sm font-medium ${STATUS[kind]}`;
+      status.textContent = text;
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const button = form.querySelector<HTMLButtonElement>('[type="submit"]');
+      const label = button?.innerHTML;
+      if (button) {
+        button.disabled = true;
+        button.textContent = 'שולח…';
+      }
+
+      const data = Object.fromEntries(new FormData(form));
+      delete data.redirect;
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.success) throw new Error(json.message || res.statusText);
+        form.reset();
+        show('success', form.dataset.success!);
+      } catch {
+        show('error', 'אופס, משהו השתבש. אפשר לנסות שוב או לכתוב לי ישירות במייל או בוואטסאפ.');
+      } finally {
+        if (button) {
+          button.disabled = false;
+          button.innerHTML = label ?? '';
+        }
+      }
+    });
+  });
+</script>

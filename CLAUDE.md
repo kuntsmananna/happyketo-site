@@ -19,6 +19,13 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - Forms post to Web3Forms using `forms` from `src/data/site.ts` (public access key; `PUBLIC_WEB3FORMS_KEY` overrides it).
 - Files/pages prefixed with `_` are ignored by Astro routing.
 
+## Components
+- `BaseLayout` renders `Header` and `Footer`; pages only pass `title`/`description`.
+- `Web3Form` wraps every form (newsletter, contact, challenge): pass `subject`, put fields in the slot, use `type="submit"`. It has a honeypot and works without JS (redirects to `/thanks`).
+- `RecipeCard` + `RecipeFilter` (vanilla JS: category chips are real links, search is Hebrew-aware, state in `?category=&q=`). Cards need to be inside the element whose id is the filter's `target`.
+- Use `src/lib/recipes.ts` for queries (`getRecipes`, `getPosts`, `recipeUrl`, `countByCategory`) instead of calling `getCollection` directly.
+- Brand stickers (`src/assets/brand/`) are decorative: always `alt=""`.
+
 ## Content (migrated from Wix)
 - `src/content/recipes/*.md` and `src/content/blog/*.md`; file name = original Hebrew Wix slug = entry id.
 - Recipe `ingredients` / `instructions` are **groups**: `[{ title?, items[] }]` / `[{ title?, steps[] }]`. Render group titles only when present; flatten for JSON-LD.

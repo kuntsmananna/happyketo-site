@@ -60,6 +60,8 @@
 
   body {
     @apply bg-cream-50 text-cocoa-900 font-sans antialiased;
+    /* Safety net against decorative overflow; `clip` (unlike hidden) keeps position: sticky working. */
+    overflow-x: clip;
   }
 
   h1,
@@ -97,4 +99,8 @@
 
 @utility card {
   @apply rounded-[var(--radius-card)] bg-white shadow-[var(--shadow-card)];
+}
+
+@utility input-field {
+  @apply rounded-full border border-olive-200 bg-white px-5 py-3 text-cocoa-900 placeholder:text-cocoa-400 transition-shadow focus:border-olive-500 focus:ring-4 focus:ring-olive-200/60 focus:outline-none;
 }

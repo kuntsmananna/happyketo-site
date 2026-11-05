@@ -26,8 +26,10 @@ src/
   content/recipes/      one .md per recipe (frontmatter: title, description, category[], prepTime, ingredients[], instructions[], image…)
   content/blog/         articles
   assets/posts/         post images (optimized at build time)
+  assets/home/, brand/  homepage photos and the Happy Keto stickers
   data/                 site.ts (contact, nav), categories.ts, faq.ts
-  layouts/              BaseLayout.astro (lang="he" dir="rtl", SEO meta)
+  layouts/              BaseLayout.astro (lang="he" dir="rtl", SEO meta, Header + Footer)
+  lib/recipes.ts        collection queries, URLs, category counts
   components/           UI components
   pages/                routes
   styles/global.css     Tailwind + design tokens
@@ -39,6 +41,6 @@ public/videos/          looping MP4s (converted GIFs) and post videos
 
 1. ✅ Project setup (Astro, Tailwind, Vercel adapter, content schema, design tokens)
 2. ✅ Scraper: 127 Wix posts + 162 images migrated ([report](docs/migration-report.md))
-3. UI components (Header, Hero, Services, FAQ, Footer, RecipeCard, RecipeFilter)
-4. Homepage + recipe/blog/challenge/contact pages, Recipe JSON-LD
+3. ✅ UI components (Header, Hero, Challenge, About, Services, FAQ, Newsletter/Web3Form, Footer, RecipeCard, RecipeFilter) + homepage and `/recipes` catalog
+4. Recipe page + Recipe JSON-LD, category pages, blog, challenge, contact, about, favorites, privacy, 404
 5. `vercel.json` (headers, 301 redirects from old Wix URLs), deploy, DNS for happyketoforme.com

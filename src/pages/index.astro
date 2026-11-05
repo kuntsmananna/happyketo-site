@@ -1,31 +1,42 @@
 ---
-// Stage 1 placeholder — replaced by the full homepage in stage 4.
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { site } from '@/data/site';
+import Hero from '@/components/Hero.astro';
+import ChallengeBlock from '@/components/ChallengeBlock.astro';
+import AboutBlock from '@/components/AboutBlock.astro';
+import ServiceCards from '@/components/ServiceCards.astro';
+import RecipeCard from '@/components/RecipeCard.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+import Icon from '@/components/Icon.astro';
+import { getRecipes } from '@/lib/recipes';
+
+const latest = (await getRecipes()).filter((r) => r.data.image).slice(0, 6);
 ---
 
 <BaseLayout>
-  <section class="bg-sage-50">
-    <div class="container-page py-24 text-center">
-      <p class="mb-3 font-medium tracking-widest text-cocoa-500">HAPPY KETO</p>
-      <h1 class="text-4xl sm:text-5xl">תזונה קטוגנית טבעית, פשוטה וטעימה</h1>
-      <p class="mx-auto mt-5 max-w-xl text-lg text-cocoa-700">
-        בלי שעות במטבח, בלי ספירת קלוריות ובלי לוותר על אוכל טעים!
-      </p>
-      <div class="mt-8 flex flex-wrap justify-center gap-3">
-        <a href="/challenge" class="btn-primary">לאתגר 4 השבועות</a>
-        <a href="/recipes" class="btn-secondary">למתכונים</a>
+  <Hero />
+  <ChallengeBlock />
+  <AboutBlock />
+  <ServiceCards />
+
+  <section class="bg-cream-100 py-16 sm:py-24" aria-labelledby="latest-title">
+    <div class="container-page">
+      <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="mb-1 font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">Tasty Keto</span></p>
+          <h2 id="latest-title" class="text-3xl sm:text-4xl">מתכונים חדשים מהמטבח</h2>
+        </div>
+        <a href="/recipes" class="inline-flex items-center gap-1.5 font-medium text-olive-700 hover:text-olive-900">
+          לכל המתכונים
+          <Icon name="arrow" size={18} />
+        </a>
+      </div>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {latest.map((recipe) => <RecipeCard recipe={recipe} />)}
       </div>
     </div>
   </section>
 
-  <section class="container-page py-16">
-    <div class="card mx-auto max-w-md p-8 text-center">
-      <h2 class="text-2xl">האתר החדש בבנייה</h2>
-      <p class="mt-3 text-cocoa-700">
-        בינתיים אפשר ליצור קשר:
-        <a class="text-olive-700 underline" href={site.contact.phoneHref}>{site.contact.phone}</a>
-      </p>
-    </div>
-  </section>
+  <FaqAccordion />
+  <NewsletterForm />
 </BaseLayout>

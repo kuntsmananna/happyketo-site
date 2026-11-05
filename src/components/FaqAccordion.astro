@@ -1,0 +1,46 @@
+---
+import Icon from './Icon.astro';
+import { faq } from '@/data/faq';
+
+interface Props {
+  title?: string;
+}
+const { title = 'שאלות ותשובות' } = Astro.props;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a.join('\n') },
+  })),
+};
+---
+
+<section class="bg-sage-50 py-16 sm:py-24" aria-labelledby="faq-title">
+  <div class="container-page max-w-3xl">
+    <h2 id="faq-title" class="mb-10 text-center text-3xl sm:text-4xl">{title}</h2>
+    <div class="space-y-3">
+      {
+        faq.map(({ q, a }) => (
+          // name="faq" makes it an exclusive accordion (one open at a time) in modern browsers.
+          <details name="faq" class="group card overflow-hidden open:shadow-[0_12px_32px_-12px_rgb(58_42_32/0.22)]">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-lg font-medium text-olive-800 transition-colors hover:text-olive-600 [&::-webkit-details-marker]:hidden">
+              {q}
+              <span class="grid size-8 shrink-0 place-items-center rounded-full bg-sage-100 text-olive-700 transition-transform duration-300 group-open:rotate-180">
+                <Icon name="chevron" size={18} />
+              </span>
+            </summary>
+            <div class="space-y-3 px-6 pb-6 leading-relaxed text-cocoa-700">
+              {a.map((p) => (
+                <p>{p}</p>
+              ))}
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</section>

@@ -75,7 +75,7 @@ async function convertGif(uri) {
 
 /**
  * Download every image URI not already on disk.
- * @returns {{ ok: Set<string>, files: Map<string, string>, gifVideos: Set<string>, failed: {uri: string, error: string}[], fetched: number }}
+ * @returns {Promise<{ ok: Set<string>, files: Map<string, string>, gifVideos: Set<string>, failed: {uri: string, error: string}[], fetched: number }>}
  */
 export async function downloadImages(uris, { concurrency = 4, log = console.log } = {}) {
   await mkdir(ASSETS_DIR, { recursive: true });

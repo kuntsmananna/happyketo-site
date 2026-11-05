@@ -1,0 +1,34 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import RecipeCard from '@/components/RecipeCard.astro';
+import RecipeFilter from '@/components/RecipeFilter.astro';
+import { countByCategory, getRecipes } from '@/lib/recipes';
+
+const recipes = await getRecipes();
+const counts = countByCategory(recipes);
+---
+
+<BaseLayout
+  title="מתכונים קטוגניים"
+  description="מתכונים קטוגניים ודלי פחמימות: מאפים, קינוחים, בשר, דגים, ירקות, מרקים, ממרחים ומתכוני פליאו. בלי סוכר ובלי קמח, פשוטים וטעימים."
+>
+  <section class="bg-sage-50">
+    <div class="container-page py-12 sm:py-16">
+      <p class="mb-2 font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">Tasty Keto</span></p>
+      <h1 class="text-4xl sm:text-5xl">מתכונים דלי פחמימות</h1>
+      <p class="mt-4 max-w-2xl text-lg text-cocoa-700">
+        שעושים שמח לגוף ולנשמה. אם אתם מודאגים שלא יהיה לכם מה לאכול, הסירו דאגה מליבכם!
+      </p>
+    </div>
+  </section>
+
+  <section class="container-page py-10 sm:py-14">
+    <RecipeFilter target="recipe-list" counts={counts} total={recipes.length} />
+    <div id="recipe-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+      {recipes.map((recipe, i) => <RecipeCard recipe={recipe} eager={i < 3} headingLevel={2} />)}
+    </div>
+    <p data-filter-empty hidden class="py-16 text-center text-lg text-cocoa-600">
+      לא נמצאו מתכונים 🤔 נסו מילה אחרת או קטגוריה אחרת.
+    </p>
+  </section>
+</BaseLayout>

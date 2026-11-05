@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import anna from '@/assets/home/anna.jpg';
+import sticker from '@/assets/brand/sticker-low-carb.png';
+import { site } from '@/data/site';
+---
+
+<section class="overflow-x-clip bg-cream-100 py-16 sm:py-24" aria-labelledby="about-title">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+    <div>
+      <h2 id="about-title" class="text-3xl leading-tight sm:text-4xl">
+        אני לא עושה דיאטה,
+        <span class="block text-olive-600">אני בוחרת במזון בריא</span>
+      </h2>
+      <div class="mt-6 space-y-4 text-lg leading-relaxed text-cocoa-700">
+        <p>
+          <span dir="ltr">HAPPY KETO</span> נולד מתוך חקירה ורצון למצוא את נקודת האיזון שבג׳ינגול בין העבודה, המשפחה,
+          הילדים, קריירה, פיתוח אישי ויתר ענייני היום יום... אבל גם תזונה קטוגנית מיטיבה ואוכל טעים.
+        </p>
+        <p>
+          להשקיע בבריאות שלנו מבלי לחכות לפנסיה או שהילדים יגדלו. אלא, עכשיו, עם העבודה, עם הילדים ועם הסל כביסה
+          והכלים בכיור...
+        </p>
+        <p class="font-medium text-olive-800">דברים קלים והרגלים פשוטים שעושים הבדל גדול.</p>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <a href="/about" class="btn-secondary bg-white px-7">
+          אודות Happy Keto
+          <Icon name="arrow" size={18} />
+        </a>
+        <p class="text-cocoa-600">— {site.author}</p>
+      </div>
+    </div>
+
+    <div class="relative mx-auto w-full max-w-xl">
+      <Image
+        src={anna}
+        alt={`${site.author} במטבח`}
+        widths={[480, 720, 960, 1400]}
+        sizes="(min-width: 1024px) 36rem, 92vw"
+        class="aspect-[4/3] w-full rounded-[2rem] object-cover object-[50%_30%] shadow-[var(--shadow-card)]"
+      />
+      <Image
+        src={sticker}
+        alt=""
+        width={180}
+        class="absolute -end-3 -top-10 w-28 rotate-[10deg] drop-shadow-lg sm:-end-8 sm:w-36"
+      />
+    </div>
+  </div>
+</section>

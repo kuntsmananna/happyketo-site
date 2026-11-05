@@ -25,9 +25,3 @@ export const recipeCategorySlugs = recipeCategories.map((c) => c.slug) as [
 ];
 
 export const getCategory = (slug: string) => recipeCategories.find((c) => c.slug === slug);
-
-/**
- * Wix blog categories that mark a post as an article (blog) rather than a recipe.
- * Paleo, lunch-box and low-carb mappings get verified against real data in stage 2.
- */
-export const wixBlogCategories = ['בלוג-קטוגני', 'מדריך-לקיטו', 'המדריך-לתזונה-דלת-פחמימות'];

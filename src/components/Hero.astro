@@ -1,0 +1,53 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import heroImg from '@/assets/home/hero-crepes.jpg';
+import sticker from '@/assets/brand/sticker-happy-keto.png';
+---
+
+<section class="relative overflow-hidden bg-sage-50">
+  <!-- soft decorative shapes -->
+  <div aria-hidden="true" class="pointer-events-none absolute -start-24 -top-24 size-80 rounded-full bg-olive-100/60 blur-3xl"></div>
+  <div aria-hidden="true" class="pointer-events-none absolute -bottom-32 end-1/3 size-96 rounded-full bg-cream-200/70 blur-3xl"></div>
+
+  <div class="container-page relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24">
+    <div class="text-center lg:text-start">
+      <p class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-sm font-medium tracking-[0.18em] text-cocoa-600 ring-1 ring-olive-100" dir="ltr">
+        HAPPY KETO
+      </p>
+      <h1 class="text-4xl leading-[1.15] sm:text-5xl lg:text-6xl">
+        תזונה קטוגנית
+        <span class="block text-olive-600">טבעית, פשוטה וטעימה</span>
+      </h1>
+      <p class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-cocoa-700 sm:text-xl lg:mx-0">
+        בלי שעות במטבח, בלי ספירת קלוריות ובלי לוותר על אוכל טעים!
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
+        <a href="/challenge" class="btn-primary px-7 text-lg shadow-lg shadow-olive-900/10">
+          תתחילו עם 3 ימי ניסיון חינם
+          <Icon name="arrow" size={20} />
+        </a>
+        <a href="/recipes" class="btn-secondary bg-white/60 px-7 text-lg">למתכונים</a>
+      </div>
+    </div>
+
+    <div class="relative mx-auto w-full max-w-md lg:max-w-none">
+      <Image
+        src={heroImg}
+        alt="ידיים מניחות תותים על קרפ קטוגני"
+        widths={[480, 720, 960, 1086]}
+        sizes="(min-width: 1024px) 45vw, (min-width: 640px) 28rem, 90vw"
+        class="aspect-[4/5] w-full rounded-t-[12rem] rounded-b-[2rem] object-cover shadow-[var(--shadow-card)]"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <Image
+        src={sticker}
+        alt=""
+        width={160}
+        class="absolute -bottom-6 -start-4 w-28 rotate-[-8deg] drop-shadow-lg sm:w-36 lg:-start-10"
+        loading="eager"
+      />
+    </div>
+  </div>
+</section>

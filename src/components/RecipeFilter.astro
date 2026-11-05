@@ -1,0 +1,126 @@
+---
+/**
+ * Category chips + text search for a list of RecipeCards.
+ * Chips are real links to /recipes/category/<slug> (works without JS);
+ * with JS they filter in place and keep ?category=&q= in the URL.
+ * The cards must be inside the element whose id is `target`.
+ */
+import Icon from './Icon.astro';
+import { recipeCategories } from '@/data/categories';
+
+interface Props {
+  target: string;
+  counts: Record<string, number>;
+  total: number;
+  /** Pre-selected category (on /recipes/category/<slug> pages). */
+  active?: string;
+}
+
+const { target, counts, total, active = '' } = Astro.props;
+const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].concat(
+  recipeCategories
+    .filter((c) => counts[c.slug])
+    .map((c) => ({ slug: c.slug, label: c.label, href: `/recipes/category/${c.slug}`, count: counts[c.slug] })),
+);
+---
+
+<div class="mb-8 space-y-4" data-recipe-filter data-target={target} data-active={active}>
+  <div role="search" class="relative max-w-md">
+    <label for="recipe-search" class="sr-only">חיפוש מתכון</label>
+    <Icon name="search" size={20} class="pointer-events-none absolute start-4 top-1/2 -translate-y-1/2 text-cocoa-500" />
+    <input
+      id="recipe-search"
+      type="search"
+      placeholder="חיפוש מתכון… (למשל: עוגה, סלמון, לחם)"
+      class="input-field w-full bg-white ps-11"
+      data-filter-search
+    />
+  </div>
+
+  <nav aria-label="סינון לפי קטגוריה" class="-mx-4 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+    <ul class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
+      {
+        chips.map((c) => (
+          <li>
+            <a
+              href={c.href}
+              data-filter-category={c.slug}
+              aria-current={c.slug === active ? 'page' : undefined}
+              class="inline-flex items-center gap-1.5 rounded-full border border-olive-200 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-cocoa-800 transition-colors hover:border-olive-400 aria-[current]:border-olive-600 aria-[current]:bg-olive-600 aria-[current]:text-cream-50"
+            >
+              {c.label}
+              <span class="text-xs opacity-70">{c.count}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <p class="text-sm text-cocoa-600" aria-live="polite" data-filter-count></p>
+</div>
+
+<script>
+  // Strip niqqud/geresh/quotes so "צ׳יפס", "צ'יפס" and "ציפס" all match; final letters → regular forms.
+  const FINALS: Record<string, string> = { ך: 'כ', ם: 'מ', ן: 'נ', ף: 'פ', ץ: 'צ' };
+  const normalize = (s: string) =>
+    s
+      .toLowerCase()
+      .replace(/[֑-ׇ]/g, '')
+      .replace(/["'׳״`\-–]/g, '')
+      .replace(/[ךםןףץ]/g, (c) => FINALS[c])
+      .replace(/\s+/g, ' ')
+      .trim();
+  // Light Hebrew stemming for query words: "עוגה" should also find "עוגת שוקולד".
+  const stem = (w: string) => (w.length >= 4 ? w.replace(/(ה|ת|ימ|ות)$/, '') : w);
+
+  document.querySelectorAll<HTMLElement>('[data-recipe-filter]').forEach((root) => {
+    const list = document.getElementById(root.dataset.target!);
+    if (!list) return;
+    const cards = [...list.querySelectorAll<HTMLElement>('[data-recipe-card]')];
+    const chips = [...root.querySelectorAll<HTMLAnchorElement>('[data-filter-category]')];
+    const search = root.querySelector<HTMLInputElement>('[data-filter-search]')!;
+    const count = root.querySelector<HTMLElement>('[data-filter-count]')!;
+    const empty = list.parentElement?.querySelector<HTMLElement>('[data-filter-empty]');
+    const index = cards.map((card) => ({ card, cats: card.dataset.categories!.split(' '), text: normalize(card.dataset.search || '') }));
+    const pageCategory = root.dataset.active || '';
+
+    const params = new URLSearchParams(location.search);
+    let category = params.get('category') ?? pageCategory;
+    search.value = params.get('q') ?? '';
+
+    function apply(updateUrl = true) {
+      const q = normalize(search.value);
+      let shown = 0;
+      for (const { card, cats, text } of index) {
+        const match = (!category || cats.includes(category)) && (!q || q.split(' ').every((w) => text.includes(stem(w))));
+        card.hidden = !match;
+        if (match) shown++;
+      }
+      chips.forEach((chip) =>
+        chip.dataset.filterCategory === category ? chip.setAttribute('aria-current', 'page') : chip.removeAttribute('aria-current'),
+      );
+      count.textContent = shown === index.length ? `${shown} מתכונים` : `נמצאו ${shown} מתכונים`;
+      if (empty) empty.hidden = shown > 0;
+
+      if (updateUrl) {
+        const url = new URL(location.href);
+        category && category !== pageCategory ? url.searchParams.set('category', category) : url.searchParams.delete('category');
+        q ? url.searchParams.set('q', search.value.trim()) : url.searchParams.delete('q');
+        history.replaceState(null, '', url);
+      }
+    }
+
+    chips.forEach((chip) =>
+      chip.addEventListener('click', (e) => {
+        // Let modified clicks (new tab etc.) behave like normal links; on a category page, chips navigate.
+        if (pageCategory || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+        e.preventDefault();
+        category = chip.dataset.filterCategory || '';
+        apply();
+      }),
+    );
+    search.addEventListener('input', () => apply());
+    apply(false);
+  });
+</script>

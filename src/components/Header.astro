@@ -1,0 +1,205 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { nav, site } from '@/data/site';
+import logo from '@/assets/brand/sticker-happy-keto.png';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isCurrent = (href: string) => path === href;
+const isSection = (href: string) => href !== '/' && (path === href || path.startsWith(href + '/'));
+---
+
+<header class="sticky top-0 z-40 border-b border-olive-100/80 bg-cream-50/90 backdrop-blur-md">
+  <div class="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
+    <a href="/" class="flex items-center gap-2.5 rounded-full" aria-label={`${site.name} – לעמוד הבית`}>
+      <Image src={logo} alt="" width={48} height={55} class="size-10 object-contain lg:size-12" loading="eager" />
+      <span class="text-lg font-bold tracking-[0.12em] text-olive-800 lg:text-xl" dir="ltr">HAPPY KETO</span>
+    </a>
+
+    <!-- Desktop navigation -->
+    <nav aria-label="ניווט ראשי" class="hidden lg:block">
+      <ul class="flex items-center gap-0.5 text-[0.95rem]">
+        {
+          nav.map((item) =>
+            item.children ? (
+              <li class="group relative" data-dropdown>
+                <div class="flex items-center">
+                  <a
+                    href={item.href}
+                    class:list={[
+                      'rounded-full py-2 ps-3 pe-1 transition-colors hover:text-olive-600',
+                      isSection(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-800',
+                    ]}
+                    aria-current={isCurrent(item.href) ? 'page' : undefined}
+                  >
+                    {item.label}
+                  </a>
+                  <button
+                    type="button"
+                    class="rounded-full p-1.5 text-cocoa-600 transition-colors hover:text-olive-600"
+                    aria-expanded="false"
+                    aria-controls="nav-dropdown-recipes"
+                    aria-label={`תת-תפריט ${item.label}`}
+                    data-dropdown-toggle
+                  >
+                    <Icon name="chevron" size={16} class="transition-transform group-data-[open]:rotate-180" />
+                  </button>
+                </div>
+                <div
+                  id="nav-dropdown-recipes"
+                  class="invisible absolute start-0 top-full z-50 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 group-data-[open]:visible group-data-[open]:opacity-100"
+                >
+                  <ul class="card grid w-max grid-cols-2 gap-x-2 p-3">
+                    {item.children.map((child) => (
+                      <li>
+                        <a
+                          href={child.href}
+                          class:list={[
+                            'block rounded-xl px-3 py-2 whitespace-nowrap transition-colors hover:bg-sage-50 hover:text-olive-700',
+                            isCurrent(child.href) && 'bg-sage-50 font-medium text-olive-700',
+                          ]}
+                          aria-current={isCurrent(child.href) ? 'page' : undefined}
+                        >
+                          {child.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={[
+                    'block rounded-full px-3 py-2 transition-colors hover:text-olive-600',
+                    isCurrent(item.href) || isSection(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-800',
+                  ]}
+                  aria-current={isCurrent(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <!-- Mobile toggle -->
+    <button
+      type="button"
+      class="group -me-2 rounded-full p-2 text-olive-800 transition-colors hover:bg-olive-50 lg:hidden"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-toggle
+    >
+      <span class="sr-only" data-menu-label>פתיחת תפריט</span>
+      <Icon name="menu" size={26} class="group-aria-expanded:hidden" />
+      <Icon name="close" size={26} class="hidden group-aria-expanded:block" />
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <nav
+    id="mobile-menu"
+    aria-label="ניווט ראשי"
+    class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-olive-100 bg-cream-50 lg:hidden"
+    data-menu
+  >
+    <ul class="container-page flex flex-col py-3 text-lg">
+      {
+        nav.map((item) => (
+          <li class="border-b border-olive-100/70 last:border-0">
+            <a
+              href={item.href}
+              class:list={[
+                'block py-3',
+                isCurrent(item.href) || isSection(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-900',
+              ]}
+              aria-current={isCurrent(item.href) ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+            {item.children && (
+              <ul class="flex flex-wrap gap-2 pb-4">
+                {item.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      class:list={[
+                        'block rounded-full border px-3.5 py-1.5 text-sm transition-colors',
+                        isCurrent(child.href)
+                          ? 'border-olive-600 bg-olive-600 text-cream-50'
+                          : 'border-olive-200 bg-white text-cocoa-800 hover:border-olive-400',
+                      ]}
+                      aria-current={isCurrent(child.href) ? 'page' : undefined}
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+    <div class="container-page flex gap-3 pb-6">
+      <a href={site.contact.phoneHref} class="btn-secondary flex-1 py-2.5 text-base">
+        <Icon name="phone" size={18} />
+        {site.contact.phone}
+      </a>
+      <a href={site.social[0].href} class="btn-secondary px-3.5 py-2.5" aria-label="Instagram" rel="noopener" target="_blank">
+        <Icon name="instagram" size={20} />
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+  const label = toggle?.querySelector('[data-menu-label]');
+
+  function setMenu(open: boolean) {
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('hidden', !open);
+    if (label) label.textContent = open ? 'סגירת תפריט' : 'פתיחת תפריט';
+  }
+
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setMenu(false);
+  });
+  matchMedia('(min-width: 64rem)').addEventListener('change', (e) => e.matches && setMenu(false));
+
+  // Desktop dropdown: hover/focus open it via CSS; the chevron button toggles it for click/touch/keyboard users.
+  const dropdowns = document.querySelectorAll<HTMLElement>('[data-dropdown]');
+  function setDropdown(el: HTMLElement, open: boolean) {
+    el.toggleAttribute('data-open', open);
+    el.querySelector('[data-dropdown-toggle]')?.setAttribute('aria-expanded', String(open));
+  }
+  dropdowns.forEach((el) => {
+    el.querySelector('[data-dropdown-toggle]')?.addEventListener('click', () => setDropdown(el, !el.hasAttribute('data-open')));
+  });
+  document.addEventListener('click', (e) => {
+    dropdowns.forEach((el) => !el.contains(e.target as Node) && setDropdown(el, false));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (toggle?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
+    dropdowns.forEach((el) => {
+      if (el.hasAttribute('data-open') || el.contains(document.activeElement)) {
+        setDropdown(el, false);
+        el.querySelector<HTMLElement>('[data-dropdown-toggle]')?.focus();
+        (document.activeElement as HTMLElement)?.blur();
+      }
+    });
+  });
+</script>
