@@ -1,0 +1,24 @@
+---
+/** Filter + grid of recipe cards. `recipes` is what to show; `all` feeds the chip counts. */
+import RecipeCard from './RecipeCard.astro';
+import RecipeFilter from './RecipeFilter.astro';
+import { countByCategory, type Recipe } from '@/lib/recipes';
+
+interface Props {
+  recipes: Recipe[];
+  all: Recipe[];
+  active?: string;
+}
+
+const { recipes, all, active } = Astro.props;
+---
+
+<section class="container-page py-10 sm:py-14">
+  <RecipeFilter target="recipe-list" counts={countByCategory(all)} total={all.length} active={active} />
+  <div id="recipe-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+    {recipes.map((recipe, i) => <RecipeCard recipe={recipe} eager={i < 3} headingLevel={2} />)}
+  </div>
+  <p data-filter-empty hidden class="py-16 text-center text-lg text-cocoa-600">
+    לא נמצאו מתכונים 🤔 נסו מילה אחרת או קטגוריה אחרת.
+  </p>
+</section>

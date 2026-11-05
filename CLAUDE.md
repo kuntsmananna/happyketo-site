@@ -32,5 +32,11 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - Post images are relative paths to `src/assets/posts/`; looping MP4s (ex-GIFs) and videos are in `public/videos/` and appear in markdown as raw `<video>`; YouTube as `<iframe>` (youtube-nocookie).
 - `npm run scrape` regenerates from Wix but never overwrites an existing `.md` without `--force`. Hand-structured recipes live in `scripts/scrape/overrides.mjs`. Check with `npm run scrape:verify`. Details: `docs/migration-report.md`.
 
+## Pages
+- `/recipes/[slug]`: renders the Markdown via `SplitContent`, which puts `RecipeBox` where the scraper left `<!-- recipe -->` (keep that marker when editing a recipe). Recipe/BlogPosting JSON-LD builders are in `src/lib/schema.ts`.
+- `/recipes/category/[category]` only exists for categories with recipes. FAQPage JSON-LD is emitted on the homepage only (`<FaqAccordion schema={false} />` elsewhere).
+- Pantry products: `src/data/favorites.ts` + `src/assets/favorites/<slug>.webp`; links keep Anna's iHerb `rcode`.
+- Form field names are Hebrew (except `name`/`email`, which Web3Forms uses) so the emails read naturally.
+
 ## Verify changes
-`npm run check && npm run build` must pass. For visual changes, screenshot at 375px and 1280px wide and confirm no horizontal scroll.
+`npm run check && npm run build && npm run check:dist` must pass. For visual changes, screenshot at 375px and 1280px wide and confirm no horizontal scroll.

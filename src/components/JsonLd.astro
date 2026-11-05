@@ -1,0 +1,11 @@
+---
+/** Structured data for search engines. `data` is serialised as-is. */
+interface Props {
+  data: Record<string, unknown> | Record<string, unknown>[];
+}
+const { data } = Astro.props;
+// Escape "<" so content can never close the script tag.
+const json = JSON.stringify(data).replace(/</g, '\\u003c');
+---
+
+<script type="application/ld+json" set:html={json} />

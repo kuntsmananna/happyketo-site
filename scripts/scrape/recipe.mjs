@@ -28,10 +28,12 @@ export function extractRecipe(blocks) {
   let mode = 'body';
   let group = null; // current group object
   let groupHasList = false;
+  let insertAt = -1; // index in `body` where the recipe section sat in the original post
   let sawRecipe = false; // explicit "מצרכים"/"אופן ההכנה" sections (used for recipe-vs-article classification)
   let implicit = false; // sections found only through the heading+list rule
 
   const newGroup = (kind, title) => {
+    if (insertAt < 0) insertAt = body.length;
     // Continue the previous untitled group of the same kind instead of starting an empty twin.
     const list = kind === 'ing' ? ingredients : instructions;
     const last = list.at(-1);
@@ -158,7 +160,7 @@ export function extractRecipe(blocks) {
   if (found && !steps.length) flags.push('no-instructions');
   if (implicit && !sawRecipe) flags.push('implicit-sections');
   if (ing.length > 3 || steps.length > 3) flags.push('many-groups');
-  return { ingredients: ing, instructions: steps, body, sawRecipe, implicit, flags };
+  return { ingredients: ing, instructions: steps, body, insertAt: insertAt < 0 ? body.length : insertAt, sawRecipe, implicit, flags };
 }
 
 /** Prep time in minutes from title/text ("5 דק", "זמן הכנה: 20 דקות", "חצי שעה"). */

@@ -4,8 +4,10 @@ import { faq } from '@/data/faq';
 
 interface Props {
   title?: string;
+  /** FAQPage structured data – emit on one page only (the homepage). */
+  schema?: boolean;
 }
-const { title = 'שאלות ותשובות' } = Astro.props;
+const { title = 'שאלות ותשובות', schema = true } = Astro.props;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -42,5 +44,5 @@ const jsonLd = {
       }
     </div>
   </div>
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  {schema && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
 </section>

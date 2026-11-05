@@ -9,7 +9,7 @@ const isCurrent = (href: string) => path === href;
 const isSection = (href: string) => href !== '/' && (path === href || path.startsWith(href + '/'));
 ---
 
-<header class="sticky top-0 z-40 border-b border-olive-100/80 bg-cream-50/90 backdrop-blur-md">
+<header class="sticky top-0 z-40 print:hidden border-b border-olive-100/80 bg-cream-50/90 backdrop-blur-md">
   <div class="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
     <a href="/" class="flex items-center gap-2.5 rounded-full" aria-label={`${site.name} – לעמוד הבית`}>
       <Image src={logo} alt="" width={48} height={55} class="size-10 object-contain lg:size-12" loading="eager" />

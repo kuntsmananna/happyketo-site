@@ -1,0 +1,104 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import PageHero from '@/components/PageHero.astro';
+import Web3Form from '@/components/Web3Form.astro';
+import { site } from '@/data/site';
+
+const topics = [
+  { value: 'question', label: 'שאלה על מתכון' },
+  { value: 'challenge', label: 'אתגר הקיטו / ליווי' },
+  { value: 'events', label: 'ארוחה או אירוע ב-Keto Cuisine' },
+  { value: 'other', label: 'משהו אחר' },
+];
+
+const channels = [
+  { icon: 'whatsapp', label: 'וואטסאפ', value: 'שלחו הודעה', href: site.contact.whatsappHref, external: true },
+  { icon: 'phone', label: 'טלפון', value: site.contact.phone, href: site.contact.phoneHref, ltr: true },
+  { icon: 'mail', label: 'אימייל', value: site.contact.email, href: `mailto:${site.contact.email}`, ltr: true },
+  { icon: 'instagram', label: 'אינסטגרם', value: site.social[0].handle, href: site.social[0].href, external: true, ltr: true },
+] as const;
+---
+
+<BaseLayout title="יצירת קשר" description="יש לכם שאלה על מתכון, על אתגר הקיטו או על ארוחה ואירוע ב-Keto Cuisine ביפו? אשמח לשמוע מכם.">
+  <PageHero
+    title="היי! שמחה שאתם כאן."
+    intro="יש לכם שאלה על אחד המתכונים? רוצים להתייעץ לגבי אתגר הקיטו או לשמוע עוד על הקורסים שלי? אני כאן לכל שאלה, מחשבה או שיתוף בתהליך שלכם."
+    breadcrumbs={[{ label: 'יצירת קשר' }]}
+  />
+
+  <section class="container-page grid items-start gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.4fr]">
+    <div class="space-y-4">
+      <h2 class="text-2xl">ניתן ליצור איתי קשר בכמה דרכים</h2>
+      <ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+        {
+          channels.map((c) => (
+            <li>
+              <a
+                href={c.href}
+                class="card flex items-center gap-4 p-4 transition-shadow hover:shadow-[0_12px_32px_-12px_rgb(58_42_32/0.25)]"
+                {...('external' in c ? { target: '_blank', rel: 'noopener' } : {})}
+              >
+                <span class="grid size-11 shrink-0 place-items-center rounded-full bg-sage-100 text-olive-700">
+                  <Icon name={c.icon} size={22} />
+                </span>
+                <span class="min-w-0">
+                  <span class="block text-sm text-cocoa-500">{c.label}</span>
+                  <span class="block truncate font-medium text-cocoa-900" dir={'ltr' in c ? 'ltr' : undefined}>
+                    {c.value}
+                  </span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="rounded-[var(--radius-card)] bg-cream-100 p-6">
+        <p class="text-sm font-medium tracking-[0.12em] text-cocoa-500"><span dir="ltr">Keto Cuisine</span></p>
+        <h2 class="mt-1 text-xl">ארוחה על הגג הכי יפה ביפו</h2>
+        <p class="mt-2 leading-relaxed text-cocoa-700">
+          ארועים לחברות וארגונים, חגיגות משפחתיות וימי הולדת ומסיבות רווקות. התפריט יותאם באופן אישי לאופי הארוע (לקבוצות מעל 10
+          אנשים).
+        </p>
+      </div>
+    </div>
+
+    <Web3Form subject="פנייה מהאתר – Happy Keto" class="card space-y-5 p-6 sm:p-8" id="contact-form">
+      <h2 class="text-2xl">כתבו לי</h2>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="ct-name" class="mb-1.5 block font-medium">שם *</label>
+          <input id="ct-name" name="name" required autocomplete="name" class="input-field w-full rounded-2xl" />
+        </div>
+        <div>
+          <label for="ct-phone" class="mb-1.5 block font-medium">טלפון <span class="font-normal text-cocoa-500">(לא חובה)</span></label>
+          <input id="ct-phone" name="טלפון" type="tel" autocomplete="tel" dir="ltr" class="input-field w-full rounded-2xl text-end" />
+        </div>
+      </div>
+      <div>
+        <label for="ct-email" class="mb-1.5 block font-medium">אימייל *</label>
+        <input id="ct-email" name="email" type="email" required autocomplete="email" dir="ltr" class="input-field w-full rounded-2xl text-end" />
+      </div>
+      <div>
+        <label for="ct-topic" class="mb-1.5 block font-medium">נושא</label>
+        <select id="ct-topic" name="נושא" class="input-field w-full rounded-2xl" data-topic>
+          {topics.map((t) => <option value={t.label} data-key={t.value}>{t.label}</option>)}
+        </select>
+      </div>
+      <div>
+        <label for="ct-message" class="mb-1.5 block font-medium">הודעה *</label>
+        <textarea id="ct-message" name="הודעה" rows="5" required class="input-field w-full resize-y rounded-2xl"></textarea>
+      </div>
+      <button type="submit" class="btn-primary w-full text-lg">שליחה</button>
+    </Web3Form>
+  </section>
+</BaseLayout>
+
+<script>
+  // /contact?topic=events preselects the topic (used by the Keto Cuisine card).
+  const key = new URLSearchParams(location.search).get('topic');
+  const select = document.querySelector<HTMLSelectElement>('[data-topic]');
+  const option = key && select?.querySelector<HTMLOptionElement>(`option[data-key="${CSS.escape(key)}"]`);
+  if (select && option) select.value = option.value;
+</script>

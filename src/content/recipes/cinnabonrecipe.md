@@ -52,6 +52,8 @@ instructions:
       - "לצקת את הרוטב סוכר על הקינמונים."
 ---
 
+<!-- recipe -->
+
 ![סינבון](../../assets/posts/cfc025_260b5c9d72374d52bca5e81da66d28d8.jpg)
 
 ![סינבון](../../assets/posts/cfc025_2237205eecde4e709a3678d8a3e527ad.jpg)

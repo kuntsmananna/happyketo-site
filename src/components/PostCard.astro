@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { postUrl, type Post } from '@/lib/recipes';
+import sticker from '@/assets/brand/sticker-good-to-know.png';
+
+interface Props {
+  post: Post;
+  eager?: boolean;
+  headingLevel?: 2 | 3;
+}
+
+const { post, eager = false, headingLevel = 3 } = Astro.props;
+const { title, description, image, tags } = post.data;
+const Heading = `h${headingLevel}` as 'h2' | 'h3';
+---
+
+<article class="card group relative flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-[0_16px_40px_-12px_rgb(58_42_32/0.28)]">
+  <div class="aspect-[16/10] overflow-hidden bg-sage-100">
+    {
+      image ? (
+        <Image
+          src={image}
+          alt=""
+          widths={[400, 640, 800]}
+          sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
+          class="size-full object-cover transition-transform duration-500 group-hover:scale-105"
+          loading={eager ? 'eager' : 'lazy'}
+        />
+      ) : (
+        <div class="grid size-full place-items-center">
+          <Image src={sticker} alt="" width={160} class="w-32" />
+        </div>
+      )
+    }
+  </div>
+  <div class="flex flex-1 flex-col p-6">
+    {
+      tags.length > 0 && (
+        <ul class="mb-2 flex flex-wrap gap-1.5" aria-label="נושאים">
+          {tags.map((t) => (
+            <li class="rounded-full bg-cream-200 px-2.5 py-0.5 text-xs font-medium text-cocoa-700">{t}</li>
+          ))}
+        </ul>
+      )
+    }
+    <Heading class="text-xl leading-snug">
+      <a href={postUrl(post)} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">{title}</a>
+    </Heading>
+    {description && description !== title && <p class="mt-2 line-clamp-3 flex-1 leading-relaxed text-cocoa-700">{description}</p>}
+    <span class="mt-4 inline-flex items-center gap-1.5 font-medium text-olive-700">
+      להמשך קריאה
+      <Icon name="arrow" size={18} class="transition-transform group-hover:-translate-x-1" />
+    </span>
+  </div>
+  <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-[inherit] ring-olive-500 ring-offset-2 group-has-[a:focus-visible]:ring-2"></span>
+</article>

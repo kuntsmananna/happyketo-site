@@ -1,0 +1,28 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import RecipeCatalog from '@/components/RecipeCatalog.astro';
+import { recipeCategories } from '@/data/categories';
+import { getRecipes } from '@/lib/recipes';
+
+export async function getStaticPaths() {
+  const all = await getRecipes();
+  return recipeCategories
+    .map((category) => ({ category, recipes: all.filter((r) => r.data.category.includes(category.slug)) }))
+    .filter(({ recipes }) => recipes.length > 0)
+    .map(({ category, recipes }) => ({ params: { category: category.slug }, props: { category, recipes, all } }));
+}
+
+const { category, recipes, all } = Astro.props;
+const title = category.slug === 'paleo' ? 'מתכוני פליאו' : `מתכוני ${category.label}`;
+---
+
+<BaseLayout title={`${title} קטוגניים`} description={`${recipes.length} ${title} קטוגניים ודלי פחמימות מהמטבח של Happy Keto: פשוטים, טעימים, בלי סוכר ובלי קמח.`}>
+  <PageHero
+    eyebrow="Tasty Keto"
+    title={title}
+    intro={`${recipes.length} מתכונים דלי פחמימות, פשוטים וטעימים.`}
+    breadcrumbs={[{ label: 'מתכונים', href: '/recipes' }, { label: category.label }]}
+  />
+  <RecipeCatalog recipes={recipes} all={all} active={category.slug} />
+</BaseLayout>

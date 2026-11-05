@@ -1,0 +1,151 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import Prose from '@/components/Prose.astro';
+import RecipeBox from '@/components/RecipeBox.astro';
+import RecipeCard from '@/components/RecipeCard.astro';
+import SplitContent from '@/components/SplitContent.astro';
+import { categoryLabel, categoryUrl, formatMinutes, getRecipes, recipeUrl, type Recipe } from '@/lib/recipes';
+import { formatDate, recipeJsonLd } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const recipes = await getRecipes();
+  return recipes.map((recipe) => ({ params: { slug: recipe.id }, props: { recipe, all: recipes } }));
+}
+
+interface Props {
+  recipe: Recipe;
+  all: Recipe[];
+}
+
+const { recipe, all } = Astro.props;
+const { title, description, image, imageAlt, category, prepTime, publishDate, ingredients, instructions } = recipe.data;
+const { Content } = await render(recipe);
+const url = new URL(recipeUrl(recipe), Astro.site).href;
+
+// Social/structured-data image: a 1200px JPEG of the cover.
+const shareImage = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : undefined;
+const shareImageUrl = shareImage ? new URL(shareImage.src, Astro.site).href : undefined;
+
+// Related: most shared categories first, then newest.
+const related = all
+  .filter((r) => r.id !== recipe.id && r.data.image)
+  .map((r) => ({ r, score: r.data.category.filter((c) => category.includes(c)).length }))
+  .filter((x) => x.score > 0)
+  .sort((a, b) => b.score - a.score || b.r.data.publishDate.getTime() - a.r.data.publishDate.getTime())
+  .slice(0, 3)
+  .map((x) => x.r);
+
+const hasRecipe = ingredients.length > 0 || instructions.length > 0;
+const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכון קטוגני מ-Happy Keto\n${url}`)}`;
+---
+
+<BaseLayout title={title} description={description || `${title} – מתכון קטוגני ודל פחמימות`} ogImage={shareImage?.src} ogType="article">
+  <JsonLd data={recipeJsonLd(recipe, url, shareImageUrl)} />
+
+  <article>
+    <header class="bg-sage-50">
+      <div class="container-page grid items-center gap-8 py-8 sm:py-12 lg:grid-cols-[1fr_minmax(0,28rem)] lg:gap-14">
+        <div>
+          <div class="mb-5 print:hidden">
+            <Breadcrumbs
+              items={[
+                { label: 'מתכונים', href: '/recipes' },
+                { label: categoryLabel(category[0]), href: categoryUrl(category[0]) },
+                { label: title },
+              ]}
+            />
+          </div>
+          <ul class="mb-3 flex flex-wrap gap-2 print:hidden" aria-label="קטגוריות">
+            {
+              category.map((c) => (
+                <li>
+                  <a
+                    href={categoryUrl(c)}
+                    class="rounded-full bg-white px-3 py-1 text-sm font-medium text-sage-700 ring-1 ring-sage-200 transition-colors hover:bg-sage-100"
+                  >
+                    {categoryLabel(c)}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+          <h1 class="text-4xl leading-tight sm:text-5xl">{title}</h1>
+          {description && description !== title && <p class="mt-4 max-w-2xl text-lg leading-relaxed text-cocoa-700">{description}</p>}
+
+          <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-cocoa-600">
+            {
+              prepTime && (
+                <span class="inline-flex items-center gap-1.5">
+                  <Icon name="clock" size={16} class="text-olive-600" />
+                  {formatMinutes(prepTime)}
+                </span>
+              )
+            }
+            <span>פורסם ב-<time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time></span>
+          </div>
+
+          <div class="mt-6 flex flex-wrap gap-3 print:hidden">
+            {
+              hasRecipe && (
+                <a href="#recipe" class="btn-primary py-2.5">
+                  למתכון
+                  <Icon name="chevron" size={18} />
+                </a>
+              )
+            }
+            <button type="button" class="btn-secondary bg-white py-2.5" data-print>הדפסה</button>
+            <a href={whatsapp} class="btn-secondary bg-white py-2.5" target="_blank" rel="noopener">
+              <Icon name="whatsapp" size={18} />
+              שיתוף
+            </a>
+          </div>
+        </div>
+
+        {
+          image && (
+            <Image
+              src={image}
+              alt={imageAlt ?? title}
+              widths={[480, 720, 960, 1280]}
+              sizes="(min-width: 1024px) 28rem, 92vw"
+              class="mx-auto aspect-[4/5] w-full max-w-md rounded-[2rem] object-cover shadow-[var(--shadow-card)] print:max-w-xs"
+              loading="eager"
+              fetchpriority="high"
+            />
+          )
+        }
+      </div>
+    </header>
+
+    <div class="container-page max-w-4xl py-10 sm:py-14">
+      <Prose>
+        <SplitContent>
+          <Content />
+          <RecipeBox recipe={recipe} slot="insert" />
+        </SplitContent>
+      </Prose>
+    </div>
+  </article>
+
+  {
+    related.length > 0 && (
+      <section class="bg-cream-100 py-14 print:hidden" aria-labelledby="related-title">
+        <div class="container-page">
+          <h2 id="related-title" class="mb-8 text-3xl">עוד מתכונים שתאהבו</h2>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {related.map((r) => <RecipeCard recipe={r} />)}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>
+
+<script>
+  document.querySelectorAll('[data-print]').forEach((b) => b.addEventListener('click', () => print()));
+</script>

@@ -1,0 +1,226 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import Icon from '@/components/Icon.astro';
+import Web3Form from '@/components/Web3Form.astro';
+import { site } from '@/data/site';
+import heroImg from '@/assets/home/challenge-eggs-kale.jpg';
+import tacos from '@/assets/home/challenge-lettuce-tacos.jpg';
+import sticker from '@/assets/brand/sticker-low-carb.png';
+
+const outcomes = [
+  'שחרור מהתמכרויות (סוכר, מזון מעובד ופחמימות) ושחרור מנטלי מתלות רגשית באוכל.',
+  'צמצום בהיקפים ותחושת קלילות בגוף.',
+  'תחושת ערנות, חדות מחשבה, מצב רוח יציב וסבלנות.',
+  'שיפור באיכות השינה.',
+  'שיפור במדדי הבריאות והקלה בתסמינים כמו: מיגרנות, אלרגיות, בעיות עור, כאבי בטן ובעיות עיכול, תופעות קדם וסתיות ועוד.',
+  'ועור פנים חלק יותר (באמת).',
+];
+
+const steps = [
+  { icon: '✏️', title: 'הקדמה והסבר', text: 'מבינים מה זה קיטו, למה זה עובד ואיך מתכוננים.' },
+  { icon: '🥗', title: 'מעבר הדרגתי לתזונה טבעית דלת פחמימות', text: 'צעד אחרי צעד, בלי קיצוניות ובלי להפוך את החיים.' },
+  { icon: '📅', title: 'הנחיות יומיות', text: 'ברורות ופשוטות ליישום, שמתאימות לאורח חיים עמוס וללו״ז אמיתי.' },
+];
+---
+
+<BaseLayout
+  title="אתגר קיטו – Going Keto 4 שבועות"
+  description="תוכנית למעבר לתזונה קטוגנית שמתאימה לאנשים (מאוד) עסוקים: שיטה הדרגתית, טעימה ואפשרית להתמדה. מתחילים ב-3 ימי ניסיון חינם."
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-sage-50">
+    <div class="container-page grid items-center gap-10 py-10 sm:py-14 lg:grid-cols-[1.15fr_1fr] lg:gap-16">
+      <div>
+        <div class="mb-6"><Breadcrumbs items={[{ label: 'אתגר קיטו' }]} /></div>
+        <p class="mb-2 font-medium tracking-[0.18em] text-cocoa-500"><span dir="ltr">Going Keto</span></p>
+        <h1 class="text-4xl leading-tight sm:text-5xl lg:text-6xl">אתגר 4 שבועות</h1>
+        <p class="mt-5 text-xl font-medium text-olive-700">תוכנית למעבר לתזונה קטוגנית שמתאימה לא.נשים (מאוד) עסוקות</p>
+        <p class="mt-4 max-w-xl text-lg leading-relaxed text-cocoa-700">
+          כל מה שרצית לדעת על קיטו במקום אחד. קל, פשוט, נגיש (גם כלכלית). בקצב והזמן שלך, בלי בלבולי מוח מיותרים.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#register" class="btn-primary px-7 text-lg">
+            להרשמה
+            <Icon name="arrow" size={20} />
+          </a>
+          <a href="#how" class="btn-secondary bg-white/70 px-7 text-lg">איך זה עובד?</a>
+        </div>
+      </div>
+      <div class="relative mx-auto w-full max-w-md">
+        <Image
+          src={heroImg}
+          alt="צלחת עם ביצי עין, קייל, בייקון ופקאנים"
+          widths={[480, 720, 960]}
+          sizes="(min-width: 1024px) 28rem, 90vw"
+          class="aspect-[4/5] w-full rounded-t-[12rem] rounded-b-[2rem] object-cover shadow-[var(--shadow-card)]"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <Image src={sticker} alt="" width={160} class="absolute -bottom-6 -start-4 w-28 rotate-[-8deg] drop-shadow-lg sm:w-36" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="py-16 sm:py-20">
+    <div class="container-page max-w-3xl text-center">
+      <h2 class="text-3xl sm:text-4xl">שיטה הדרגתית, טעימה ואפשרית להתמדה</h2>
+      <p class="mt-5 text-lg leading-relaxed text-cocoa-700">
+        לסופרוומן שמג׳נגלת בין עבודה, משפחה, חוגים, נסיעות, חופשות, מסעדות, סופי שבוע, אירוחים… או בקיצור – החיים.
+      </p>
+      <p class="mt-4 text-xl font-medium text-olive-700">בלי קיצוניות. בלי להפוך את החיים. פשוט דרך שנכנסת לשגרה שלך.</p>
+      <ul class="mt-8 flex flex-wrap justify-center gap-3">
+        {['קיטו צעד אחרי צעד', 'מתאים לחיים האמיתיים', 'לא סופרים קלוריות'].map((t) => (
+          <li class="inline-flex items-center gap-2 rounded-full bg-sage-50 px-4 py-2 font-medium text-olive-800">
+            <Icon name="check" size={18} class="text-olive-600" />
+            {t}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Outcomes -->
+  <section class="bg-cream-100 py-16 sm:py-20" aria-labelledby="outcomes-title">
+    <div class="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.2fr]">
+      <Image
+        src={tacos}
+        alt="טאקו בעלי חסה במילוי עוף ואבוקדו"
+        widths={[480, 720]}
+        sizes="(min-width: 1024px) 26rem, 90vw"
+        class="mx-auto aspect-[3/4] w-full max-w-sm rounded-[2rem] object-cover shadow-[var(--shadow-card)]"
+      />
+      <div>
+        <h2 id="outcomes-title" class="text-3xl sm:text-4xl">למה לצפות במהלך ובסוף התוכנית</h2>
+        <ul class="mt-8 space-y-4">
+          {
+            outcomes.map((o) => (
+              <li class="flex gap-3 text-lg leading-relaxed text-cocoa-800">
+                <span class="mt-1 grid size-7 shrink-0 place-items-center rounded-full bg-olive-600 text-cream-50">
+                  <Icon name="check" size={16} />
+                </span>
+                {o}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how" class="scroll-mt-24 py-16 sm:py-20" aria-labelledby="how-title">
+    <div class="container-page">
+      <h2 id="how-title" class="mb-10 text-center text-3xl sm:text-4xl">איך התוכנית עובדת?</h2>
+      <ol class="grid gap-6 md:grid-cols-3">
+        {
+          steps.map((s, i) => (
+            <li class="card p-7">
+              <div class="mb-4 flex items-center gap-3">
+                <span class="text-3xl" aria-hidden="true">{s.icon}</span>
+                <span class="text-sm font-medium text-cocoa-500">שלב {i + 1}</span>
+              </div>
+              <h3 class="text-xl">{s.title}</h3>
+              <p class="mt-2 leading-relaxed text-cocoa-700">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Pricing + registration -->
+  <section id="register" class="scroll-mt-24 bg-sage-50 py-16 sm:py-20" aria-labelledby="register-title">
+    <div class="container-page grid items-start gap-10 lg:grid-cols-[1fr_1.3fr]">
+      <div class="lg:sticky lg:top-28">
+        <h2 id="register-title" class="text-3xl sm:text-4xl">מצטרפים לאתגר</h2>
+        <p class="mt-4 text-lg leading-relaxed text-cocoa-700">
+          השאירו פרטים ואחזור אליכם לתיאום ולהסבר על התשלום. אפשר להתחיל ב-3 ימי ניסיון חינם ולהחליט אחר כך.
+        </p>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+          <div class="card p-6">
+            <p class="text-sm font-medium tracking-[0.12em] text-cocoa-500"><span dir="ltr">Keto Kickstart</span></p>
+            <p class="mt-2 text-xl font-bold text-olive-800">3 ימי ניסיון</p>
+            <p class="mt-1 text-3xl font-bold text-olive-600">חינם</p>
+          </div>
+          <div class="card p-6 ring-2 ring-olive-600">
+            <p class="text-sm font-medium tracking-[0.12em] text-cocoa-500"><span dir="ltr">Going Keto</span></p>
+            <p class="mt-2 text-xl font-bold text-olive-800">התוכנית המלאה</p>
+            <p class="mt-1 text-3xl font-bold text-olive-600">₪250</p>
+          </div>
+        </div>
+        <p class="mt-6 text-sm text-cocoa-600">
+          שאלות? <a class="text-olive-700 underline" href={site.contact.whatsappHref} target="_blank" rel="noopener">וואטסאפ</a> או
+          <a class="text-olive-700 underline" href={site.contact.phoneHref} dir="ltr">{site.contact.phone}</a>
+        </p>
+      </div>
+
+      <Web3Form
+        subject="הרשמה לאתגר Going Keto – Happy Keto"
+        successMessage="איזה כיף! 🎉 קיבלתי את הפרטים ואחזור אליכם בהקדם לתיאום."
+        class="card space-y-5 p-6 sm:p-8"
+      >
+        <div class="grid gap-5 sm:grid-cols-2">
+          <div>
+            <label for="ch-name" class="mb-1.5 block font-medium">שם מלא *</label>
+            <input id="ch-name" name="name" required autocomplete="name" class="input-field w-full rounded-2xl" />
+          </div>
+          <div>
+            <label for="ch-phone" class="mb-1.5 block font-medium">טלפון *</label>
+            <input id="ch-phone" name="טלפון" type="tel" required autocomplete="tel" dir="ltr" class="input-field w-full rounded-2xl text-end" />
+          </div>
+        </div>
+        <div>
+          <label for="ch-email" class="mb-1.5 block font-medium">אימייל *</label>
+          <input id="ch-email" name="email" type="email" required autocomplete="email" dir="ltr" class="input-field w-full rounded-2xl text-end" />
+        </div>
+
+        <fieldset>
+          <legend class="mb-2 font-medium">במה תרצו להתחיל? *</legend>
+          <div class="grid gap-3 sm:grid-cols-2">
+            {
+              [
+                ['Keto Kickstart – 3 ימי ניסיון חינם', '3 ימי ניסיון חינם'],
+                ['Going Keto – התוכנית המלאה (₪250)', 'התוכנית המלאה'],
+              ].map(([value, label], i) => (
+                <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-olive-200 px-4 py-3 transition-colors has-[:checked]:border-olive-600 has-[:checked]:bg-sage-50">
+                  <input type="radio" name="מסלול" value={value} required checked={i === 0} class="size-4 accent-olive-600" />
+                  {label}
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+
+        <div>
+          <label for="ch-diet" class="mb-1.5 block font-medium">סגנון תזונה</label>
+          <select id="ch-diet" name="תזונה" class="input-field w-full rounded-2xl">
+            <option>רגילה (אוכלים הכל)</option>
+            <option>צמחונית</option>
+            <option>צמחונית + דגים</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="ch-notes" class="mb-1.5 block font-medium">משהו שחשוב לי לדעת? <span class="font-normal text-cocoa-500">(לא חובה)</span></label>
+          <textarea id="ch-notes" name="הערות" rows="3" class="input-field w-full resize-y rounded-2xl"></textarea>
+        </div>
+
+        <label class="flex items-start gap-3 text-sm leading-relaxed text-cocoa-700">
+          <input type="checkbox" name="אישור" value="קראתי ומאשר/ת" required class="mt-1 size-4 shrink-0 accent-olive-600" />
+          <span>
+            ידוע לי שהתוכנית אינה טיפול רפואי ואינה תחליף לייעוץ רפואי, ושאם יש לי בעיה רפואית או שאני נוטל/ת תרופות באופן קבוע –
+            אתייעץ עם הרופא/ה לפני שמתחילים. *
+          </span>
+        </label>
+
+        <button type="submit" class="btn-primary w-full text-lg">שליחה</button>
+      </Web3Form>
+    </div>
+  </section>
+
+  <FaqAccordion schema={false} />
+</BaseLayout>

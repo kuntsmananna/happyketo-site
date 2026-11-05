@@ -97,6 +97,7 @@ async function main() {
       r.ingredients = o.ingredients;
       r.instructions = o.instructions;
       r.body = p.blocks.filter((b) => ['img', 'video', 'youtube'].includes(b.type));
+      r.insertAt = 0; // recipe first, then the extra photos
       r.flags = [];
       r.sawRecipe = true;
     }
@@ -183,7 +184,7 @@ async function main() {
     }
     p.blocks.filter((b) => b.type === 'youtube').forEach((b) => videos.push({ slug: p.slug, youtube: b.id }));
 
-    const markdown = blocksToMarkdown(bodyBlocks, {
+    const mdOptions = {
       rewriteHref: (href) => {
         const out = rewriteHref(href);
         if (out.startsWith('/') && !/^\/(recipes|blog|challenge|about|contact|favorites)?(\/|$|#)/.test(out)) unknownLinks.add(out);
@@ -195,7 +196,15 @@ async function main() {
       fallbackAlt: p.title,
       // The cover is shown by the page template; don't repeat it as the first body image.
       skipUris: coverOk ? new Set([p.coverUri]) : undefined,
-    });
+    };
+    // Recipes: mark where the ingredients/steps were, so the page can render them in the same place.
+    let markdown;
+    if (p.kind === 'recipe') {
+      const at = p.recipe.insertAt + (bodyBlocks.length - p.recipe.body.length); // shift for a prepended GIF video
+      const before = blocksToMarkdown(bodyBlocks.slice(0, at), mdOptions);
+      const after = blocksToMarkdown(bodyBlocks.slice(at), mdOptions);
+      markdown = [before, '<!-- recipe -->', after].filter(Boolean).join('\n\n');
+    } else markdown = blocksToMarkdown(bodyBlocks, mdOptions);
 
     const description = makeDescription(bodyBlocks, p.title);
     const tags = [

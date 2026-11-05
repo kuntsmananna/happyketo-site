@@ -1,0 +1,56 @@
+// Post-build QA: internal links resolve, JSON-LD parses, recipe pages are complete.
+//   npm run build && node scripts/check-dist.mjs
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import path from 'node:path';
+
+const DIST = path.resolve(import.meta.dirname, '../dist');
+const pages = [];
+(function walk(dir) {
+  for (const f of readdirSync(dir)) {
+    const p = path.join(dir, f);
+    if (statSync(p).isDirectory()) walk(p);
+    else if (f.endsWith('.html')) pages.push(p);
+  }
+})(DIST);
+
+const problems = [];
+const warnings = [];
+const resolves = (href) => {
+  const clean = decodeURIComponent(href.split(/[?#]/)[0]);
+  if (clean === '' || clean === '/') return true;
+  const p = path.join(DIST, clean);
+  return existsSync(p) && statSync(p).isFile() ? true : existsSync(path.join(p, 'index.html'));
+};
+let links = 0;
+const ldTypes = {};
+for (const file of pages) {
+  const rel = path.relative(DIST, file);
+  const html = readFileSync(file, 'utf8');
+  for (const [, href] of html.matchAll(/href="(\/[^"]*)"/g)) {
+    if (href.startsWith('/_astro/') || href.startsWith('/_vercel/') || href.startsWith('/videos/')) continue;
+    links++;
+    if (!resolves(href)) problems.push(`${rel}: broken link ${decodeURIComponent(href)}`);
+  }
+  for (const [, json] of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
+    try {
+      for (const d of [JSON.parse(json)].flat()) {
+        ldTypes[d['@type']] = (ldTypes[d['@type']] || 0) + 1;
+        if (d['@type'] === 'Recipe') {
+          for (const k of ['name', 'author', 'datePublished']) if (!d[k]) problems.push(`${rel}: Recipe missing ${k}`);
+          // Google needs a photo for recipe rich results; a few original posts have none.
+          if (!d.image) warnings.push(`${rel}: Recipe has no image (no rich result until a photo is added)`);
+        }
+      }
+    } catch (e) {
+      problems.push(`${rel}: invalid JSON-LD (${e.message})`);
+    }
+  }
+  if (rel.startsWith('recipes/') && !rel.startsWith('recipes/category') && rel !== 'recipes/index.html') {
+    if (html.includes('<!-- recipe -->')) problems.push(`${rel}: unreplaced recipe marker`);
+    if (!/"@type":"Recipe"/.test(html)) problems.push(`${rel}: no Recipe JSON-LD`);
+  }
+}
+console.log({ pages: pages.length, internalLinks: links, jsonLd: ldTypes });
+if (warnings.length) console.log('warnings:\n  ' + warnings.join('\n  '));
+console.log(problems.length ? problems.slice(0, 40).join('\n') : 'no problems');
+process.exitCode = problems.length ? 1 : 0;

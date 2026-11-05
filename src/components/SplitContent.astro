@@ -1,0 +1,22 @@
+---
+/**
+ * Renders the default slot (rendered Markdown) and injects the "insert" slot at `marker`
+ * (an HTML comment the scraper writes where the recipe sat in the original post).
+ * Without the marker, the insert goes after the content.
+ */
+interface Props {
+  marker?: string;
+}
+const { marker = '<!-- recipe -->' } = Astro.props;
+
+const html = await Astro.slots.render('default');
+const insert = await Astro.slots.render('insert');
+const at = html.indexOf(marker);
+const before = at >= 0 ? html.slice(0, at) : html;
+const after = at >= 0 ? html.slice(at + marker.length) : '';
+const hasText = (s: string) => s.replace(/<[^>]*>/g, '').trim().length > 0 || /<(img|video|iframe)\b/.test(s);
+---
+
+{hasText(before) && <div data-content-before><Fragment set:html={before} /></div>}
+<Fragment set:html={insert} />
+{hasText(after) && <div data-content-after><Fragment set:html={after} /></div>}

@@ -1,0 +1,27 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/PageHero.astro';
+import PostCard from '@/components/PostCard.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+import { getPosts } from '@/lib/recipes';
+
+const posts = await getPosts();
+---
+
+<BaseLayout
+  title="בלוג דל פחמימות"
+  description="מאמרים ומדריכים על תזונה קטוגנית, פליאו ודלת פחמימות: איך מתחילים, מה אוכלים, קריאת תוויות, טיולים ועוד."
+>
+  <PageHero
+    eyebrow="Keto Blog"
+    title="מידע בנושא תזונה דלת פחמימות"
+    intro="כל מה שחשוב לדעת לתהליך מוצלח במעבר לתזונה טבעית קטוגנית."
+    breadcrumbs={[{ label: 'בלוג' }]}
+  />
+  <section class="container-page py-10 sm:py-14">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+      {posts.map((post, i) => <PostCard post={post} eager={i < 3} headingLevel={2} />)}
+    </div>
+  </section>
+  <NewsletterForm />
+</BaseLayout>

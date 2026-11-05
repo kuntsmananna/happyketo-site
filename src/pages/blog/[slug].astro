@@ -1,0 +1,99 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Icon from '@/components/Icon.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import PostCard from '@/components/PostCard.astro';
+import Prose from '@/components/Prose.astro';
+import { getPosts, postUrl, type Post } from '@/lib/recipes';
+import { formatDate, postJsonLd } from '@/lib/schema';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, all: posts } }));
+}
+
+interface Props {
+  post: Post;
+  all: Post[];
+}
+
+const { post, all } = Astro.props;
+const { title, description, image, imageAlt, publishDate, tags } = post.data;
+const { Content } = await render(post);
+const url = new URL(postUrl(post), Astro.site).href;
+const shareImage = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : undefined;
+
+const related = all
+  .filter((p) => p.id !== post.id)
+  .map((p) => ({ p, score: p.data.tags.filter((t) => tags.includes(t)).length }))
+  .sort((a, b) => b.score - a.score || b.p.data.publishDate.getTime() - a.p.data.publishDate.getTime())
+  .slice(0, 3)
+  .map((x) => x.p);
+---
+
+<BaseLayout title={title} description={description || title} ogImage={shareImage?.src} ogType="article">
+  <JsonLd data={postJsonLd(post, url, shareImage ? new URL(shareImage.src, Astro.site).href : undefined)} />
+
+  <article>
+    <header class="bg-sage-50">
+      <div class="container-page max-w-4xl py-8 sm:py-12">
+        <div class="mb-5"><Breadcrumbs items={[{ label: 'בלוג', href: '/blog' }, { label: title }]} /></div>
+        {
+          tags.length > 0 && (
+            <ul class="mb-3 flex flex-wrap gap-2" aria-label="נושאים">
+              {tags.map((t) => (
+                <li class="rounded-full bg-white px-3 py-1 text-sm font-medium text-cocoa-700 ring-1 ring-cream-300">{t}</li>
+              ))}
+            </ul>
+          )
+        }
+        <h1 class="text-4xl leading-tight sm:text-5xl">{title}</h1>
+        <p class="mt-4 text-sm text-cocoa-600">
+          אנה קונצמן רוזנברג · <time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time>
+        </p>
+      </div>
+    </header>
+
+    <div class="container-page max-w-4xl py-10 sm:py-14">
+      {
+        image && (
+          <Image
+            src={image}
+            alt={imageAlt ?? title}
+            widths={[640, 960, 1280]}
+            sizes="(min-width: 896px) 56rem, 92vw"
+            class="mb-10 max-h-[70vh] w-full rounded-[2rem] object-cover shadow-[var(--shadow-card)]"
+            loading="eager"
+            fetchpriority="high"
+          />
+        )
+      }
+      <Prose>
+        <Content />
+      </Prose>
+
+      <aside class="mt-14 flex flex-col items-start gap-4 rounded-[2rem] bg-olive-700 p-8 text-cream-50 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p class="text-xl font-bold">רוצים לעשות את זה ביחד?</p>
+          <p class="mt-1 text-cream-100">אתגר 4 שבועות למעבר הדרגתי וטעים לקיטו. מתחילים ב-3 ימי ניסיון חינם.</p>
+        </div>
+        <a href="/challenge" class="btn shrink-0 bg-cream-50 text-olive-800 hover:bg-white">
+          לפרטים
+          <Icon name="arrow" size={18} />
+        </a>
+      </aside>
+    </div>
+  </article>
+
+  <section class="bg-cream-100 py-14" aria-labelledby="related-title">
+    <div class="container-page">
+      <h2 id="related-title" class="mb-8 text-3xl">עוד מהבלוג</h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {related.map((p) => <PostCard post={p} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
