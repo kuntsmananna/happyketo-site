@@ -1,5 +1,5 @@
 ---
-/** Filter + grid of recipe cards. `recipes` is what to show; `all` feeds the chip counts. */
+/** Filter (an addition) + the original's two-column grid of square recipe tiles. `recipes` is what to show; `all` feeds the chip counts. */
 import RecipeCard from './RecipeCard.astro';
 import RecipeFilter from './RecipeFilter.astro';
 import { countByCategory, type Recipe } from '@/lib/recipes';
@@ -13,9 +13,9 @@ interface Props {
 const { recipes, all, active } = Astro.props;
 ---
 
-<section class="container-page section-y-sm">
+<section class="mx-auto max-w-[1280px] px-[6%] pt-8 pb-16 lg:px-5 lg:pt-5 lg:pb-24">
   <RecipeFilter target="recipe-list" counts={countByCategory(all)} total={all.length} active={active} />
-  <div id="recipe-list" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+  <div id="recipe-list" class="grid gap-8 sm:grid-cols-2">
     {recipes.map((recipe, i) => <RecipeCard recipe={recipe} eager={i < 3} headingLevel={2} />)}
   </div>
   <p data-filter-empty hidden class="py-16 text-center text-lg text-bark-600">

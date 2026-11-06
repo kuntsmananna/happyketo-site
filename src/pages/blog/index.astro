@@ -2,7 +2,6 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/PageHero.astro';
 import PostCard from '@/components/PostCard.astro';
-import NewsletterForm from '@/components/NewsletterForm.astro';
 import { getPosts } from '@/lib/recipes';
 
 const posts = await getPosts();
@@ -19,10 +18,9 @@ const posts = await getPosts();
     intro="כל מה שחשוב לדעת לתהליך מוצלח במעבר לתזונה טבעית קטוגנית."
     breadcrumbs={[{ label: 'בלוג' }]}
   />
-  <section class="container-page section-y-sm">
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-8">
+  <section class="mx-auto max-w-[1280px] px-[6%] pt-8 pb-16 lg:px-5 lg:pt-5 lg:pb-24">
+    <div class="grid gap-8 sm:grid-cols-2">
       {posts.map((post, i) => <PostCard post={post} eager={i < 3} headingLevel={2} />)}
     </div>
   </section>
-  <NewsletterForm />
 </BaseLayout>

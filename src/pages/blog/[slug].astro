@@ -2,13 +2,12 @@
 import { Image, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import Icon from '@/components/Icon.astro';
 import JsonLd from '@/components/JsonLd.astro';
-import PostCard from '@/components/PostCard.astro';
+import RelatedPosts from '@/components/RelatedPosts.astro';
+import ShareRow from '@/components/ShareRow.astro';
 import Prose from '@/components/Prose.astro';
 import { getPosts, postUrl, type Post } from '@/lib/recipes';
-import { formatDate, postJsonLd } from '@/lib/schema';
+import { postJsonLd } from '@/lib/schema';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -21,7 +20,7 @@ interface Props {
 }
 
 const { post, all } = Astro.props;
-const { title, description, image, imageAlt, publishDate, tags } = post.data;
+const { title, description, image, imageAlt, tags } = post.data;
 const { Content } = await render(post);
 const url = new URL(postUrl(post), Astro.site).href;
 const shareImage = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : undefined;
@@ -37,63 +36,41 @@ const related = all
 <BaseLayout title={title} description={description || title} ogImage={shareImage?.src} ogType="article">
   <JsonLd data={postJsonLd(post, url, shareImage ? new URL(shareImage.src, Astro.site).href : undefined)} />
 
-  <article>
-    <header class="bg-mint-50">
-      <div class="container-page max-w-4xl py-8 sm:py-12">
-        <div class="mb-5"><Breadcrumbs items={[{ label: 'בלוג', href: '/blog' }, { label: title }]} /></div>
-        {
-          tags.length > 0 && (
-            <ul class="mb-3 flex flex-wrap gap-2" aria-label="נושאים">
-              {tags.map((t) => (
-                <li class="rounded-full bg-white px-3 py-1 text-sm font-medium text-bark-700 ring-1 ring-cream-300">{t}</li>
-              ))}
-            </ul>
-          )
-        }
-        <h1 class="h-display">{title}</h1>
-        <p class="mt-4 text-sm text-bark-600">
-          אנה קונצמן רוזנברג · <time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time>
-        </p>
-      </div>
-    </header>
+  <!-- One 740px column, as on the original: title, photo, the post, tags, share, related. -->
+  <article class="mx-auto w-[89%] pt-10 lg:w-[740px] lg:pt-[100px]">
+    <h1 class="text-[2rem] leading-[1.2] lg:text-[2.3rem]">{title}</h1>
+    {
+      image && (
+        <Image
+          src={image}
+          alt={imageAlt ?? title}
+          width={1480}
+          widths={[480, 740, 1110, 1480]}
+          sizes="(min-width: 1024px) 740px, 89vw"
+          class="mt-12 w-full"
+          loading="eager"
+          fetchpriority="high"
+        />
+      )
+    }
+    <Prose class="mt-0">
+      <Content />
+    </Prose>
 
-    <div class="container-page max-w-4xl section-y-sm">
-      {
-        image && (
-          <Image
-            src={image}
-            alt={imageAlt ?? title}
-            widths={[640, 960, 1280]}
-            sizes="(min-width: 896px) 56rem, 92vw"
-            class="mb-10 max-h-[70vh] w-full rounded-[2rem] object-cover shadow-[var(--shadow-card)]"
-            loading="eager"
-            fetchpriority="high"
-          />
-        )
-      }
-      <Prose>
-        <Content />
-      </Prose>
-
-      <aside class="mt-14 flex flex-col items-start gap-4 rounded-[2rem] bg-forest-700 p-8 text-cream-50 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p class="text-xl font-bold">רוצים לעשות את זה ביחד?</p>
-          <p class="mt-1 text-cream-100">אתגר 4 שבועות למעבר הדרגתי וטעים לקיטו. מתחילים ב-3 ימי ניסיון חינם.</p>
+    {
+      tags.length > 0 && (
+        <div class="mt-12 border-t border-bark-300/60 pt-5 text-sm text-bark-800">
+          <h2 class="font-sans text-sm text-bark-800">תיוגים:</h2>
+          <ul class="mt-3 flex flex-wrap gap-2">
+            {tags.map((t) => (
+              <li class="inline-flex min-h-[31px] items-center border border-bark-300 px-3">{t}</li>
+            ))}
+          </ul>
         </div>
-        <a href="/challenge" class="btn shrink-0 bg-cream-50 text-forest-800 hover:bg-white">
-          לפרטים
-          <Icon name="arrow" size={18} />
-        </a>
-      </aside>
-    </div>
+      )
+    }
+    <div class="mt-6"><ShareRow url={url} /></div>
   </article>
 
-  <section class="bg-cream-100 section-y-sm" aria-labelledby="related-title">
-    <div class="container-page">
-      <h2 id="related-title" class="mb-8 h-section">עוד מהבלוג</h2>
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {related.map((p) => <PostCard post={p} />)}
-      </div>
-    </div>
-  </section>
+  <RelatedPosts label="עוד מהבלוג" items={related.map((p) => ({ title: p.data.title, href: postUrl(p), image: p.data.image }))} />
 </BaseLayout>

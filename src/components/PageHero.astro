@@ -1,7 +1,7 @@
 ---
 /**
  * Inner-page header in the original's styles:
- *   marquee  mustard "Keto Blog • Happy Blog" band, then title row on cream (blog, recipes, pantry)
+ *   marquee  mustard "Keto Blog • Happy Blog" band only, as on the original (title kept for screen readers)
  *   navy     navy band with leaf shadows, centered cream title + intro (challenge)
  *   plain    centered title + intro on cream (contact, privacy)
  */
@@ -21,10 +21,17 @@ interface Props {
 const { title, intro, eyebrow, breadcrumbs, variant = 'plain', marquee } = Astro.props;
 ---
 
-{variant === 'marquee' && marquee && <Marquee word={marquee} />}
+{
+  variant === 'marquee' && (
+    <>
+      <h1 class="sr-only">{title}</h1>
+      {marquee && <Marquee word={marquee} />}
+    </>
+  )
+}
 
 {
-  variant === 'navy' ? (
+  variant === 'marquee' ? null : variant === 'navy' ? (
     <section class="surface-navy section-y text-center">
       <div class="container-page max-w-3xl">
         {breadcrumbs && (

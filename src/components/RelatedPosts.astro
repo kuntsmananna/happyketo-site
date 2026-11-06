@@ -1,0 +1,39 @@
+---
+/** Three small cards under a post (photo 291×163 + green title), as on the original. */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  items: { title: string; href: string; image?: ImageMetadata }[];
+  label: string;
+}
+const { items, label } = Astro.props;
+---
+
+<section class="mx-auto mt-16 w-[89%] pb-16 lg:mt-[90px] lg:w-[940px] lg:pb-24 print:hidden" aria-label={label}>
+  <ul class="grid gap-8 sm:grid-cols-3 sm:gap-[33px]">
+    {
+      items.map((it) => (
+        <li class="group relative">
+          {it.image ? (
+            <Image
+              src={it.image}
+              alt=""
+              width={582}
+              height={326}
+              fit="cover"
+              widths={[291, 582]}
+              sizes="(min-width: 640px) 291px, 89vw"
+              class="aspect-[291/163] w-full object-cover"
+            />
+          ) : (
+            <div class="aspect-[291/163] w-full bg-mint-100" />
+          )}
+          <a href={it.href} class="mt-5 block px-6 font-display text-lg leading-tight text-forest-600 after:absolute after:inset-0 group-hover:underline">
+            {it.title}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</section>

@@ -1,7 +1,8 @@
 ---
-/** Contact page (both languages): the original's centered text, contact channels and a form. */
-import Icon from '@/components/Icon.astro';
-import PageHero from '@/components/PageHero.astro';
+/**
+ * Contact page (both languages): the original's centered lines (20px, two groups with a blank line between),
+ * followed by the contact form (an addition: the original has no form; messages go to Anna via Web3Forms).
+ */
 import Web3Form from '@/components/Web3Form.astro';
 import { site } from '@/data/site';
 import { getLang } from '@/i18n';
@@ -11,13 +12,11 @@ const ig = site.social[0];
 
 const copy = {
   he: {
-    crumb: 'יצירת קשר',
     title: 'היי! שמחה שאתם כאן.',
     intro:
       'יש לכם שאלה על אחד המתכונים?\nרוצים להתייעץ לגבי אתגר הקיטו או לשמוע עוד על הקורסים שלי?\nאני כאן לכל שאלה, מחשבה או שיתוף בתהליך שלכם.',
     ways: 'ניתן ליצור איתי קשר בכמה דרכים:',
     instagram: 'מוזמנים לעקוב ולכתוב לי בפרטי באינסטגרם',
-    whatsapp: 'וואטסאפ',
     formTitle: 'או כתבו לי כאן',
     name: 'שם *',
     phone: 'טלפון',
@@ -36,13 +35,11 @@ const copy = {
     ],
   },
   en: {
-    crumb: 'Contact',
     title: 'Hi! Glad you’re here.',
     intro:
       'Do you have a question about one of the recipes?\nWant to get advice about the keto challenge or hear more about my courses?\nI am here for any questions, thoughts, or sharing in your process.',
     ways: 'You can contact me in several ways:',
     instagram: 'You are welcome to follow and write to me privately on Instagram',
-    whatsapp: 'WhatsApp',
     formTitle: 'Or write to me here',
     name: 'Name *',
     phone: 'Phone',
@@ -63,29 +60,22 @@ const copy = {
 }[lang];
 ---
 
-<PageHero variant="plain" title={copy.title} intro={copy.intro} breadcrumbs={[{ label: copy.crumb }]} />
-
-<section class="bg-cream-100 pb-16 sm:pb-24">
-  <div class="container-page max-w-3xl text-center text-lg text-bark-800">
-    <p>{copy.ways}</p>
-    <ul class="mt-3 flex flex-wrap justify-center gap-3">
-      <li>
-        <a href={`mailto:${site.contact.email}`} class="btn-outline gap-2 text-base"><Icon name="mail" size={18} />{site.contact.email}</a>
-      </li>
-      <li>
-        <a href={site.contact.phoneHref} class="btn-outline gap-2 text-base"><Icon name="phone" size={18} /><span dir="ltr">{site.contact.phone.replace('-', '.')}</span></a>
-      </li>
-      <li>
-        <a href={site.contact.whatsappHref} class="btn-outline gap-2 text-base" target="_blank" rel="noopener"><Icon name="whatsapp" size={18} />{copy.whatsapp}</a>
-      </li>
-    </ul>
-    <p class="mt-5">
+<section class="bg-cream-100 px-[6%] pt-10 pb-6 text-center text-[1.3rem] leading-[1.4] text-bark-800 lg:px-0 lg:pt-[49px] lg:pb-[75px] lg:text-xl">
+  <div class="mx-auto lg:w-[980px]">
+    <h1 class="font-sans text-[length:inherit] leading-[inherit] text-bark-800">{copy.title}</h1>
+    <p class="whitespace-pre-line">{copy.intro}</p>
+    <p class="mt-[1.4em]">{copy.ways}</p>
+    <p><a href={`mailto:${site.contact.email}`} class="hover:underline">{site.contact.email}</a></p>
+    <p><a href={site.contact.phoneHref} class="hover:underline" dir="ltr">{site.contact.phone.replace('-', '.')}</a></p>
+    <p>
       {copy.instagram}{' '}
-      <a href={ig.href} class="font-medium text-forest-600 underline" target="_blank" rel="noopener" dir="ltr">{ig.handle}</a>
+      <a href={ig.href} class="underline" target="_blank" rel="noopener" dir="ltr">{ig.handle}</a>
     </p>
   </div>
+</section>
 
-  <div class="container-page mt-12 max-w-2xl">
+<section class="bg-cream-100 pb-16 sm:pb-24">
+  <div class="container-page max-w-2xl">
     <Web3Form subject={copy.subject} class="card space-y-5 p-6 sm:p-8" id="contact-form">
       <h2 class="h-card text-2xl">{copy.formTitle}</h2>
       <div class="grid gap-5 sm:grid-cols-2">

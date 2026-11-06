@@ -15,12 +15,13 @@ export async function getStaticPaths() {
 
 const { category, recipes, all } = Astro.props;
 const title = category.slug === 'paleo' ? 'מתכוני פליאו' : `מתכוני ${category.label}`;
+const bandWord: Record<string, string> = { paleo: 'Paleo', pastry: 'Pastry', meat: 'Meat', fish: 'Fish', soups: 'Soups', eggs: 'Eggs', vegetables: 'Vegetables', desserts: 'Desserts', spreads: 'Spreads', drinks: 'Drinks' };
 ---
 
 <BaseLayout title={`${title} קטוגניים`} description={`${recipes.length} ${title} קטוגניים ודלי פחמימות מהמטבח של Happy Keto: פשוטים, טעימים, בלי סוכר ובלי קמח.`}>
   <PageHero
     variant="marquee"
-    marquee="Recipes"
+    marquee={bandWord[category.slug] ?? 'Recipes'}
     title={title}
     intro={`${recipes.length} מתכונים דלי פחמימות, פשוטים וטעימים.`}
     breadcrumbs={[{ label: 'מתכונים', href: '/recipes' }, { label: category.label }]}

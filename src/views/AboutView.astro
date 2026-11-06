@@ -1,8 +1,10 @@
 ---
-/** About page (both languages), laid out like the original: photo + lime portrait panel, "Happy Keto" band, story. */
+/**
+ * About page (both languages), laid out like the original: food photo + lime panel with the arched portrait,
+ * "Happy Keto" band, then the story in groups of lines (blank line between groups) with the steak photo and
+ * the kitchen selfie overlapping it. Phones: portrait panel, band, story with the selfie only.
+ */
 import { Image } from 'astro:assets';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import Icon from '@/components/Icon.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import Marquee from '@/components/Marquee.astro';
 import { site } from '@/data/site';
@@ -18,7 +20,6 @@ const lang = getLang(Astro.url);
 const copy = {
   he: {
     name: 'אנה קונצמן רוזנברג',
-    crumb: 'אודות',
     intro: [
       'אתחיל מהסוף: אני הייטקיסטית עם 2 ילדות קטנות, לו״ז משוגע ואובססיה לסדר ונקיון שיודעת איך בכל הדבר המשוגע הזה שנקרא החיים להכניס ולשלב אוכל טעים ומזין ב-no time. איך?! אשמח לחלוק וללמד אתכם.',
       'אני אנה, ואני חיה ״בקצב גבוה״, לא נחה לדקה אבל בעיקר עקשנית.',
@@ -52,8 +53,6 @@ const copy = {
       'מטרת התכנים המופיעים באתר היא לספק מידע בנושא תזונה קטוגנית טבעית. התכנים אינם חוות דעת רפואית מקצועית. התכנים המופיעים בתוכנית זו נועדו להרחבת הידע האישי של המשתמשים והמשתמשות ואין לראות בהם תחליף להתייעצות עם רופא מומחה.',
     ],
     sign: 'שלכם/ן, אנה קונצמן רוזנברג',
-    ctaChallenge: 'לאתגר 4 השבועות',
-    ctaRecipes: 'למתכונים',
     plateAlt: 'צלחת עם ביצי עין, קייל ופקאנים',
     steakAlt: 'סטייק פרוס על קרש',
     selfieAlt: 'אנה בסדנת בישול',
@@ -61,7 +60,6 @@ const copy = {
   },
   en: {
     name: 'Anna Kuntsman Rosenberg',
-    crumb: 'About',
     intro: [
       'I’ll start at the end: I’m a high-tech person with 2 little girls, a crazy schedule, and an obsession with order and cleanliness who knows how to incorporate delicious and nutritious food into this crazy thing called life in no time. How?! I’d be happy to share and teach you.',
       'I’m Anna, and I live "at a high pace," never resting for a minute, but mostly stubborn.',
@@ -98,8 +96,6 @@ const copy = {
       'The purpose of the content on the site is to provide information on the natural ketogenic diet. The content is not a professional medical opinion. The content appearing in this program is intended to expand the personal knowledge of users and should not be considered a substitute for consulting a specialist.',
     ],
     sign: 'Yours, Anna Kuntsman Rosenberg',
-    ctaChallenge: 'Join the 4-week challenge',
-    ctaRecipes: 'Recipes (in Hebrew)',
     plateAlt: 'A plate with fried eggs, kale and pecans',
     steakAlt: 'Sliced steak on a board',
     selfieAlt: 'Anna at a cooking workshop',
@@ -116,95 +112,89 @@ const person = {
   address: { '@type': 'PostalAddress', addressLocality: lang === 'he' ? 'יפו' : 'Jaffa', addressCountry: 'IL' },
   sameAs: site.social.map((s) => s.href),
 };
----
 
+// The original's line groups (a blank line between groups): intro before the photos, story after them.
+const introGroups = [[copy.intro[0]], [copy.intro[1], copy.intro[2]]];
+const s = copy.story;
+const storyGroups = [s.slice(0, 3), s.slice(3, 7), [s[7]], [s[8], s[9]], [s[10], s[11]], [s[12]]];
+---
 <JsonLd data={person} />
 
-<!-- Top: food photo + lime panel with the arched portrait (as on the original) -->
-<section class="grid lg:grid-cols-2">
-  <div class="flex flex-col items-center justify-center bg-lime-100 px-6 py-12 text-center sm:py-16">
-    <div class="mb-8 [&_nav]:justify-center"><Breadcrumbs items={[{ label: copy.crumb }]} /></div>
-    <div class="relative w-full max-w-[16rem] sm:max-w-xs">
-      <Image
-        src={anna}
-        alt=""
-        width={640}
-        height={800}
-        fit="cover"
-        position="top"
-        widths={[320, 480, 640]}
-        sizes="(min-width: 640px) 20rem, 16rem"
-        class="aspect-[4/5] w-full rounded-t-full object-cover shadow-[var(--shadow-card)]"
-        loading="eager"
-        fetchpriority="high"
-      />
-      <Image src={stickerLowCarb} alt="" width={140} class="absolute -top-4 -start-6 w-24 rotate-[-8deg] drop-shadow-md" />
+<!-- Top: food photo + lime panel with the arched portrait, then the "Happy Keto" band (as on the original) -->
+<section>
+  <div class="grid lg:h-[762px] lg:grid-cols-2">
+    <div class="flex flex-col items-center bg-lime-100 px-[11%] pt-10 pb-6 text-center lg:px-0 lg:pt-[132px] lg:pb-0">
+      <div class="relative w-full lg:w-[392px]">
+        <Image
+          src={anna}
+          alt=""
+          width={784}
+          height={933}
+          fit="cover"
+          position="top"
+          widths={[392, 600, 784]}
+          sizes="(min-width: 1024px) 392px, 78vw"
+          class="aspect-[392/489] w-full rounded-t-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <Image src={stickerLowCarb} alt="" width={200} class="absolute -top-[3%] -left-[6%] w-[34%] lg:-top-[15px] lg:left-[16px] lg:w-[99px]" loading="eager" />
+      </div>
+      <h1 class="mt-3 text-[1.75rem] leading-[1.15] lg:mt-6 lg:text-[2.5rem]">{copy.name}</h1>
     </div>
-    <h1 class="h-display mt-8">{copy.name}</h1>
+    <div class="relative hidden lg:block">
+      <Image
+        src={plate}
+        alt={copy.plateAlt}
+        widths={[564]}
+        sizes="50vw"
+        class="absolute inset-0 size-full object-cover"
+        loading="eager"
+      />
+    </div>
   </div>
-  <div class="relative order-first h-[min(60vw,22rem)] lg:order-none lg:h-auto">
-    <Image
-      src={plate}
-      alt={copy.plateAlt}
-      widths={[480, 720, 960, 1400]}
-      sizes="(min-width: 1024px) 50vw, 100vw"
-      class="absolute inset-0 size-full object-cover"
-      loading="eager"
-    />
-  </div>
+  <Marquee word="Keto" sparkles />
 </section>
 
-<Marquee word="Keto" />
-
-<section class="bg-cream-100 section-y">
-  <div class="container-page max-w-3xl space-y-4 text-lg leading-relaxed text-bark-800">
-    {copy.intro.map((p) => <p>{p}</p>)}
+<section class="bg-cream-100 pt-[62px] pb-14 text-[1.3rem] leading-[1.4] text-bark-800 lg:pt-[83px] lg:pb-[58px] lg:text-xl">
+  <div class="mx-auto w-[82%] space-y-[1.4em] lg:w-[980px]">
+    {introGroups.map((g) => <div>{g.map((p) => <p>{p}</p>)}</div>)}
   </div>
 
-  <div class="container-page mt-12 max-w-4xl">
-    <div class="relative mx-auto max-w-2xl pb-16 sm:pb-24">
-      <Image
-        src={steak}
-        alt={copy.steakAlt}
-        width={1200}
-        height={760}
-        fit="cover"
-        widths={[480, 720, 960, 1200]}
-        sizes="(min-width: 672px) 42rem, 92vw"
-        class="aspect-[1200/760] w-[85%] object-cover"
-      />
-      <Image
-        src={selfie}
-        alt={copy.selfieAlt}
-        width={480}
-        height={640}
-        fit="cover"
-        widths={[240, 360, 480]}
-        sizes="(min-width: 672px) 15rem, 38vw"
-        class="absolute end-0 bottom-0 aspect-[3/4] w-[38%] border-4 border-cream-100 object-cover shadow-[var(--shadow-card)]"
-      />
+  <!-- Desktop: steak photo with the selfie overlapping its lower corner (original: 706×446 and 282×385). Phones: selfie only. -->
+  <div class="relative mt-10 lg:mx-auto lg:mt-[82px] lg:h-[610px] lg:w-[980px]" dir="ltr">
+    <Image
+      src={steak}
+      alt={copy.steakAlt}
+      width={1057}
+      height={668}
+      fit="cover"
+      widths={[706, 1057]}
+      sizes="706px"
+      class="absolute top-0 left-[80px] hidden h-[446px] w-[706px] object-cover lg:block"
+    />
+    <Image
+      src={selfie}
+      alt={copy.selfieAlt}
+      width={564}
+      height={770}
+      fit="cover"
+      widths={[390, 564, 780]}
+      sizes="(min-width: 1024px) 282px, 100vw"
+      class="aspect-[320/305] w-full object-cover lg:absolute lg:top-[225px] lg:left-[640px] lg:aspect-auto lg:h-[385px] lg:w-[282px]"
+    />
+  </div>
+
+  <div class="mx-auto mt-10 w-[82%] space-y-[1.4em] lg:mt-[62px] lg:w-[980px]">
+    {storyGroups.map((g) => <div>{g.map((p) => <p>{p}</p>)}</div>)}
+    <div class="font-bold">
+      <h2 class="font-sans text-[length:inherit] leading-[inherit] text-bark-800">{copy.disclosureTitle}</h2>
+      {copy.disclosure.map((p) => <p>{p}</p>)}
+      <p>{copy.welcome}</p>
     </div>
-  </div>
-
-  <div class="container-page mt-12 max-w-3xl space-y-4 text-lg leading-relaxed text-bark-800">
-    {copy.story.map((p) => <p>{p}</p>)}
-
-    <h2 class="pt-6 font-sans text-xl font-bold text-bark-800">{copy.disclosureTitle}</h2>
-    {copy.disclosure.map((p) => <p class="font-semibold">{p}</p>)}
-    <p class="text-xl font-bold text-forest-600">{copy.welcome}</p>
-
-    <div class="space-y-1 rounded-[var(--radius-card)] border border-bark-300/60 bg-white/60 p-5 text-base text-bark-600">
+    <div class="pt-[1.4em] font-bold">
       {copy.medical.map((p) => <p>{p}</p>)}
     </div>
-
-    <p class="pt-4 text-xl font-bold">{copy.sign}</p>
-
-    <div class="flex flex-wrap gap-3 pt-4">
-      <a href={localized('/challenge', lang)} class="btn-primary">
-        {copy.ctaChallenge}
-        <Icon name="arrow" size={18} />
-      </a>
-      <a href="/recipes" hreflang={lang === 'en' ? 'he' : undefined} class="btn-outline">{copy.ctaRecipes}</a>
-    </div>
+    <p class="pt-[1.4em] text-[1.4rem] font-bold lg:text-[1.375rem]">{copy.sign}</p>
   </div>
 </section>

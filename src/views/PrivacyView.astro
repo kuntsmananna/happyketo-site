@@ -3,9 +3,8 @@
  * Privacy policy (both languages). Sections 4–6 are from the original Wix policy; sections 1–3 describe what this
  * site actually does (no AdSense; cookieless analytics; Web3Forms; privacy-enhanced YouTube) – review before launch.
  * The English text is a translation of the Hebrew (the original's English page was never translated).
+ * Layout as on the original: plain 20px lines, headings on their own line in the same style, no gaps.
  */
-import PageHero from '@/components/PageHero.astro';
-import Prose from '@/components/Prose.astro';
 import { site } from '@/data/site';
 import { getLang } from '@/i18n';
 
@@ -13,25 +12,24 @@ const lang = getLang(Astro.url);
 const mail = site.contact.email;
 ---
 
-{
-  lang === 'he' ? (
-    <PageHero
-      title="מדיניות פרטיות"
-      intro="ב-Happy Keto, אנו מעריכים את פרטיות המבקרים שלנו. מסמך זה מפרט את סוגי המידע האישי שנאסף על ידינו וכיצד אנו משתמשים בו."
-      breadcrumbs={[{ label: 'מדיניות פרטיות' }]}
-    />
-  ) : (
-    <PageHero
-      title="Privacy Policy"
-      intro="At Happy Keto, we value the privacy of our visitors. This document describes the types of personal information we collect and how we use it."
-      breadcrumbs={[{ label: 'Privacy Policy' }]}
-    />
-  )
-}
+<div class="bg-cream-100 px-[6%] pt-7 pb-16 text-[1.16rem] leading-[1.4] text-bark-800 lg:px-0 lg:pt-[105px] lg:pb-[46px] lg:text-xl">
+  <div class="mx-auto lg:w-[980px] [&_a]:underline [&_h2]:font-sans [&_h2]:text-[length:inherit] [&_h2]:leading-[inherit] [&_h2]:text-bark-800">
+    {
+      lang === 'he' ? (
+        <>
+          <h1 class="font-sans text-[length:inherit] leading-[inherit] text-bark-800">מדיניות פרטיות - Happy Keto</h1>
+          <p>ב-Happy Keto, אנו מעריכים את פרטיות המבקרים שלנו.</p>
+          <p>מסמך זה מפרט את סוגי המידע האישי שנאסף על ידינו וכיצד אנו משתמשים בו.</p>
+        </>
+      ) : (
+        <>
+          <h1 class="font-sans text-[length:inherit] leading-[inherit] text-bark-800">Privacy Policy - Happy Keto</h1>
+          <p>At Happy Keto, we value the privacy of our visitors.</p>
+          <p>This document describes the types of personal information we collect and how we use it.</p>
+        </>
+      )
+    }
 
-<div class="bg-cream-100 pb-16 sm:pb-24">
-  <div class="container-page max-w-3xl">
-    <Prose>
       {
         lang === 'he' ? (
           <>
@@ -65,7 +63,7 @@ const mail = site.contact.email;
             </p>
             <h2>6. הסכמה</h2>
             <p>בעצם השימוש באתר שלנו, אתם מסכימים למדיניות הפרטיות שלנו ומסכימים לתנאיה.</p>
-            <p class="text-sm">
+            <p>
               לשאלות בנושא פרטיות: <a href={`mailto:${mail}`}>{mail}</a>
             </p>
           </>
@@ -104,12 +102,11 @@ const mail = site.contact.email;
             </p>
             <h2>6. Consent</h2>
             <p>By using our site, you agree to this privacy policy and its terms.</p>
-            <p class="text-sm">
+            <p>
               Privacy questions: <a href={`mailto:${mail}`}>{mail}</a>
             </p>
           </>
         )
       }
-    </Prose>
   </div>
 </div>

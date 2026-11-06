@@ -2,15 +2,14 @@
 import { Image, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Breadcrumbs from '@/components/Breadcrumbs.astro';
-import Icon from '@/components/Icon.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import Prose from '@/components/Prose.astro';
 import RecipeBox from '@/components/RecipeBox.astro';
-import RecipeCard from '@/components/RecipeCard.astro';
+import RelatedPosts from '@/components/RelatedPosts.astro';
+import ShareRow from '@/components/ShareRow.astro';
 import SplitContent from '@/components/SplitContent.astro';
-import { categoryLabel, categoryUrl, formatMinutes, getRecipes, recipeUrl, type Recipe } from '@/lib/recipes';
-import { formatDate, recipeJsonLd } from '@/lib/schema';
+import { categoryLabel, categoryUrl, getRecipes, recipeUrl, type Recipe } from '@/lib/recipes';
+import { recipeJsonLd } from '@/lib/schema';
 
 export async function getStaticPaths() {
   const recipes = await getRecipes();
@@ -23,7 +22,7 @@ interface Props {
 }
 
 const { recipe, all } = Astro.props;
-const { title, description, image, imageAlt, category, prepTime, publishDate, ingredients, instructions, tags } = recipe.data;
+const { title, description, image, imageAlt, category, tags } = recipe.data;
 const { Content } = await render(recipe);
 const url = new URL(recipeUrl(recipe), Astro.site).href;
 
@@ -40,134 +39,65 @@ const related = all
   .slice(0, 3)
   .map((x) => x.r);
 
-const hasRecipe = ingredients.length > 0 || instructions.length > 0;
-const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכון קטוגני מ-Happy Keto\n${url}`)}`;
 ---
 
 <BaseLayout title={title} description={description || `${title} – מתכון קטוגני ודל פחמימות`} ogImage={shareImage?.src} ogType="article">
   <JsonLd data={recipeJsonLd(recipe, url, shareImageUrl)} />
 
-  <article>
-    <header class="bg-mint-50">
-      <div class="container-page grid items-center gap-8 py-8 sm:py-12 lg:grid-cols-[1fr_minmax(0,28rem)] lg:gap-14">
-        <div>
-          <div class="mb-5 print:hidden">
-            <Breadcrumbs
-              items={[
-                { label: 'מתכונים', href: '/recipes' },
-                { label: categoryLabel(category[0]), href: categoryUrl(category[0]) },
-                { label: title },
-              ]}
-            />
-          </div>
-          <ul class="mb-3 flex flex-wrap gap-2 print:hidden" aria-label="קטגוריות">
-            {
-              category.map((c) => (
-                <li>
-                  <a
-                    href={categoryUrl(c)}
-                    class="rounded-full bg-white px-3 py-1 text-sm font-medium text-mint-700 ring-1 ring-mint-200 transition-colors hover:bg-mint-100"
-                  >
-                    {categoryLabel(c)}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-          <h1 class="h-display">{title}</h1>
+  <!-- One 740px column, as on the original: title, intro, photo, the recipe, the rest of the post, tags, share, related. -->
+  <article class="mx-auto w-[89%] pt-10 lg:w-[740px] lg:pt-[100px]">
+    <h1 class="text-[2rem] leading-[1.2] lg:text-[2.3rem]">{title}</h1>
+    <Prose class="mt-5">
+      <SplitContent>
+        <Content />
+        <Fragment slot="insert">
+          {
+            image && (
+              <Image
+                src={image}
+                alt={imageAlt ?? title}
+                width={1480}
+                widths={[480, 740, 1110, 1480]}
+                sizes="(min-width: 1024px) 740px, 89vw"
+                class="!my-0 w-full"
+                loading="eager"
+                fetchpriority="high"
+              />
+            )
+          }
+          <RecipeBox recipe={recipe} />
+        </Fragment>
+      </SplitContent>
+    </Prose>
 
-          <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-bark-600">
-            {
-              prepTime && (
-                <span class="inline-flex items-center gap-1.5">
-                  <Icon name="clock" size={16} class="text-forest-600" />
-                  {formatMinutes(prepTime)}
-                </span>
-              )
-            }
-            <span>פורסם ב-<time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time></span>
-          </div>
-
-          <div class="mt-6 flex flex-wrap gap-3 print:hidden">
-            {
-              hasRecipe && (
-                <a href="#recipe" class="btn-primary btn-sm">
-                  למתכון
-                  <Icon name="chevron" size={18} />
-                </a>
-              )
-            }
-            <button type="button" class="btn-secondary btn-sm" data-print>הדפסה</button>
-            <a href={whatsapp} class="btn-secondary btn-sm" target="_blank" rel="noopener">
-              <Icon name="whatsapp" size={18} />
-              שיתוף
-            </a>
-          </div>
-        </div>
-
-        {
-          image && (
-            <Image
-              src={image}
-              alt={imageAlt ?? title}
-              width={1024}
-              height={1280}
-              fit="cover"
-              widths={[360, 480, 720, 1024]}
-              sizes="(min-width: 1024px) 28rem, (min-width: 448px) 28rem, 92vw"
-              class="mx-auto aspect-[4/5] w-full max-w-md rounded-[2rem] object-cover shadow-[var(--shadow-card)] print:max-w-xs"
-              loading="eager"
-              fetchpriority="high"
-            />
-          )
-        }
-      </div>
-    </header>
-
-    <div class="container-page max-w-4xl section-y-sm">
-      <Prose>
-        <SplitContent>
-          <Content />
-          <RecipeBox recipe={recipe} slot="insert" />
-        </SplitContent>
-      </Prose>
-
+    <div class="mt-12 border-t border-bark-300/60 pt-5 text-sm text-bark-800 print:hidden">
       {
         tags.length > 0 && (
-          <div class="mt-12 border-t border-bark-300/50 pt-6 print:hidden">
-            <h2 class="mb-3 font-sans text-sm font-semibold text-bark-600">תיוגים:</h2>
-            <ul class="flex flex-wrap gap-2">
+          <>
+            <h2 class="font-sans text-sm text-bark-800">תיוגים:</h2>
+            <ul class="mt-3 flex flex-wrap gap-2">
               {tags.map((t) => (
                 <li>
-                  <a
-                    href={`/recipes?q=${encodeURIComponent(t)}`}
-                    class="inline-flex min-h-11 items-center rounded-md border border-bark-300 bg-white px-3 text-sm text-bark-700 transition-colors hover:border-forest-600 hover:text-forest-700"
-                  >
+                  <a href={`/recipes?q=${encodeURIComponent(t)}`} class="inline-flex min-h-[31px] items-center border border-bark-300 px-3 hover:border-forest-600 hover:text-forest-700">
                     {t}
                   </a>
                 </li>
               ))}
             </ul>
-          </div>
+          </>
         )
       }
+      <ul class="mt-6 flex flex-wrap gap-x-4">
+        {category.map((c) => (
+          <li>
+            <a href={categoryUrl(c)} class="inline-flex min-h-11 items-center hover:underline">{categoryLabel(c)}</a>
+          </li>
+        ))}
+        <li><a href="/recipes" class="inline-flex min-h-11 items-center hover:underline">מתכונים</a></li>
+      </ul>
     </div>
+    <div class="mt-6"><ShareRow url={url} /></div>
   </article>
 
-  {
-    related.length > 0 && (
-      <section class="bg-cream-100 py-14 print:hidden" aria-labelledby="related-title">
-        <div class="container-page">
-          <h2 id="related-title" class="mb-8 h-section">עוד מתכונים שתאהבו</h2>
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {related.map((r) => <RecipeCard recipe={r} />)}
-          </div>
-        </div>
-      </section>
-    )
-  }
+  {related.length > 0 && <RelatedPosts label="עוד מתכונים" items={related.map((r) => ({ title: r.data.title, href: recipeUrl(r), image: r.data.image }))} />}
 </BaseLayout>
-
-<script>
-  document.querySelectorAll('[data-print]').forEach((b) => b.addEventListener('click', () => print()));
-</script>
