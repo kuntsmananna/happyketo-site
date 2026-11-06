@@ -37,7 +37,7 @@ const c = homeFor(lang).about;
         height={760}
         fit="cover"
         widths={[480, 720, 960, 1200]}
-        sizes="(min-width: 672px) 42rem, 92vw"
+        sizes="(min-width: 672px) 36rem, 78vw"
         class="aspect-[1200/760] w-[85%] object-cover"
       />
       <Image
@@ -48,11 +48,11 @@ const c = homeFor(lang).about;
         fit="cover"
         position="top"
         widths={[240, 360, 480, 640]}
-        sizes="(min-width: 672px) 18rem, 40vw"
+        sizes="(min-width: 672px) 18rem, 39vw"
         class="absolute -bottom-10 end-0 aspect-square w-[42%] rounded-full border-4 border-lime-100 object-cover"
       />
       <Image src={sticker} alt="" width={160} class="absolute -top-8 end-[30%] w-20 rotate-[10deg] drop-shadow-md sm:w-28" />
-      <figcaption class="mt-14 text-lg text-forest-600">{c.name}</figcaption>
+      <figcaption class="mt-6 w-[55%] text-start text-lg text-forest-600">{c.name}</figcaption>
     </figure>
   </div>
 </section>

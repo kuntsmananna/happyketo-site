@@ -1,12 +1,17 @@
 ---
 /** Split hero as on the original: photo half (left) + cream text half with wordmark, title and mustard CTA. */
-import { Image } from 'astro:assets';
+import { getImage } from 'astro:assets';
 import { homeFor } from '@/data/home';
 import { getLang, localized } from '@/i18n';
 import heroImg from '@/assets/home/hero-crepes.jpg';
 
 const lang = getLang(Astro.url);
 const c = homeFor(lang).hero;
+
+// Phones show a wide strip, desktop a tall half-screen: generate a matching crop for each.
+const wide = await Promise.all([480, 720, 960, 1280].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 0.62), fit: 'cover', format: 'webp' })));
+const tall = await Promise.all([640, 900, 1086].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 1.33), fit: 'cover', format: 'webp' })));
+const srcset = (imgs: typeof wide) => imgs.map((i) => `${i.src} ${i.attributes.width}w`).join(', ');
 ---
 
 <section class="grid bg-cream-100 lg:min-h-[min(calc(100dvh-5rem),48rem)] lg:grid-cols-2">
@@ -25,14 +30,20 @@ const c = homeFor(lang).hero;
   </div>
 
   <div class="relative order-first h-[min(62vw,24rem)] lg:order-none lg:h-auto">
-    <Image
-      src={heroImg}
-      alt={c.imageAlt}
-      widths={[480, 720, 960, 1086]}
-      sizes="(min-width: 1024px) 50vw, 100vw"
-      class="absolute inset-0 size-full object-cover"
-      loading="eager"
-      fetchpriority="high"
-    />
+    <picture>
+      <source media="(min-width: 1024px)" srcset={srcset(tall)} sizes="50vw" type="image/webp" />
+      <img
+        src={wide[1].src}
+        srcset={srcset(wide)}
+        sizes="100vw"
+        alt={c.imageAlt}
+        width={wide[1].attributes.width}
+        height={wide[1].attributes.height}
+        class="absolute inset-0 size-full object-cover"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </picture>
   </div>
 </section>

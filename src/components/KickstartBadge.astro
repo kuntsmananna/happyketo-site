@@ -19,7 +19,7 @@ const s = t(lang).badge;
     class="group relative block rounded-[1.25rem] rounded-tl-[2.5rem] bg-mustard-400 py-3 ps-5 pe-4 pt-5 text-forest-800 shadow-[0_10px_30px_-10px_rgb(64_45_18/0.5)] transition-transform hover:-translate-y-0.5 sm:py-4 sm:ps-6 sm:pt-6"
     dir={lang === 'he' ? 'rtl' : 'ltr'}
   >
-    <Image src={egg} alt="" width={72} class="absolute -top-9 -left-3 w-14 rotate-[-10deg] drop-shadow-md sm:-top-10 sm:w-16" />
+    <Image src={egg} alt="" width={72} densities={[1, 2]} class="absolute -top-9 -left-3 w-14 rotate-[-10deg] drop-shadow-md sm:-top-10 sm:w-16" />
     <span class="block font-serif text-xl leading-tight italic sm:text-2xl" dir="ltr">{s.title}</span>
     <span class="mt-0.5 flex items-center gap-2 text-sm">
       {s.text}

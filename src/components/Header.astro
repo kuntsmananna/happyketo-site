@@ -119,9 +119,8 @@ const linkActive = 'bg-white/10 text-lime-100';
             hreflang={otherLang}
             lang={otherLang}
             class="inline-flex min-h-11 items-center rounded-full border border-lime-100/40 px-3 text-sm font-medium text-lime-100 transition-colors hover:bg-white/10"
-            aria-label={s.langSwitch.aria}
           >
-            {s.langSwitch.short}
+            {s.langSwitch.short}<span class="sr-only">{s.langSwitch.hidden}</span>
           </a>
         </li>
       </ul>
@@ -134,9 +133,8 @@ const linkActive = 'bg-white/10 text-lime-100';
         hreflang={otherLang}
         lang={otherLang}
         class="inline-flex min-h-11 items-center rounded-full border border-lime-100/40 px-3 text-sm font-medium text-lime-100"
-        aria-label={s.langSwitch.aria}
       >
-        {s.langSwitch.short}
+        {s.langSwitch.short}<span class="sr-only">{s.langSwitch.hidden}</span>
       </a>
       <button
         type="button"

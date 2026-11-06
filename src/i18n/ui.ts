@@ -11,7 +11,7 @@ export const ui = {
     menuClose: 'סגירת תפריט',
     menu: 'תפריט',
     submenu: 'תת-תפריט',
-    langSwitch: { label: 'English', short: 'EN', aria: 'Switch to English' },
+    langSwitch: { label: 'English', short: 'EN', hidden: ' · English' },
     joinChallenge: 'הצטרפו לאתגר 4 השבועות',
     footer: {
       call: 'Call',
@@ -39,7 +39,7 @@ export const ui = {
     menuClose: 'Close menu',
     menu: 'Menu',
     submenu: 'Submenu',
-    langSwitch: { label: 'עברית', short: 'עב', aria: 'לאתר בעברית' },
+    langSwitch: { label: 'עברית', short: 'עב', hidden: ' · עברית' },
     joinChallenge: 'Join the 4-week challenge',
     footer: {
       call: 'Call',

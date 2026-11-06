@@ -23,7 +23,7 @@ interface Props {
 }
 
 const { recipe, all } = Astro.props;
-const { title, description, image, imageAlt, category, prepTime, publishDate, ingredients, instructions } = recipe.data;
+const { title, description, image, imageAlt, category, prepTime, publishDate, ingredients, instructions, tags } = recipe.data;
 const { Content } = await render(recipe);
 const url = new URL(recipeUrl(recipe), Astro.site).href;
 
@@ -75,7 +75,6 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
             }
           </ul>
           <h1 class="h-display">{title}</h1>
-          {description && description !== title && <p class="lead mt-4 max-w-2xl">{description}</p>}
 
           <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-bark-600">
             {
@@ -132,6 +131,26 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
           <RecipeBox recipe={recipe} slot="insert" />
         </SplitContent>
       </Prose>
+
+      {
+        tags.length > 0 && (
+          <div class="mt-12 border-t border-bark-300/50 pt-6 print:hidden">
+            <h2 class="mb-3 font-sans text-sm font-semibold text-bark-600">תיוגים:</h2>
+            <ul class="flex flex-wrap gap-2">
+              {tags.map((t) => (
+                <li>
+                  <a
+                    href={`/recipes?q=${encodeURIComponent(t)}`}
+                    class="inline-flex min-h-11 items-center rounded-md border border-bark-300 bg-white px-3 text-sm text-bark-700 transition-colors hover:border-forest-600 hover:text-forest-700"
+                  >
+                    {t}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
     </div>
   </article>
 
