@@ -18,15 +18,20 @@ interface Props {
   headingLevel?: 2 | 3;
   /** Extra attributes for the <article> (e.g. data-* used by RecipeFilter). */
   attrs?: Record<string, string | boolean>;
+  /** Smaller tile (homepage row): smaller title, image sizes for ~300px. */
+  compact?: boolean;
 }
 
-const { title, href, image, sticker, chip, eager = false, headingLevel = 3, attrs = {} } = Astro.props;
+const { title, href, image, sticker, chip, eager = false, headingLevel = 3, attrs = {}, compact = false } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 <article
   data-reveal={eager ? undefined : true}
-  class="group relative grid aspect-square grid-cols-1 grid-rows-1 overflow-hidden bg-forest-800 [contain-intrinsic-size:auto_37rem] [content-visibility:auto]"
+  class:list={[
+    'group relative grid aspect-square grid-cols-1 grid-rows-1 overflow-hidden bg-forest-800',
+    !compact && '[contain-intrinsic-size:auto_37rem] [content-visibility:auto]',
+  ]}
   {...attrs}
 >
   {
@@ -37,8 +42,8 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
         width={1208}
         height={1208}
         fit="cover"
-        widths={[360, 600, 900, 1208]}
-        sizes="(min-width: 1280px) 604px, (min-width: 640px) 46vw, 88vw"
+        widths={compact ? [300, 450, 600] : [360, 600, 900, 1208]}
+        sizes={compact ? '(min-width: 1024px) 280px, 78vw' : '(min-width: 1280px) 604px, (min-width: 640px) 46vw, 88vw'}
         class="hover-zoom size-full min-h-0 min-w-0 object-cover [grid-area:1/1]"
         loading={eager ? 'eager' : 'lazy'}
       />
@@ -53,9 +58,9 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     class="z-[1] bg-gradient-to-t from-black/65 via-black/20 to-black/5 transition-opacity duration-500 [grid-area:1/1] group-hover:opacity-90"
   >
   </div>
-  <div class="z-[2] flex flex-col items-start self-end px-6 pb-6 [grid-area:1/1] lg:pb-[27px]">
+  <div class:list={['z-[2] flex flex-col items-start self-end [grid-area:1/1]', compact ? 'px-5 pb-5' : 'px-6 pb-6 lg:pb-[27px]']}>
     {chip && <span class="mb-3 bg-forest-600 px-3 py-1.5 text-sm leading-none text-lime-100">{chip}</span>}
-    <Heading class="font-sans text-[1.4rem] leading-tight font-bold text-cream-100 lg:text-[1.625rem]">
+    <Heading class:list={['font-sans leading-tight font-bold text-cream-100', compact ? 'text-[1.3rem]' : 'text-[1.4rem] lg:text-[1.625rem]']}>
       <a href={href} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">{title}</a>
     </Heading>
   </div>

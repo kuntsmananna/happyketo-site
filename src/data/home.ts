@@ -55,6 +55,13 @@ const he = {
     { key: 'blog', eyebrow: 'Keto Blog', title: 'מידע בנושא תזונה דלת פחמימות', text: 'כל מה שחשוב לדעת לתהליך מוצלח במעבר לתזונה טבעית קטוגנית.', cta: 'להמשך קריאה', href: '/blog', alt: 'ידיים מחזיקות עגבניות שרי' },
     { key: 'favorites', eyebrow: 'Happy Favorites', title: 'המזווה הקטוגני', text: 'ניסיתי, אהבתי, ממליצה בחום!', cta: 'מעניין מה יש שם', href: '/favorites', alt: 'שקית ממתיק אלולוז' },
   ],
+  // Latest recipes row (an addition, Anna's choice; not on the original homepage).
+  latest: {
+    eyebrow: 'Latest Recipes',
+    title: 'מתכונים חדשים מהמטבח',
+    note: '',
+    cta: 'לכל המתכונים',
+  },
   newsletter: {
     title: 'תשארו בקשר!',
     text: 'לחדשות ועדכונים נא השאירו פרטים, מבטיחה לא לחפור ;)',
@@ -113,6 +120,12 @@ const en: typeof he = {
     { key: 'blog', eyebrow: 'Keto Blog', title: 'Information on low-carb diets', text: 'Everything you need to know for a successful transition to a natural ketogenic diet. (In Hebrew)', cta: 'Continue reading', href: '/blog', alt: 'Hands holding cherry tomatoes' },
     { key: 'recipes', eyebrow: 'Tasty Keto', title: 'Low-carb recipes that make the body and soul happy', text: 'If you are worried that you will not have anything to eat, remove worry from your heart! (In Hebrew)', cta: 'Let’s make something delicious', href: '/recipes', alt: 'Fried eggs on toast with greens' },
   ],
+  latest: {
+    eyebrow: 'Latest Recipes',
+    title: 'New from the kitchen',
+    note: 'The recipes are in Hebrew.',
+    cta: 'All recipes',
+  },
   newsletter: {
     title: 'Stay in touch!',
     // fixed: original "I promise not to dig" (a literal translation of the Hebrew idiom)

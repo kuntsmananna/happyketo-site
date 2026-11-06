@@ -9,9 +9,10 @@ interface Props {
   /** Eager-load images of the first cards in view. */
   eager?: boolean;
   headingLevel?: 2 | 3;
+  compact?: boolean;
 }
 
-const { recipe, eager, headingLevel } = Astro.props;
+const { recipe, eager, headingLevel, compact } = Astro.props;
 const { title, description, image, category, tags } = recipe.data;
 const attrs = { 'data-recipe-card': true, 'data-categories': category.join(' '), 'data-search': `${title} ${description} ${tags.join(' ')}` };
 ---
@@ -25,4 +26,5 @@ const attrs = { 'data-recipe-card': true, 'data-categories': category.join(' '),
   eager={eager}
   headingLevel={headingLevel}
   attrs={attrs}
+  compact={compact}
 />

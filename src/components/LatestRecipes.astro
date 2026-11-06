@@ -1,0 +1,44 @@
+---
+/**
+ * Homepage row of the 4 newest recipes (an addition, Anna's choice; not on the original homepage).
+ * Desktop: one row of square photo tiles; phones: a swipeable row (scroll-snap) where the next tile peeks in.
+ * Recipes are Hebrew-only, so on the English homepage the tiles are marked lang="he" and the CTA has hreflang.
+ */
+import RecipeCard from './RecipeCard.astro';
+import { homeFor } from '@/data/home';
+import { getLang } from '@/i18n';
+import { getRecipes } from '@/lib/recipes';
+
+const lang = getLang(Astro.url);
+const c = homeFor(lang).latest;
+const latest = (await getRecipes()).filter((r) => r.data.image).slice(0, 4);
+---
+
+<section class="bg-cream-100 pt-14 pb-16 text-center lg:pt-[90px] lg:pb-[100px]" aria-labelledby="latest-title">
+  <p data-reveal class="eyebrow text-forest-600" dir="ltr">{c.eyebrow}</p>
+  <h2 data-reveal id="latest-title" class="h-section mt-1 px-[6%]">{c.title}</h2>
+  {c.note && <p data-reveal class="mt-2 text-base text-bark-700">{c.note}</p>}
+
+  <ul
+    class="mt-9 flex snap-x snap-mandatory scroll-px-[6%] gap-4 overflow-x-auto px-[6%] pb-2 text-start [scrollbar-width:none] lg:mx-auto lg:mt-12 lg:grid lg:w-[1188px] lg:grid-cols-4 lg:gap-6 lg:overflow-visible lg:px-0 [&::-webkit-scrollbar]:hidden"
+    lang={lang === 'en' ? 'he' : undefined}
+    dir="rtl"
+  >
+    {
+      latest.map((recipe) => (
+        <li class="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-auto">
+          <RecipeCard recipe={recipe} compact />
+        </li>
+      ))
+    }
+  </ul>
+
+  <a
+    data-reveal
+    href="/recipes"
+    hreflang={lang === 'en' ? 'he' : undefined}
+    class="btn-secondary btn-lg mt-10 lg:mt-14"
+  >
+    {c.cta}
+  </a>
+</section>
