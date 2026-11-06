@@ -1,0 +1,51 @@
+---
+/**
+ * The original site's floating "Keto Kickstart – three days free trial" badge.
+ * Bottom-left on every page (as on the original); can be hidden for the session.
+ */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { getLang, localized } from '@/i18n';
+import { t } from '@/i18n/ui';
+import egg from '@/assets/brand/sticker-happy-keto.png';
+
+const lang = getLang(Astro.url);
+const s = t(lang).badge;
+---
+
+<aside class="fixed bottom-4 left-4 z-30 print:hidden" data-kickstart aria-label={s.title}>
+  <a
+    href={`${localized('/challenge', lang)}#register`}
+    class="group relative block rounded-[1.25rem] rounded-tl-[2.5rem] bg-mustard-400 py-3 ps-5 pe-4 pt-5 text-forest-800 shadow-[0_10px_30px_-10px_rgb(64_45_18/0.5)] transition-transform hover:-translate-y-0.5 sm:py-4 sm:ps-6 sm:pt-6"
+    dir={lang === 'he' ? 'rtl' : 'ltr'}
+  >
+    <Image src={egg} alt="" width={72} densities={[1, 2]} class="absolute -top-9 -left-3 w-14 rotate-[-10deg] drop-shadow-md sm:-top-10 sm:w-16" />
+    <span class="block font-serif text-xl leading-tight italic sm:text-2xl" dir="ltr">{s.title}</span>
+    <span class="mt-0.5 flex items-center gap-2 text-sm">
+      {s.text}
+      <Icon name="arrowLong" size={22} class="transition-transform group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
+    </span>
+  </a>
+  <button
+    type="button"
+    class="absolute -top-2 -right-2 grid size-7 place-items-center rounded-full bg-forest-800 text-cream-100 shadow ring-2 ring-cream-100"
+    aria-label={s.close}
+    data-kickstart-close
+  >
+    <Icon name="close" size={14} />
+  </button>
+</aside>
+
+<script>
+  const KEY = 'hk-kickstart-hidden';
+  const badge = document.querySelector<HTMLElement>('[data-kickstart]');
+  try {
+    if (sessionStorage.getItem(KEY)) badge?.remove();
+  } catch {}
+  badge?.querySelector('[data-kickstart-close]')?.addEventListener('click', () => {
+    badge.remove();
+    try {
+      sessionStorage.setItem(KEY, '1');
+    } catch {}
+  });
+</script>

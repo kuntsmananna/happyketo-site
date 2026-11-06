@@ -10,6 +10,8 @@ tags:
   - "מדריך לקיטו"
   - "המדריך לפליאו"
   - "המדריך לתזונה דלת פחמימות"
+  - "פליאו"
+  - "לואו קארב"
 ---
 
 1.  [**MCT Powder**](https://il.iherb.com/pr/nutiva-organic-mct-powder-unflavored-10-6-oz-300-g/82001?rcode=CGJ130)**:** Power Your Brain, Energize Your Body.

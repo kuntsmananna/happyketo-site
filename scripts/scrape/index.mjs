@@ -31,7 +31,7 @@ const BLOG_TAGS = {
   'המדריך-לתזונה-דלת-פחמימות': 'המדריך לתזונה דלת פחמימות',
   'low-carb-1': 'המדריך לפליאו',
 };
-const RECIPE_TAGS = { 'lunch-box': 'lunch-box' };
+const RECIPE_TAGS = { 'lunch-box': 'lunch box' };
 
 /** Title keywords → category, used only when Wix gave no specific recipe category. */
 const KEYWORD_CATEGORIES = [
@@ -208,9 +208,10 @@ async function main() {
 
     const description = makeDescription(bodyBlocks, p.title);
     const tags = [
-      ...new Set(
-        p.wixCategories.map((c) => (p.kind === 'recipe' ? RECIPE_TAGS[c] : BLOG_TAGS[c])).filter(Boolean),
-      ),
+      ...new Set([
+        ...p.wixCategories.map((c) => (p.kind === 'recipe' ? RECIPE_TAGS[c] : BLOG_TAGS[c])).filter(Boolean),
+        ...p.wixTags,
+      ]),
     ];
 
     const fm = {

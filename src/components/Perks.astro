@@ -1,21 +1,34 @@
 ---
-/** The three Happy Keto promises as wrapping pills (one source for homepage + challenge page). */
+/** The three Happy Keto promises with ✔ marks (homepage + challenge page). */
 import Icon from './Icon.astro';
+import { homeFor } from '@/data/home';
+import { getLang } from '@/i18n';
 
 interface Props {
   class?: string;
-  align?: 'start' | 'center';
+  /** "dark": light text for navy sections (as on the original); "light": pills on light backgrounds. */
+  tone?: 'dark' | 'light';
 }
 
-const { class: className, align = 'start' } = Astro.props;
-const perks = ['קיטו צעד אחרי צעד', 'מתאים לחיים האמיתיים', 'לא סופרים קלוריות'];
+const { class: className, tone = 'light' } = Astro.props;
+const perks = homeFor(getLang(Astro.url)).challenge.perks;
 ---
 
-<ul class:list={['flex flex-wrap gap-2.5', align === 'center' && 'justify-center', className]}>
+<ul class:list={['flex flex-wrap justify-center gap-x-6 gap-y-2.5', className]}>
   {
     perks.map((p) => (
-      <li class="inline-flex items-center gap-2 rounded-full bg-sage-50 py-2 ps-2 pe-4 font-medium text-olive-800 ring-1 ring-sage-100">
-        <span class="grid size-6 place-items-center rounded-full bg-olive-600 text-cream-50">
+      <li
+        class:list={[
+          'inline-flex items-center gap-2 font-medium',
+          tone === 'dark' ? 'text-cream-100' : 'rounded-full bg-white py-2 ps-2 pe-4 text-forest-700 ring-1 ring-mint-200',
+        ]}
+      >
+        <span
+          class:list={[
+            'grid size-6 place-items-center rounded-full',
+            tone === 'dark' ? 'bg-mustard-400 text-navy-800' : 'bg-forest-600 text-lime-100',
+          ]}
+        >
           <Icon name="check" size={14} />
         </span>
         {p}

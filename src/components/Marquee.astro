@@ -1,0 +1,51 @@
+---
+/**
+ * The original's mustard band: "Keto Blog • Happy Blog • Keto Blog …" (logo font + italic serif).
+ * Decorative (aria-hidden); scrolls slowly, and stands still for people who prefer reduced motion.
+ */
+interface Props {
+  /** The second word, e.g. "Blog", "Recipes", "Favorites", "Keto". */
+  word: string;
+  tone?: 'mustard' | 'lime';
+}
+
+const { word, tone = 'mustard' } = Astro.props;
+const pairs = word === 'Keto' ? [['Happy', 'Keto']] : [['Keto', word], ['Happy', word]];
+const run = Array.from({ length: 6 }, () => pairs).flat();
+---
+
+<div
+  aria-hidden="true"
+  class:list={[
+    'relative overflow-hidden py-5 text-forest-600 select-none sm:py-7',
+    tone === 'mustard' ? 'bg-mustard-400' : 'bg-lime-100',
+  ]}
+  dir="ltr"
+>
+  <div class="flex w-max animate-[marquee_60s_linear_infinite] gap-0 whitespace-nowrap motion-reduce:animate-none">
+    {
+      [0, 1].map(() => (
+        <span class="flex shrink-0 items-baseline">
+          {run.map(([a, b]) => (
+            <span class="flex items-baseline px-3 text-3xl sm:text-4xl">
+              <span class="font-logo font-bold">{a}</span>
+              <span class="ms-2 font-serif italic">{b}</span>
+              <span class="ms-6 text-2xl">•</span>
+            </span>
+          ))}
+        </span>
+      ))
+    }
+  </div>
+</div>
+
+<style is:global>
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+</style>

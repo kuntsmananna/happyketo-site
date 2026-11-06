@@ -4,6 +4,36 @@ import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
+const RANGES = {
+  latin: ['U+0000-00FF', 'U+0131', 'U+0152-0153', 'U+02BB-02BC', 'U+02C6', 'U+02DA', 'U+02DC', 'U+0304', 'U+0308',
+    'U+0329', 'U+2000-206F', 'U+20AC', 'U+2122', 'U+2191', 'U+2193', 'U+2212', 'U+2215', 'U+FEFF', 'U+FFFD'],
+  hebrew: ['U+0307-0308', 'U+0590-05FF', 'U+200C-2010', 'U+20AA', 'U+25CC', 'U+FB1D-FB4F'],
+};
+
+/**
+ * A self-hosted font family from local woff2 files, one face per subset (Latin first: fallback metrics use it).
+ * @param {string} name
+ * @param {`--${string}`} cssVariable
+ * @param {string} weight
+ * @param {Partial<Record<keyof typeof RANGES, string>>} files
+ * @param {'normal' | 'italic'} [style]
+ * @param {string[]} [fallbacks]
+ * @returns {any}
+ */
+function family(name, cssVariable, weight, files, style = 'normal', fallbacks = ['system-ui', 'sans-serif']) {
+  return {
+    provider: fontProviders.local(),
+    name,
+    cssVariable,
+    fallbacks,
+    options: {
+      variants: Object.entries(files).map(([subset, src]) => ({
+        src: [src], weight, style, display: 'swap', unicodeRange: RANGES[/** @type {keyof typeof RANGES} */ (subset)],
+      })),
+    },
+  };
+}
+
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
   site: 'https://www.happyketoforme.com',
@@ -20,38 +50,26 @@ export default defineConfig({
 
   integrations: [sitemap({ filter: (page) => !/\/thanks\/?$/.test(page) })],
 
-  // Rubik (variable, 300–900) from the @fontsource-variable/rubik npm package: no network at build
-  // time, self-hosted with the site, Hebrew + Latin subsets only (each loads only when its characters
-  // appear), and a metric-matched fallback so text doesn't shift when the font arrives.
+  // Free look-alikes of the original Wix brand fonts, self-hosted from npm (no network at build time).
+  // Each family gets Hebrew + Latin faces split by unicode-range (a face downloads only when used),
+  // and a metric-matched fallback so text doesn't shift when the font arrives.
+  //   body    Assistant      ≈ Almoni (text)        display Varela Round ≈ Asimon (headings)
+  //   logo    Syne           = original logo font   serif   Gelasio (Georgia twin) for italic Latin labels
   fonts: [
-    {
-      provider: fontProviders.local(),
-      name: 'Rubik',
-      cssVariable: '--font-rubik',
-      fallbacks: ['system-ui', 'sans-serif'],
-      options: {
-        variants: [
-          {
-            src: ['@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2'],
-            weight: '300 900',
-            style: 'normal',
-            display: 'swap',
-            unicodeRange: [
-              'U+0000-00FF', 'U+0131', 'U+0152-0153', 'U+02BB-02BC', 'U+02C6', 'U+02DA', 'U+02DC', 'U+0304',
-              'U+0308', 'U+0329', 'U+2000-206F', 'U+20AC', 'U+2122', 'U+2191', 'U+2193', 'U+2212', 'U+2215',
-              'U+FEFF', 'U+FFFD',
-            ],
-          },
-          {
-            src: ['@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2'],
-            weight: '300 900',
-            style: 'normal',
-            display: 'swap',
-            unicodeRange: ['U+0307-0308', 'U+0590-05FF', 'U+200C-2010', 'U+20AA', 'U+25CC', 'U+FB1D-FB4F'],
-          },
-        ],
-      },
-    },
+    family('Assistant', '--font-assistant', '300 800', {
+      latin: '@fontsource-variable/assistant/files/assistant-latin-wght-normal.woff2',
+      hebrew: '@fontsource-variable/assistant/files/assistant-hebrew-wght-normal.woff2',
+    }),
+    family('Varela Round', '--font-varela', '400', {
+      latin: '@fontsource/varela-round/files/varela-round-latin-400-normal.woff2',
+      hebrew: '@fontsource/varela-round/files/varela-round-hebrew-400-normal.woff2',
+    }),
+    family('Syne', '--font-syne', '400 800', {
+      latin: '@fontsource-variable/syne/files/syne-latin-wght-normal.woff2',
+    }),
+    family('Gelasio', '--font-gelasio', '400', {
+      latin: '@fontsource/gelasio/files/gelasio-latin-400-italic.woff2',
+    }, 'italic', ['Georgia', 'serif']),
   ],
 
   prefetch: { prefetchAll: true, defaultStrategy: 'hover' },

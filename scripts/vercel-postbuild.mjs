@@ -41,6 +41,13 @@ for (const c of recipeCategories) {
 for (const w of ['בלוג-קטוגני', 'מדריך-לקיטו', 'המדריך-לתזונה-דלת-פחמימות', 'low-carb-1']) add(`/recipes/categories/${w}`, '/blog');
 for (const w of ['מתכונים', 'lunch-box']) add(`/recipes/categories/${w}`, '/recipes');
 
+// English (/en/…) versions of the old Wix pages: to the English page where one exists, else the Hebrew target.
+const EN_PAGES = new Set(['/', '/about', '/contact', '/challenge', '/favorites', '/privacy']);
+for (const [from, to] of [...redirects]) {
+  if (from.startsWith('/post/') || from.startsWith('/recipes/categories/')) continue; // posts: wildcard below
+  add('/en' + from, EN_PAGES.has(to) ? (to === '/' ? '/en' : '/en' + to) : to);
+}
+
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 /** Match both the raw (Hebrew) and the percent-encoded spelling, with or without a trailing slash. */
 const pathPattern = (p) => {
@@ -58,8 +65,13 @@ const redirectRoutes = [...redirects].map(([from, to]) => ({
 }));
 // Wildcards: anything else under the old Wix sections.
 redirectRoutes.push(
+  // The original had no English posts: /en/post/… and /en/recipes… go to the Hebrew pages.
+  { src: '^/en/(post|recipes)(/.*)?$', headers: { Location: '/$1$2' }, status: 301 },
+  { src: '^/en/(challenge-page)(?:/.*)?$', headers: { Location: '/en/challenge' }, status: 301 },
   { src: '^/post/(.+?)/?$', headers: { Location: '/recipes/$1' }, status: 301 }, // unknown post → try recipes (404 page if missing)
   { src: '^/recipes/categories/?$', headers: { Location: '/recipes' }, status: 301 },
+  // Wix tag pages → the catalog filtered by that tag (search matches tags).
+  { src: '^/recipes/tags/([^/]+)/?$', headers: { Location: '/recipes?q=$1' }, status: 301 },
   { src: '^/recipes/page/\\d+/?$', headers: { Location: '/recipes' }, status: 301 },
   { src: '^/challenge-page(?:/.*)?$', headers: { Location: '/challenge' }, status: 301 },
   { src: '^/profile(?:/.*)?$', headers: { Location: '/about' }, status: 301 },

@@ -1,12 +1,15 @@
 ---
 import JsonLd from './JsonLd.astro';
+import { getLang } from '@/i18n';
+import { t } from '@/i18n/ui';
 
 interface Props {
   /** Trail without the home page; the last item is the current page (href optional). */
   items: { label: string; href?: string }[];
 }
 
-const trail = [{ label: 'עמוד הבית', href: '/' }, ...Astro.props.items];
+const lang = getLang(Astro.url);
+const trail = [{ label: t(lang).home, href: lang === 'en' ? '/en' : '/' }, ...Astro.props.items];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -19,18 +22,18 @@ const jsonLd = {
 };
 ---
 
-<nav aria-label="פירורי לחם" class="text-sm text-cocoa-600">
+<nav aria-label={lang === 'en' ? 'Breadcrumb' : 'פירורי לחם'} class="text-sm text-bark-600">
   <ol class="flex flex-wrap items-center gap-x-1.5 gap-y-1">
     {
       trail.map((item, i) => (
         <li class="flex items-center gap-1.5">
-          {i > 0 && <span aria-hidden="true" class="text-cocoa-400">‹</span>}
+          {i > 0 && <span aria-hidden="true" class="text-bark-400">{lang === 'en' ? '›' : '‹'}</span>}
           {item.href && i < trail.length - 1 ? (
-            <a href={item.href} class="hover:text-olive-700 hover:underline">
+            <a href={item.href} class="hover:text-forest-700 hover:underline">
               {item.label}
             </a>
           ) : (
-            <span aria-current="page" class="text-cocoa-800">
+            <span aria-current="page" class="text-bark-800">
               {item.label}
             </span>
           )}

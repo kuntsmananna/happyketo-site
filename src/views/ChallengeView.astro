@@ -1,0 +1,312 @@
+---
+/**
+ * Challenge page (both languages). Combines the original "אתגר קיטו" page (navy header + two plan cards)
+ * and the program page (description, what to expect, overview), plus the lead form.
+ */
+import { Image } from 'astro:assets';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import Icon from '@/components/Icon.astro';
+import PageHero from '@/components/PageHero.astro';
+import Perks from '@/components/Perks.astro';
+import Web3Form from '@/components/Web3Form.astro';
+import { site } from '@/data/site';
+import { getLang } from '@/i18n';
+import planFull from '@/assets/home/challenge-eggs-kale.jpg';
+import planFree from '@/assets/home/challenge-lettuce-tacos.jpg';
+
+const lang = getLang(Astro.url);
+
+const copy = {
+  he: {
+    crumb: 'אתגר קיטו',
+    title: 'אתגר קיטו',
+    intro: 'כל מה שרצית לדעת על קיטו במקום אחד.\nקל, פשוט, נגיש (גם כלכלית).\nבקצב והזמן שלך בלי בלבולי מוח מיותרים.',
+    plans: [
+      { id: 'free', name: 'Keto Kickstart תוכנית חינמית ל־3 ימים', price: 'חינם', value: 'Keto Kickstart – תוכנית חינמית ל־3 ימים', image: planFree, alt: 'טאקו בעלי חסה' },
+      { id: 'full', name: 'Going Keto - 4 שבועות', price: '₪250', value: 'Going Keto – 4 שבועות (₪250)', image: planFull, alt: 'ביצי עין עם קייל ופקאנים' },
+    ],
+    join: 'להצטרפות',
+    programTitle: 'Going Keto - 4 שבועות',
+    programLead: 'תוכנית למעבר לתזונה קטוגנית שמתאימה לא.נשים (מאוד) עסוקות',
+    method: [
+      'שיטה הדרגתית, טעימה ואפשרית להתמדה',
+      'לסופרוומן שמג׳נגלת בין עבודה, משפחה, חוגים, נסיעות, חופשות, מסעדות, סופי שבוע, אירוחים… או בקיצור - החיים.',
+      'בלי קיצוניות. בלי להפוך את החיים. פשוט דרך שנכנסת לשגרה שלך.',
+    ],
+    expectTitle: 'למה לצפות במהלך ובסוף התוכנית:',
+    expect: [
+      'שחרור מהתמכרויות (סוכר, מזון מעובד ופחמימות) ושחרור מנטלי מתלות רגשית באוכל.',
+      'צמצום בהיקפים ותחושת קלילות בגוף.',
+      'תחושת ערנות, חדות מחשבה, מצב רוח יציב וסבלנות.',
+      'שיפור באיכות השינה.',
+      'שיפור במדדי הבריאות והקלה בתסמינים כמו: מיגרנות, אלרגיות, בעיות עור, כאבי בטן ובעיות עיכול, תופעות קדם וסתיות ועוד.',
+      'ועור פנים חלק יותר (באמת).',
+    ],
+    howTitle: 'איך התוכנית עובדת?',
+    how: 'הנחיות יומיות ברורות ופשוטות ליישום, שמתאימות לאורח חיים עמוס וללו״ז אמיתי.',
+    overviewTitle: 'Overview',
+    overview: [
+      { icon: '✏️', title: 'הקדמה והסבר', steps: '3 שלבים' },
+      { icon: '🥗', title: 'מעבר הדרגתי לתזונה טבעית דלת פחמימות', steps: '6 שלבים' },
+    ],
+    registerTitle: 'מצטרפים לאתגר',
+    registerText: 'השאירו פרטים ואחזור אליכם לתיאום ולהסבר על התשלום. אפשר להתחיל ב-3 ימי ניסיון חינם ולהחליט אחר כך.',
+    questions: 'שאלות?',
+    or: 'או',
+    whatsapp: 'וואטסאפ',
+    form: {
+      subject: 'הרשמה לאתגר Going Keto – Happy Keto',
+      success: 'איזה כיף! 🎉 קיבלתי את הפרטים ואחזור אליכם בהקדם לתיאום.',
+      name: 'שם מלא *',
+      phone: 'טלפון *',
+      email: 'אימייל *',
+      track: 'במה תרצו להתחיל? *',
+      diet: 'סגנון תזונה',
+      diets: ['רגילה (אוכלים הכל)', 'צמחונית', 'צמחונית + דגים'],
+      notes: 'משהו שחשוב לי לדעת?',
+      optional: '(לא חובה)',
+      consent:
+        'ידוע לי שהתוכנית אינה טיפול רפואי ואינה תחליף לייעוץ רפואי, ושאם יש לי בעיה רפואית או שאני נוטל/ת תרופות באופן קבוע – אתייעץ עם הרופא/ה לפני שמתחילים. *',
+      consentValue: 'קראתי ומאשר/ת',
+      send: 'שליחה',
+      fields: { phone: 'טלפון', track: 'מסלול', diet: 'תזונה', notes: 'הערות', consent: 'אישור' },
+    },
+    sticky: 'להרשמה · מתחילים ב-3 ימים חינם',
+  },
+  en: {
+    crumb: 'Keto challenge',
+    title: 'Keto challenge',
+    // The original English page kept this intro in Hebrew; translated here.
+    intro: 'Everything you wanted to know about keto, in one place.\nEasy, simple, accessible (also on your budget).\nAt your own pace and time, without the confusion.',
+    plans: [
+      { id: 'free', name: 'Keto Kickstart Free 3-Day Plan', price: 'Free', value: 'Keto Kickstart – free 3-day plan', image: planFree, alt: 'Lettuce tacos' },
+      { id: 'full', name: 'Going Keto - 4 weeks', price: '₪250', value: 'Going Keto – 4 weeks (₪250)', image: planFull, alt: 'Fried eggs with kale and pecans' },
+    ],
+    join: 'Join',
+    programTitle: 'Going Keto - 4 weeks',
+    programLead: 'A ketogenic diet transition plan that suits (very) busy women',
+    method: [
+      // fixed: "possible method for persistence"
+      'A gradual, delicious method that is actually possible to stick with',
+      'For the superwoman who juggles work, family, classes, travel, vacations, restaurants, weekends, hosting... Or in short - life.',
+      'Without extremes. Without turning your life upside down. Simply a way that fits into your routine.',
+    ],
+    expectTitle: 'What to expect during and at the end of the program:',
+    expect: [
+      'Freedom from addictions (sugar, processed food and carbohydrates) and mental liberation from emotional dependence on food.',
+      'Fewer inches and a feeling of lightness in the body.',
+      'Feeling alert, a sharp mind, stable mood and patience.',
+      'Improved sleep quality.',
+      // fixed: "pre- and post-menopausal symptoms" – the Hebrew means premenstrual symptoms
+      'Improvement in health indicators and relief from symptoms such as: migraines, allergies, skin problems, stomach pain and digestive problems, premenstrual symptoms and more.',
+      'And smoother facial skin (really).',
+    ],
+    howTitle: 'How does the program work?',
+    how: 'Clear and simple daily instructions to implement, that fit a busy lifestyle and a real schedule.',
+    overviewTitle: 'Overview',
+    overview: [
+      { icon: '✏️', title: 'Introduction and explanation', steps: '3 steps' },
+      { icon: '🥗', title: 'Gradual transition to a natural low-carb diet', steps: '6 steps' },
+    ],
+    registerTitle: 'Join the challenge',
+    registerText: 'Leave your details and I’ll get back to you to set things up and explain the payment. You can start with the free 3-day plan and decide later.',
+    questions: 'Questions?',
+    or: 'or',
+    whatsapp: 'WhatsApp',
+    form: {
+      subject: 'Challenge sign-up (EN) – Happy Keto',
+      success: 'Wonderful! 🎉 I got your details and will be in touch soon.',
+      name: 'Full name *',
+      phone: 'Phone *',
+      email: 'Email *',
+      track: 'Where would you like to start? *',
+      diet: 'Eating style',
+      diets: ['Regular (I eat everything)', 'Vegetarian', 'Vegetarian + fish'],
+      notes: 'Anything I should know?',
+      optional: '(optional)',
+      consent:
+        'I understand the program is not medical treatment or a substitute for medical advice, and that if I have a medical condition or take medication regularly I will consult my doctor before starting. *',
+      consentValue: 'I have read and agree',
+      send: 'Send',
+      fields: { phone: 'Phone', track: 'Plan', diet: 'Eating style', notes: 'Notes', consent: 'Consent' },
+    },
+    sticky: 'Sign up · start with 3 free days',
+  },
+}[lang];
+const f = copy.form;
+---
+
+<div data-challenge-hero>
+  <PageHero variant="navy" title={copy.title} intro={copy.intro} breadcrumbs={[{ label: copy.crumb }]}>
+    <div class="mx-auto mt-12 grid max-w-3xl gap-6 text-start sm:grid-cols-2">
+      {
+        copy.plans.map((p) => (
+          <article class="flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-cream-100 text-bark-800 shadow-[var(--shadow-card)]">
+            <Image
+              src={p.image}
+              alt={p.alt}
+              width={720}
+              height={540}
+              fit="cover"
+              widths={[360, 540, 720]}
+              sizes="(min-width: 640px) 22rem, 92vw"
+              class="aspect-[4/3] w-full object-cover"
+            />
+            <div class="flex flex-1 flex-col items-center gap-2 p-6 text-center">
+              <h2 class="text-xl text-forest-600">{p.name}</h2>
+              <p class="text-2xl font-bold text-forest-800">{p.price}</p>
+              <a href="#register" data-plan={p.id} class="btn-secondary mt-auto w-full">
+                {copy.join}
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </PageHero>
+</div>
+
+<!-- Program description (original program page) -->
+<section class="bg-cream-100 section-y" aria-labelledby="program-title">
+  <div class="container-page max-w-3xl">
+    <h2 id="program-title" class="h-section text-center">{copy.programTitle}</h2>
+    <p class="mt-4 text-center text-xl text-forest-700">{copy.programLead}</p>
+    <div class="mt-8 space-y-2 text-center text-lg text-bark-800">
+      {copy.method.map((m, i) => <p class:list={[i === 0 && 'font-semibold text-forest-700']}>{m}</p>)}
+    </div>
+    <Perks class="mt-8" />
+
+    <div class="mt-14 grid gap-10 md:grid-cols-2">
+      <div>
+        <h3 class="text-2xl">{copy.expectTitle}</h3>
+        <ul class="list-star mt-4 text-lg text-bark-800">
+          {copy.expect.map((e) => <li>{e}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-2xl">{copy.howTitle}</h3>
+        <p class="mt-4 text-lg text-bark-800">{copy.how}</p>
+        <p class="eyebrow mt-8 text-xl sm:text-2xl"><span dir="ltr">{copy.overviewTitle}</span></p>
+        <ol class="mt-2 divide-y divide-bark-300/50 border-y border-bark-300/50">
+          {
+            copy.overview.map((o) => (
+              <li class="flex items-center justify-between gap-4 py-4 text-lg">
+                <span>
+                  <span aria-hidden="true" class="me-2">{o.icon}</span>
+                  {o.title}
+                </span>
+                <span class="shrink-0 rounded-full bg-mint-100 px-3 py-1 text-sm text-forest-700">{o.steps}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Registration -->
+<section id="register" class="scroll-mt-24 bg-lime-100 section-y" aria-labelledby="register-title">
+  <div class="container-page grid items-start gap-10 lg:grid-cols-[1fr_1.3fr]">
+    <div class="lg:sticky lg:top-28">
+      <h2 id="register-title" class="h-section">{copy.registerTitle}</h2>
+      <p class="mt-4 text-lg leading-relaxed text-forest-800">{copy.registerText}</p>
+      <p class="mt-6 text-bark-700">
+        {copy.questions}{' '}
+        <a class="text-forest-700 underline" href={site.contact.whatsappHref} target="_blank" rel="noopener">{copy.whatsapp}</a>{' '}
+        {copy.or}{' '}
+        <a class="text-forest-700 underline" href={site.contact.phoneHref} dir="ltr">{site.contact.phone}</a>
+      </p>
+    </div>
+
+    <Web3Form subject={f.subject} successMessage={f.success} class="card space-y-5 p-6 sm:p-8">
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="ch-name" class="field-label">{f.name}</label>
+          <input id="ch-name" name="name" required autocomplete="name" class="input-field w-full" />
+        </div>
+        <div>
+          <label for="ch-phone" class="field-label">{f.phone}</label>
+          <input id="ch-phone" name={f.fields.phone} type="tel" required autocomplete="tel" dir="ltr" class="input-field w-full rtl:text-end" />
+        </div>
+      </div>
+      <div>
+        <label for="ch-email" class="field-label">{f.email}</label>
+        <input id="ch-email" name="email" type="email" required autocomplete="email" dir="ltr" class="input-field w-full rtl:text-end" />
+      </div>
+
+      <fieldset>
+        <legend class="mb-2 font-medium">{f.track}</legend>
+        <div class="grid gap-3 sm:grid-cols-2">
+          {
+            copy.plans.map((p, i) => (
+              <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-bark-300 px-4 py-3 transition-colors has-[:checked]:border-forest-600 has-[:checked]:bg-mint-50">
+                <input type="radio" name={f.fields.track} value={p.value} data-plan-radio={p.id} required checked={i === 0} class="size-4 accent-forest-600" />
+                <span>
+                  {p.name} · <strong class="font-semibold">{p.price}</strong>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <div>
+        <label for="ch-diet" class="field-label">{f.diet}</label>
+        <select id="ch-diet" name={f.fields.diet} class="input-field w-full">
+          {f.diets.map((d) => <option>{d}</option>)}
+        </select>
+      </div>
+
+      <div>
+        <label for="ch-notes" class="field-label">{f.notes} <span class="font-normal text-bark-500">{f.optional}</span></label>
+        <textarea id="ch-notes" name={f.fields.notes} rows="3" class="input-field w-full resize-y"></textarea>
+      </div>
+
+      <label class="flex items-start gap-3 text-sm leading-relaxed text-bark-700">
+        <input type="checkbox" name={f.fields.consent} value={f.consentValue} required class="mt-1 size-4 shrink-0 accent-forest-600" />
+        <span>{f.consent}</span>
+      </label>
+
+      <button type="submit" class="btn-primary w-full text-lg">{f.send}</button>
+    </Web3Form>
+  </div>
+</section>
+
+<FaqAccordion schema={false} />
+
+<!-- Phones: keep the next step in reach while reading (hidden over the header section and the form itself). -->
+<div
+  class="fixed inset-x-0 bottom-0 z-30 translate-y-full border-t border-forest-700 bg-forest-600/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_24px_-12px_rgb(18_70_51/0.5)] backdrop-blur-md transition-transform duration-300 data-[show]:translate-y-0 lg:hidden print:hidden"
+  data-sticky-cta
+  aria-hidden="true"
+>
+  <a href="#register" class="btn-primary w-full" tabindex="-1">
+    {copy.sticky}
+    <Icon name="arrow" size={18} />
+  </a>
+</div>
+
+<script>
+  // Plan buttons preselect the matching option in the form.
+  document.querySelectorAll<HTMLAnchorElement>('[data-plan]').forEach((a) =>
+    a.addEventListener('click', () => {
+      const radio = document.querySelector<HTMLInputElement>(`[data-plan-radio="${a.dataset.plan}"]`);
+      if (radio) radio.checked = true;
+    }),
+  );
+
+  const bar = document.querySelector<HTMLElement>('[data-sticky-cta]');
+  const watched = [document.querySelector('[data-challenge-hero]'), document.getElementById('register')].filter(Boolean) as Element[];
+  if (bar && watched.length) {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+      const show = visible.size === 0;
+      bar.toggleAttribute('data-show', show);
+      bar.setAttribute('aria-hidden', String(!show));
+      bar.querySelector('a')?.setAttribute('tabindex', show ? '0' : '-1');
+    });
+    watched.forEach((el) => io.observe(el));
+  }
+</script>

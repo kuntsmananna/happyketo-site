@@ -1,0 +1,55 @@
+---
+/** Keto Cuisine (rooftop dinners in Jaffa): cream section, ✦ list, long-arrow link, two photos. */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { homeFor } from '@/data/home';
+import { getLang, localized } from '@/i18n';
+import day from '@/assets/home/cuisine-rooftop-day.jpg';
+import night from '@/assets/home/cuisine-rooftop-night.jpg';
+
+const lang = getLang(Astro.url);
+const c = homeFor(lang).cuisine;
+---
+
+<section class="bg-cream-100 section-y" aria-labelledby="cuisine-title">
+  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+    <div class="text-forest-600">
+      <p class="eyebrow"><span dir="ltr">{c.eyebrow}</span></p>
+      <h2 id="cuisine-title" class="h-section">{c.title}</h2>
+      <div class="mt-4 space-y-1 text-lg">
+        {c.lines.map((l) => <p>{l}</p>)}
+      </div>
+      <ul class="list-star mt-6 text-lg">
+        {c.list.map((i) => <li>{i}</li>)}
+      </ul>
+      <p class="mt-3 text-bark-600">{c.note}</p>
+      <a href={`${localized('/contact', lang)}?topic=events`} class="link-arrow mt-6 text-lg text-forest-600">
+        {c.cta}
+        <Icon name="arrowLong" size={24} />
+      </a>
+    </div>
+
+    <div class="relative mx-auto grid w-full max-w-lg grid-cols-[1.35fr_1fr] items-end gap-4">
+      <Image
+        src={day}
+        alt={c.dayAlt}
+        width={640}
+        height={960}
+        fit="cover"
+        widths={[240, 360, 480, 640]}
+        sizes="(min-width: 1024px) 18rem, 52vw"
+        class="aspect-[2/3] w-full object-cover shadow-[var(--shadow-card)]"
+      />
+      <Image
+        src={night}
+        alt={c.nightAlt}
+        width={480}
+        height={600}
+        fit="cover"
+        widths={[180, 260, 360, 480]}
+        sizes="(min-width: 1024px) 13rem, 38vw"
+        class="mb-10 aspect-[4/5] w-full object-cover shadow-[var(--shadow-card)]"
+      />
+    </div>
+  </div>
+</section>

@@ -16,7 +16,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
 <article class="card card-interactive group relative flex flex-col overflow-hidden">
-  <div class="aspect-[16/10] overflow-hidden bg-sage-100">
+  <div class="aspect-[16/10] overflow-hidden bg-mint-100">
     {
       image ? (
         <Image
@@ -42,7 +42,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
       tags.length > 0 && (
         <ul class="mb-2 flex flex-wrap gap-1.5" aria-label="נושאים">
           {tags.map((t) => (
-            <li class="rounded-full bg-cream-200 px-2.5 py-0.5 text-xs font-medium text-cocoa-700">{t}</li>
+            <li class="rounded-full bg-cream-200 px-2.5 py-0.5 text-xs font-medium text-bark-700">{t}</li>
           ))}
         </ul>
       )
@@ -50,11 +50,11 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     <Heading class="h-card">
       <a href={postUrl(post)} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">{title}</a>
     </Heading>
-    {description && description !== title && <p class="mt-2 line-clamp-3 flex-1 leading-relaxed text-cocoa-700">{description}</p>}
-    <span class="mt-4 inline-flex items-center gap-1.5 font-medium text-olive-700">
+    {description && description !== title && <p class="mt-2 line-clamp-3 flex-1 leading-relaxed text-bark-700">{description}</p>}
+    <span class="mt-4 inline-flex items-center gap-1.5 font-medium text-forest-700">
       להמשך קריאה
       <Icon name="arrow" size={18} class="transition-transform group-hover:-translate-x-1" />
     </span>
   </div>
-  <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-[inherit] ring-olive-500 ring-offset-2 group-has-[a:focus-visible]:ring-2"></span>
+  <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-[inherit] ring-forest-500 ring-offset-2 group-has-[a:focus-visible]:ring-2"></span>
 </article>

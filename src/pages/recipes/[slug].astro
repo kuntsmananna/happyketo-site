@@ -23,7 +23,7 @@ interface Props {
 }
 
 const { recipe, all } = Astro.props;
-const { title, description, image, imageAlt, category, prepTime, publishDate, ingredients, instructions } = recipe.data;
+const { title, description, image, imageAlt, category, prepTime, publishDate, ingredients, instructions, tags } = recipe.data;
 const { Content } = await render(recipe);
 const url = new URL(recipeUrl(recipe), Astro.site).href;
 
@@ -48,7 +48,7 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
   <JsonLd data={recipeJsonLd(recipe, url, shareImageUrl)} />
 
   <article>
-    <header class="bg-sage-50">
+    <header class="bg-mint-50">
       <div class="container-page grid items-center gap-8 py-8 sm:py-12 lg:grid-cols-[1fr_minmax(0,28rem)] lg:gap-14">
         <div>
           <div class="mb-5 print:hidden">
@@ -66,7 +66,7 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
                 <li>
                   <a
                     href={categoryUrl(c)}
-                    class="rounded-full bg-white px-3 py-1 text-sm font-medium text-sage-700 ring-1 ring-sage-200 transition-colors hover:bg-sage-100"
+                    class="rounded-full bg-white px-3 py-1 text-sm font-medium text-mint-700 ring-1 ring-mint-200 transition-colors hover:bg-mint-100"
                   >
                     {categoryLabel(c)}
                   </a>
@@ -75,13 +75,12 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
             }
           </ul>
           <h1 class="h-display">{title}</h1>
-          {description && description !== title && <p class="lead mt-4 max-w-2xl">{description}</p>}
 
-          <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-cocoa-600">
+          <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-bark-600">
             {
               prepTime && (
                 <span class="inline-flex items-center gap-1.5">
-                  <Icon name="clock" size={16} class="text-olive-600" />
+                  <Icon name="clock" size={16} class="text-forest-600" />
                   {formatMinutes(prepTime)}
                 </span>
               )
@@ -132,6 +131,26 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
           <RecipeBox recipe={recipe} slot="insert" />
         </SplitContent>
       </Prose>
+
+      {
+        tags.length > 0 && (
+          <div class="mt-12 border-t border-bark-300/50 pt-6 print:hidden">
+            <h2 class="mb-3 font-sans text-sm font-semibold text-bark-600">תיוגים:</h2>
+            <ul class="flex flex-wrap gap-2">
+              {tags.map((t) => (
+                <li>
+                  <a
+                    href={`/recipes?q=${encodeURIComponent(t)}`}
+                    class="inline-flex min-h-11 items-center rounded-md border border-bark-300 bg-white px-3 text-sm text-bark-700 transition-colors hover:border-forest-600 hover:text-forest-700"
+                  >
+                    {t}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
     </div>
   </article>
 

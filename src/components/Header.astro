@@ -1,49 +1,67 @@
 ---
+/**
+ * Site header in the original's style: deep-green bar, lime "HAPPY KETO" wordmark, lime menu pill on phones.
+ * Desktop adds the full menu (recipes dropdown), the challenge call-to-action and the language switch.
+ */
 import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import { nav, site } from '@/data/site';
+import { navFor, site, type NavItem } from '@/data/site';
+import { alternates, getLang } from '@/i18n';
+import { t } from '@/i18n/ui';
 import logo from '@/assets/brand/sticker-happy-keto.png';
+
+const lang = getLang(Astro.url);
+const s = t(lang);
+const nav = navFor(lang);
+const homeHref = lang === 'en' ? '/en' : '/';
+const alt = alternates(Astro.url.pathname);
+// The switch goes to the same page in the other language, or to its home page.
+const switchHref = lang === 'he' ? (alt.en ?? '/en') : (alt.he ?? '/');
+const otherLang = lang === 'he' ? 'en' : 'he';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === href;
-const isSection = (href: string) => href !== '/' && (path === href || path.startsWith(href + '/'));
+const isSection = (href: string) => href !== '/' && href !== '/en' && (path === href || path.startsWith(href + '/'));
 const active = (href: string) => isCurrent(href) || isSection(href);
 const cta = nav.find((i) => i.cta);
-const linkBase = 'rounded-full transition-colors hover:bg-olive-50 hover:text-olive-700';
-const linkActive = 'bg-olive-50 font-medium text-olive-800';
+const links = nav.filter((i) => !i.cta);
+const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
+const linkBase = 'rounded-full transition-colors hover:bg-white/10 hover:text-lime-100';
+const linkActive = 'bg-white/10 text-lime-100';
 ---
 
 <header
-  class="sticky top-0 z-40 border-b border-olive-100/80 bg-cream-50/90 backdrop-blur-md transition-shadow duration-300 data-[scrolled]:shadow-[0_6px_24px_-12px_rgb(58_42_32/0.25)] print:hidden"
+  class="sticky top-0 z-40 bg-forest-600 text-cream-100 transition-shadow duration-300 data-[scrolled]:shadow-[0_8px_24px_-10px_rgb(18_70_51/0.6)] print:hidden"
   data-site-header
 >
-  <div class="container-page flex h-16 items-center justify-between gap-4 lg:h-20">
-    <a href="/" class="flex items-center gap-2.5 rounded-full" aria-label={`${site.name} – לעמוד הבית`}>
-      <Image src={logo} alt="" width={48} height={55} class="size-10 object-contain lg:size-12" loading="eager" />
-      <span class="text-lg font-bold tracking-[0.12em] text-olive-800 lg:text-xl" dir="ltr">HAPPY KETO</span>
+  <div class="container-page flex h-16 items-center justify-between gap-3 lg:h-20">
+    <a href={homeHref} class="flex items-center gap-2.5 rounded-full text-lime-100" aria-label={s.homeLabel}>
+      <Image src={logo} alt="" width={48} height={55} class="size-9 object-contain lg:size-11" loading="eager" />
+      <span class="wordmark text-lg lg:text-xl" dir="ltr">HAPPY KETO</span>
     </a>
 
     <!-- Desktop navigation -->
-    <nav aria-label="ניווט ראשי" class="hidden lg:block">
-      <ul class="flex items-center gap-1 text-[0.95rem]">
+    <nav aria-label={s.nav} class="hidden lg:block">
+      <ul class="flex items-center gap-0.5 text-[0.95rem]">
         {
-          nav.filter((item) => !item.cta).map((item) =>
+          links.map((item) =>
             item.children ? (
               <li class="group relative" data-dropdown>
                 <div class="flex items-center">
                   <a
                     href={item.href}
-                    class:list={['py-2 ps-3 pe-1', linkBase, active(item.href) ? linkActive : 'text-cocoa-800']}
+                    {...hl(item)}
+                    class:list={['py-2 ps-3 pe-1', linkBase, active(item.href) && linkActive]}
                     aria-current={isCurrent(item.href) ? 'page' : undefined}
                   >
                     {item.label}
                   </a>
                   <button
                     type="button"
-                    class="rounded-full p-2 text-cocoa-600 transition-colors hover:bg-olive-50 hover:text-olive-700"
+                    class="rounded-full p-2 transition-colors hover:bg-white/10 hover:text-lime-100"
                     aria-expanded="false"
                     aria-controls="nav-dropdown-recipes"
-                    aria-label={`תת-תפריט ${item.label}`}
+                    aria-label={`${s.submenu} ${item.label}`}
                     data-dropdown-toggle
                   >
                     <Icon name="chevron" size={16} class="transition-transform group-data-[open]:rotate-180" />
@@ -53,14 +71,15 @@ const linkActive = 'bg-olive-50 font-medium text-olive-800';
                   id="nav-dropdown-recipes"
                   class="invisible absolute start-0 top-full z-50 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 group-data-[open]:visible group-data-[open]:opacity-100"
                 >
-                  <ul class="card grid w-max grid-cols-2 gap-x-2 p-3">
+                  <ul class="card grid w-max grid-cols-2 gap-x-2 bg-cream-50 p-3 text-bark-800">
                     {item.children.map((child) => (
                       <li>
                         <a
                           href={child.href}
+                          {...hl(child)}
                           class:list={[
-                            'block rounded-xl px-3 py-2 whitespace-nowrap transition-colors hover:bg-sage-50 hover:text-olive-700',
-                            isCurrent(child.href) && 'bg-sage-50 font-medium text-olive-700',
+                            'block rounded-xl px-3 py-2 whitespace-nowrap transition-colors hover:bg-mint-100 hover:text-forest-700',
+                            isCurrent(child.href) && 'bg-mint-100 text-forest-700',
                           ]}
                           aria-current={isCurrent(child.href) ? 'page' : undefined}
                         >
@@ -75,7 +94,8 @@ const linkActive = 'bg-olive-50 font-medium text-olive-800';
               <li>
                 <a
                   href={item.href}
-                  class:list={['block px-3 py-2', linkBase, active(item.href) ? linkActive : 'text-cocoa-800']}
+                  {...hl(item)}
+                  class:list={['block px-3 py-2', linkBase, active(item.href) && linkActive]}
                   aria-current={isCurrent(item.href) ? 'page' : undefined}
                 >
                   {item.label}
@@ -93,40 +113,59 @@ const linkActive = 'bg-olive-50 font-medium text-olive-800';
             </li>
           )
         }
+        <li class="ms-1">
+          <a
+            href={switchHref}
+            hreflang={otherLang}
+            lang={otherLang}
+            class="inline-flex min-h-11 items-center rounded-full border border-lime-100/40 px-3 text-sm font-medium text-lime-100 transition-colors hover:bg-white/10"
+          >
+            {s.langSwitch.short}<span class="sr-only">{s.langSwitch.hidden}</span>
+          </a>
+        </li>
       </ul>
     </nav>
 
-    <!-- Mobile toggle -->
-    <button
-      type="button"
-      class="group -me-2 rounded-full p-2 text-olive-800 transition-colors hover:bg-olive-50 lg:hidden"
-      aria-expanded="false"
-      aria-controls="mobile-menu"
-      data-menu-toggle
-    >
-      <span class="sr-only" data-menu-label>פתיחת תפריט</span>
-      <Icon name="menu" size={26} class="group-aria-expanded:hidden" />
-      <Icon name="close" size={26} class="hidden group-aria-expanded:block" />
-    </button>
+    <!-- Phones/tablets: language switch + the original's lime "Menu" pill -->
+    <div class="flex items-center gap-2 lg:hidden">
+      <a
+        href={switchHref}
+        hreflang={otherLang}
+        lang={otherLang}
+        class="inline-flex min-h-11 items-center rounded-full border border-lime-100/40 px-3 text-sm font-medium text-lime-100"
+      >
+        {s.langSwitch.short}<span class="sr-only">{s.langSwitch.hidden}</span>
+      </a>
+      <button
+        type="button"
+        class="group inline-flex min-h-11 items-center gap-2 rounded-full bg-lime-100 px-4 text-sm font-medium text-forest-700 transition-colors hover:bg-lime-200"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-toggle
+      >
+        <span data-menu-label class="sr-only">{s.menuOpen}</span>
+        <span aria-hidden="true">{s.menu}</span>
+        <span aria-hidden="true" class="size-2 rounded-full bg-forest-700 group-aria-expanded:hidden"></span>
+        <Icon name="close" size={16} class="hidden group-aria-expanded:block" />
+      </button>
+    </div>
   </div>
 
   <!-- Mobile menu -->
   <nav
     id="mobile-menu"
-    aria-label="ניווט ראשי"
-    class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-olive-100 bg-cream-50 lg:hidden"
+    aria-label={s.nav}
+    class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-cream-50 text-bark-800 lg:hidden"
     data-menu
   >
     <ul class="container-page flex flex-col py-3 text-lg">
       {
         nav.map((item) => (
-          <li class="border-b border-olive-100/70 last:border-0">
+          <li class="border-b border-bark-300/40 last:border-0">
             <a
               href={item.href}
-              class:list={[
-                'block py-3',
-                active(item.href) ? 'font-medium text-olive-700' : 'text-cocoa-900',
-              ]}
+              {...hl(item)}
+              class:list={['block py-3', active(item.href) ? 'font-semibold text-forest-600' : 'text-bark-800']}
               aria-current={isCurrent(item.href) ? 'page' : undefined}
             >
               {item.label}
@@ -137,11 +176,12 @@ const linkActive = 'bg-olive-50 font-medium text-olive-800';
                   <li>
                     <a
                       href={child.href}
+                      {...hl(child)}
                       class:list={[
                         'inline-flex min-h-11 items-center rounded-full border px-4 text-sm transition-colors',
                         isCurrent(child.href)
-                          ? 'border-olive-600 bg-olive-600 text-cream-50'
-                          : 'border-olive-200 bg-white text-cocoa-800 hover:border-olive-400',
+                          ? 'border-forest-600 bg-forest-600 text-lime-100'
+                          : 'border-bark-300 bg-white text-bark-800 hover:border-forest-400',
                       ]}
                       aria-current={isCurrent(child.href) ? 'page' : undefined}
                     >
@@ -159,26 +199,26 @@ const linkActive = 'bg-olive-50 font-medium text-olive-800';
       {
         cta && (
           <a href={cta.href} class="btn-primary w-full">
-            הצטרפו לאתגר 4 השבועות
+            {s.joinChallenge}
             <Icon name="arrow" size={18} />
           </a>
         )
       }
       <div class="flex gap-3">
-      <a href={site.contact.phoneHref} class="btn-secondary flex-1 text-base">
-        <Icon name="phone" size={18} />
-        <span dir="ltr">{site.contact.phone}</span>
-      </a>
-      <a href={site.social[0].href} class="btn-secondary px-3.5" aria-label="Instagram" rel="noopener" target="_blank">
-        <Icon name="instagram" size={20} />
-      </a>
+        <a href={site.contact.phoneHref} class="btn-outline flex-1 text-base">
+          <Icon name="phone" size={18} />
+          <span dir="ltr">{site.contact.phone}</span>
+        </a>
+        <a href={site.social[0].href} class="btn-outline px-3.5" aria-label="Instagram" rel="noopener" target="_blank">
+          <Icon name="instagram" size={20} />
+        </a>
       </div>
     </div>
   </nav>
 </header>
 
 <script>
-  // Soft shadow once the page is scrolled (marks the header's edge over content).
+  // Soft shadow once the page is scrolled.
   const header = document.querySelector<HTMLElement>('[data-site-header]');
   const onScroll = () => header?.toggleAttribute('data-scrolled', scrollY > 8);
   addEventListener('scroll', onScroll, { passive: true });
@@ -187,12 +227,13 @@ const linkActive = 'bg-olive-50 font-medium text-olive-800';
   const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
   const menu = document.querySelector<HTMLElement>('[data-menu]');
   const label = toggle?.querySelector('[data-menu-label]');
+  const isHe = document.documentElement.lang === 'he';
 
   function setMenu(open: boolean) {
     if (!toggle || !menu) return;
     toggle.setAttribute('aria-expanded', String(open));
     menu.classList.toggle('hidden', !open);
-    if (label) label.textContent = open ? 'סגירת תפריט' : 'פתיחת תפריט';
+    if (label) label.textContent = open ? (isHe ? 'סגירת תפריט' : 'Close menu') : isHe ? 'פתיחת תפריט' : 'Open menu';
   }
 
   toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
@@ -224,7 +265,6 @@ const linkActive = 'bg-olive-50 font-medium text-olive-800';
       if (el.hasAttribute('data-open') || el.contains(document.activeElement)) {
         setDropdown(el, false);
         el.querySelector<HTMLElement>('[data-dropdown-toggle]')?.focus();
-        (document.activeElement as HTMLElement)?.blur();
       }
     });
   });

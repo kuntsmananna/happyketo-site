@@ -27,7 +27,7 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
 <div class="mb-8 space-y-4" data-recipe-filter data-target={target} data-active={active}>
   <div role="search" class="relative max-w-md">
     <label for="recipe-search" class="sr-only">חיפוש מתכון</label>
-    <Icon name="search" size={20} class="pointer-events-none absolute start-4 top-1/2 -translate-y-1/2 text-cocoa-500" />
+    <Icon name="search" size={20} class="pointer-events-none absolute start-4 top-1/2 -translate-y-1/2 text-bark-500" />
     <input
       id="recipe-search"
       type="search"
@@ -46,10 +46,10 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
               href={c.href}
               data-filter-category={c.slug}
               aria-current={c.slug === active ? 'page' : undefined}
-              class="group inline-flex min-h-11 items-center gap-1.5 rounded-full border border-olive-200 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-cocoa-800 transition-colors hover:border-olive-400 aria-[current]:border-olive-600 aria-[current]:bg-olive-600 aria-[current]:text-cream-50"
+              class="group inline-flex min-h-11 items-center gap-1.5 rounded-full border border-forest-200 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-bark-800 transition-colors hover:border-forest-400 aria-[current]:border-forest-600 aria-[current]:bg-forest-600 aria-[current]:text-cream-50"
             >
               {c.label}
-              <span class="text-xs text-cocoa-500 group-aria-[current]:text-cream-100">{c.count}</span>
+              <span class="text-xs text-bark-500 group-aria-[current]:text-cream-100">{c.count}</span>
             </a>
           </li>
         ))
@@ -57,7 +57,7 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
     </ul>
   </nav>
 
-  <p class="text-sm text-cocoa-600" aria-live="polite" data-filter-count></p>
+  <p class="text-sm text-bark-600" aria-live="polite" data-filter-count></p>
 </div>
 
 <script>

@@ -1,0 +1,18 @@
+---
+/** Landing page after a form is sent without JavaScript (Web3Forms redirect). */
+import { getLang } from '@/i18n';
+
+const lang = getLang(Astro.url);
+const c =
+  lang === 'he'
+    ? { title: 'תודה! ❤️', text: 'הפרטים התקבלו ואחזור אליכם בהקדם.', back: 'חזרה לעמוד הבית', href: '/' }
+    : { title: 'Thank you! ❤️', text: 'Your details were received and I’ll get back to you soon.', back: 'Back to the home page', href: '/en' };
+---
+
+<section class="bg-cream-100 section-y text-center">
+  <div class="container-page">
+    <h1 class="h-display">{c.title}</h1>
+    <p class="lead mx-auto mt-4 max-w-md">{c.text}</p>
+    <a href={c.href} class="btn-primary mt-8">{c.back}</a>
+  </div>
+</section>

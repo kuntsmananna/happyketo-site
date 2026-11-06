@@ -5,12 +5,13 @@
  */
 export type FavoriteGroup = 'fats' | 'salt' | 'sweet' | 'pantry' | 'snacks';
 
-export const favoriteGroups: { id: FavoriteGroup; title: string; intro: string }[] = [
-  { id: 'fats', title: 'שומנים טובים', intro: 'לבישול, לטיגון ולטעם.' },
-  { id: 'salt', title: 'מלח ואלקטרוליטים', intro: 'במיוחד בשבועות הראשונים של המעבר לקיטו.' },
-  { id: 'sweet', title: 'ממתיקים וסירופים', intro: 'מתוק בלי סוכר.' },
-  { id: 'pantry', title: 'מזווה ואפייה', intro: 'הבסיס למאפים, לציפויים ולמטבח היומיומי.' },
-  { id: 'snacks', title: 'נשנושים', intro: 'לדרך, לטיולים ולרגעי חשק.' },
+/** Group titles (an addition – the original page is one flat list). */
+export const favoriteGroups: { id: FavoriteGroup; title: { he: string; en: string } }[] = [
+  { id: 'fats', title: { he: 'שומנים טובים', en: 'Good fats' } },
+  { id: 'salt', title: { he: 'מלח ואלקטרוליטים', en: 'Salt & electrolytes' } },
+  { id: 'sweet', title: { he: 'ממתיקים וסירופים', en: 'Sweeteners & syrups' } },
+  { id: 'pantry', title: { he: 'מזווה ואפייה', en: 'Pantry & baking' } },
+  { id: 'snacks', title: { he: 'נשנושים', en: 'Snacks' } },
 ];
 
 export type Favorite = { slug: string; name: string; ingredients: string; note?: string; href: string; group: FavoriteGroup };

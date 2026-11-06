@@ -1,0 +1,54 @@
+---
+/** Happy Favorites / Keto Blog / Tasty Keto: navy section with square photos and long-arrow links (as on the original). */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { homeFor } from '@/data/home';
+import { getLang } from '@/i18n';
+import allulose from '@/assets/home/favorites-allulose.jpg';
+import tomatoes from '@/assets/home/blog-tomatoes.jpg';
+import eggs from '@/assets/home/blog-eggs.jpg';
+import goodToKnow from '@/assets/brand/sticker-good-to-know.png';
+
+const lang = getLang(Astro.url);
+const items = homeFor(lang).services;
+const images = { favorites: allulose, blog: tomatoes, recipes: eggs } as const;
+---
+
+<section class="surface-navy overflow-x-clip section-y" aria-label="Happy Keto">
+  <div class="container-page grid gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+    {
+      items.map((c) => (
+        <article class="group relative flex flex-col">
+          <div class:list={['relative', c.key === 'favorites' ? 'bg-white' : 'bg-navy-800']}>
+            <Image
+              src={images[c.key as keyof typeof images]}
+              alt={c.alt}
+              width={640}
+              height={640}
+              fit={c.key === 'favorites' ? 'contain' : 'cover'}
+              widths={[320, 480, 640]}
+              sizes="(min-width: 1024px) 20rem, (min-width: 640px) 45vw, 92vw"
+              class:list={['aspect-square w-full', c.key === 'favorites' ? 'object-contain p-8' : 'object-cover']}
+            />
+            {c.key === 'blog' && (
+              <Image src={goodToKnow} alt="" width={180} class="absolute -bottom-6 -start-4 w-28 rotate-[-6deg] drop-shadow-lg" />
+            )}
+          </div>
+          <p class="eyebrow mt-6 text-cream-100">
+            <span dir="ltr">{c.eyebrow}</span>
+          </p>
+          <h2 class="text-2xl leading-snug text-lime-100 sm:text-3xl">{c.title}</h2>
+          <p class="mt-3 flex-1 text-lg text-cream-100/90">{c.text}</p>
+          <a
+            href={c.href}
+            hreflang={lang === 'en' && !c.href.startsWith('/en') ? 'he' : undefined}
+            class="link-arrow mt-5 text-lg text-mustard-300 after:absolute after:inset-0"
+          >
+            {c.cta}
+            <Icon name="arrowLong" size={24} class="transition-transform group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
+          </a>
+        </article>
+      ))
+    }
+  </div>
+</section>

@@ -1,42 +1,8 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Hero from '@/components/Hero.astro';
-import ChallengeBlock from '@/components/ChallengeBlock.astro';
-import AboutBlock from '@/components/AboutBlock.astro';
-import ServiceCards from '@/components/ServiceCards.astro';
-import RecipeCard from '@/components/RecipeCard.astro';
-import FaqAccordion from '@/components/FaqAccordion.astro';
-import NewsletterForm from '@/components/NewsletterForm.astro';
-import Icon from '@/components/Icon.astro';
-import { getRecipes } from '@/lib/recipes';
-
-const latest = (await getRecipes()).filter((r) => r.data.image).slice(0, 6);
+import HomeView from '@/views/HomeView.astro';
 ---
 
 <BaseLayout>
-  <Hero />
-  <ChallengeBlock />
-  <AboutBlock />
-  <ServiceCards />
-
-  <section class="bg-cream-100 section-y" aria-labelledby="latest-title">
-    <div class="container-page">
-      <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p class="eyebrow"><span dir="ltr">Tasty Keto</span></p>
-          <h2 id="latest-title" class="h-section">מתכונים חדשים מהמטבח</h2>
-        </div>
-        <a href="/recipes" class="inline-flex items-center gap-1.5 font-medium text-olive-700 hover:text-olive-900">
-          לכל המתכונים
-          <Icon name="arrow" size={18} />
-        </a>
-      </div>
-      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {latest.map((recipe) => <RecipeCard recipe={recipe} />)}
-      </div>
-    </div>
-  </section>
-
-  <FaqAccordion />
-  <NewsletterForm />
+  <HomeView />
 </BaseLayout>

@@ -1,25 +1,58 @@
 ---
-/** Standard inner-page header: optional breadcrumbs, Latin eyebrow, title and intro. */
+/**
+ * Inner-page header in the original's styles:
+ *   marquee  mustard "Keto Blog • Happy Blog" band, then title row on cream (blog, recipes, pantry)
+ *   navy     navy band with leaf shadows, centered cream title + intro (challenge)
+ *   plain    centered title + intro on cream (contact, privacy)
+ */
 import Breadcrumbs from './Breadcrumbs.astro';
+import Marquee from './Marquee.astro';
 
 interface Props {
   title: string;
-  eyebrow?: string;
   intro?: string;
+  eyebrow?: string;
   breadcrumbs?: { label: string; href?: string }[];
-  tone?: 'sage' | 'cream';
+  variant?: 'marquee' | 'navy' | 'plain';
+  /** Second word of the marquee ("Blog", "Recipes", "Favorites"). */
+  marquee?: string;
 }
 
-const { title, eyebrow, intro, breadcrumbs, tone = 'sage' } = Astro.props;
+const { title, intro, eyebrow, breadcrumbs, variant = 'plain', marquee } = Astro.props;
 ---
 
-<section class:list={['relative overflow-hidden', tone === 'sage' ? 'bg-sage-50' : 'bg-cream-100']}>
-  <div aria-hidden="true" class="pointer-events-none absolute -end-24 -top-24 size-72 rounded-full bg-olive-100/50 blur-3xl"></div>
-  <div class="container-page relative section-y-sm">
-    {breadcrumbs && <div class="mb-6"><Breadcrumbs items={breadcrumbs} /></div>}
-    {eyebrow && <p class="eyebrow"><span dir="ltr">{eyebrow}</span></p>}
-    <h1 class="h-display max-w-3xl">{title}</h1>
-    {intro && <p class="lead mt-4 max-w-2xl">{intro}</p>}
-    <slot />
-  </div>
-</section>
+{variant === 'marquee' && marquee && <Marquee word={marquee} />}
+
+{
+  variant === 'navy' ? (
+    <section class="surface-navy section-y text-center">
+      <div class="container-page max-w-3xl">
+        {breadcrumbs && (
+          <div class="mb-8 flex justify-center [&_a]:text-cream-100/80 [&_a:hover]:text-lime-100 [&_nav]:text-cream-100/70 [&_span]:text-cream-100">
+            <Breadcrumbs items={breadcrumbs} />
+          </div>
+        )}
+        {eyebrow && <p class="eyebrow text-cream-100"><span dir="ltr">{eyebrow}</span></p>}
+        <h1 class="h-display text-cream-100">{title}</h1>
+        {intro && <p class="mx-auto mt-5 max-w-xl text-lg leading-relaxed whitespace-pre-line text-cream-100/95 sm:text-xl">{intro}</p>}
+        <slot />
+      </div>
+    </section>
+  ) : (
+    <section class:list={['bg-cream-100', variant === 'plain' ? 'section-y-sm text-center' : 'pt-8 pb-2 sm:pt-10']}>
+      <div class:list={['container-page', variant === 'plain' && 'max-w-3xl']}>
+        {breadcrumbs && (
+          <div class:list={['mb-5', variant === 'plain' && 'flex justify-center']}>
+            <Breadcrumbs items={breadcrumbs} />
+          </div>
+        )}
+        {eyebrow && <p class="eyebrow"><span dir="ltr">{eyebrow}</span></p>}
+        <h1 class:list={[variant === 'plain' ? 'h-display' : 'h-section', 'max-w-3xl', variant === 'plain' && 'mx-auto']}>{title}</h1>
+        {intro && (
+          <p class:list={['lead mt-3 max-w-2xl whitespace-pre-line', variant === 'plain' && 'mx-auto']}>{intro}</p>
+        )}
+        <slot />
+      </div>
+    </section>
+  )
+}

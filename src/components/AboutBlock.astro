@@ -1,52 +1,58 @@
 ---
+/** Lime "about" section: centered story, green button, salmon photo + round portrait + Low Carb sticker. */
 import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
+import { homeFor } from '@/data/home';
+import { getLang, localized } from '@/i18n';
+import salmon from '@/assets/home/challenge-salmon.jpg';
 import anna from '@/assets/home/anna.jpg';
 import sticker from '@/assets/brand/sticker-low-carb.png';
-import { site } from '@/data/site';
+
+const lang = getLang(Astro.url);
+const c = homeFor(lang).about;
 ---
 
-<section class="overflow-x-clip bg-cream-100 section-y" aria-labelledby="about-title">
-  <div class="container-page grid items-center gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-    <div>
-      <h2 id="about-title" class="h-section">
-        אני לא עושה דיאטה,
-        <span class="block text-olive-600">אני בוחרת במזון בריא</span>
-      </h2>
-      <div class="mt-6 space-y-4 text-lg leading-relaxed text-cocoa-700">
-        <p>
-          <span dir="ltr">HAPPY KETO</span> נולד מתוך חקירה ורצון למצוא את נקודת האיזון שבג׳ינגול בין העבודה, המשפחה,
-          הילדים, קריירה, פיתוח אישי ויתר ענייני היום יום... אבל גם תזונה קטוגנית מיטיבה ואוכל טעים.
-        </p>
-        <p>
-          להשקיע בבריאות שלנו מבלי לחכות לפנסיה או שהילדים יגדלו. אלא, עכשיו, עם העבודה, עם הילדים ועם הסל כביסה
-          והכלים בכיור...
-        </p>
-        <p class="font-medium text-olive-800">דברים קלים והרגלים פשוטים שעושים הבדל גדול.</p>
-      </div>
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-        <a href="/about" class="btn-secondary bg-white px-7">
-          אודות Happy Keto
-          <Icon name="arrow" size={18} />
-        </a>
-        <p class="text-cocoa-600">— {site.author}</p>
-      </div>
+<section class="overflow-x-clip bg-lime-100 section-y" aria-labelledby="about-title">
+  <div class="container-page max-w-4xl text-center">
+    {
+      c.heading ? (
+        <h2 id="about-title" class="font-serif text-3xl italic sm:text-4xl">
+          {c.heading}
+        </h2>
+      ) : (
+        <h2 id="about-title" class="sr-only">
+          {c.cta}
+        </h2>
+      )
+    }
+    <div class:list={['mx-auto max-w-3xl space-y-3 font-display text-xl leading-relaxed text-forest-600 sm:text-2xl', c.heading && 'mt-6']}>
+      {c.paragraphs.map((p) => <p>{p}</p>)}
     </div>
+    <a href={localized('/about', lang)} class="btn-secondary mt-8">{c.cta}</a>
 
-    <div class="relative mx-auto w-full max-w-xl">
+    <figure class="relative mx-auto mt-14 max-w-2xl">
+      <Image
+        src={salmon}
+        alt={c.salmonAlt}
+        width={1200}
+        height={760}
+        fit="cover"
+        widths={[480, 720, 960, 1200]}
+        sizes="(min-width: 672px) 36rem, 78vw"
+        class="aspect-[1200/760] w-[85%] object-cover"
+      />
       <Image
         src={anna}
-        alt={`${site.author} במטבח`}
-        widths={[480, 720, 960, 1400]}
-        sizes="(min-width: 1024px) 36rem, 92vw"
-        class="aspect-[4/3] w-full rounded-[2rem] object-cover object-[50%_30%] shadow-[var(--shadow-card)]"
+        alt={c.annaAlt}
+        width={640}
+        height={640}
+        fit="cover"
+        position="top"
+        widths={[240, 360, 480, 640]}
+        sizes="(min-width: 672px) 18rem, 39vw"
+        class="absolute -bottom-10 end-0 aspect-square w-[42%] rounded-full border-4 border-lime-100 object-cover"
       />
-      <Image
-        src={sticker}
-        alt=""
-        width={180}
-        class="absolute -end-3 -top-10 w-28 rotate-[10deg] drop-shadow-lg sm:-end-8 sm:w-36"
-      />
-    </div>
+      <Image src={sticker} alt="" width={160} class="absolute -top-8 end-[30%] w-20 rotate-[10deg] drop-shadow-md sm:w-28" />
+      <figcaption class="mt-6 w-[55%] text-start text-lg text-forest-600">{c.name}</figcaption>
+    </figure>
   </div>
 </section>

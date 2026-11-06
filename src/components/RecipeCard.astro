@@ -12,7 +12,7 @@ interface Props {
 }
 
 const { recipe, eager = false, headingLevel = 3 } = Astro.props;
-const { title, description, image, category, prepTime } = recipe.data;
+const { title, description, image, category, prepTime, tags } = recipe.data;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
@@ -20,9 +20,9 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
   class="card card-interactive group relative flex flex-col overflow-hidden [contain-intrinsic-size:auto_26rem] [content-visibility:auto]"
   data-recipe-card
   data-categories={category.join(' ')}
-  data-search={`${title} ${description}`}
+  data-search={`${title} ${description} ${tags.join(' ')}`}
 >
-  <div class="relative aspect-[4/3] overflow-hidden bg-sage-100">
+  <div class="relative aspect-[4/3] overflow-hidden bg-mint-100">
     {
       image ? (
         <Image
@@ -44,7 +44,7 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     }
     {
       prepTime && (
-        <span class="absolute bottom-3 start-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-cocoa-800 backdrop-blur">
+        <span class="absolute bottom-3 start-3 inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-bark-800 backdrop-blur">
           <Icon name="clock" size={14} />
           {formatMinutes(prepTime)}
         </span>
@@ -56,17 +56,17 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
     <ul class="mb-2 flex flex-wrap gap-1.5" aria-label="קטגוריות">
       {
         category.map((c) => (
-          <li class="rounded-full bg-sage-50 px-2.5 py-0.5 text-xs font-medium text-sage-700">{categoryLabel(c)}</li>
+          <li class="rounded-full bg-mint-50 px-2.5 py-0.5 text-xs font-medium text-mint-700">{categoryLabel(c)}</li>
         ))
       }
     </ul>
-    <Heading class="text-lg leading-snug font-bold">
+    <Heading class="text-xl leading-snug">
       <a href={recipeUrl(recipe)} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">
         {title}
       </a>
     </Heading>
-    {description && description !== title && <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-cocoa-700">{description}</p>}
+    {description && description !== title && <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-bark-700">{description}</p>}
   </div>
   <!-- Focus ring for the whole card when the (stretched) link is focused -->
-  <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-[inherit] ring-olive-500 ring-offset-2 group-has-[a:focus-visible]:ring-2"></span>
+  <span aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-[inherit] ring-forest-500 ring-offset-2 group-has-[a:focus-visible]:ring-2"></span>
 </article>

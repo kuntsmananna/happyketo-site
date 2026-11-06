@@ -11,7 +11,7 @@ function resolve(reqPath) {
   const headers = {};
   for (const r of routes) {
     if (r.handle === 'filesystem') {
-      const p = path.join(STATIC, decodeURIComponent(reqPath));
+      const p = path.join(STATIC, decodeURIComponent(reqPath.split('?')[0]));
       if (existsSync(p) && statSync(p).isFile()) return { status: 200, headers };
       if (existsSync(path.join(p, 'index.html'))) return { status: 200, headers };
       continue;
@@ -52,6 +52,11 @@ for (const [from, to] of [
   ['/recipes/categories/low-carb-1', '/blog'], [enc('/recipes/categories/בלוג-קטוגני'), '/blog'], ['/recipes/categories/lunch-box', '/recipes'],
   ['/recipes', '/recipes'], ['/recipes/page/3', '/recipes'], ['/general-8', '/'], ['/profile/kuntsman-anna/profile', '/about'],
   ['/about/', '/about'], ['/', '/'],
+  ['/en', '/en'], ['/en/about-happy-keto', '/en/about'], ['/en/contact-8', '/en/contact'], ['/en/ketochallenge', '/en/challenge'],
+  [enc('/en/iherb-מומלצים'), '/en/favorites'], [enc('/en/מדיניותפרטיות'), '/en/privacy'], ['/en/challenge-page/' + enc('קיטו4שבועות'), '/en/challenge'],
+  ['/en/keto-blog', '/blog'], ['/en/pastry-recipes', '/recipes/category/pastry'], ['/en/recipes', '/recipes'],
+  ['/en/post/' + enc('פנקייק-קטוגני'), '/recipes/פנקייק-קטוגני'], ['/en/about', '/en/about'],
+  [enc('/recipes/tags/צמחוני'), '/recipes?q=צמחוני'],
 ]) cases.push([from, to]);
 
 let bad = 0;

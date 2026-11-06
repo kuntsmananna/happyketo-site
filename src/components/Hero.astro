@@ -1,56 +1,49 @@
 ---
-import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
+/** Split hero as on the original: photo half (left) + cream text half with wordmark, title and mustard CTA. */
+import { getImage } from 'astro:assets';
+import { homeFor } from '@/data/home';
+import { getLang, localized } from '@/i18n';
 import heroImg from '@/assets/home/hero-crepes.jpg';
-import sticker from '@/assets/brand/sticker-happy-keto.png';
+
+const lang = getLang(Astro.url);
+const c = homeFor(lang).hero;
+
+// Phones show a wide strip, desktop a tall half-screen: generate a matching crop for each.
+const wide = await Promise.all([480, 720, 960, 1280].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 0.62), fit: 'cover', format: 'webp' })));
+const tall = await Promise.all([640, 900, 1086].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 1.33), fit: 'cover', format: 'webp' })));
+const srcset = (imgs: typeof wide) => imgs.map((i) => `${i.src} ${i.attributes.width}w`).join(', ');
 ---
 
-<section class="relative overflow-hidden bg-sage-50">
-  <!-- soft decorative shapes -->
-  <div aria-hidden="true" class="pointer-events-none absolute -start-24 -top-24 size-80 rounded-full bg-olive-100/60 blur-3xl"></div>
-  <div aria-hidden="true" class="pointer-events-none absolute -bottom-32 end-1/3 size-96 rounded-full bg-cream-200/70 blur-3xl"></div>
+<section class="grid bg-cream-100 lg:min-h-[min(calc(100dvh-5rem),48rem)] lg:grid-cols-2">
+  <div class="flex flex-col items-center justify-center px-6 py-12 text-center sm:py-16 lg:px-12">
+    <p class="wordmark text-2xl text-forest-600 sm:text-4xl" dir="ltr">{c.wordmark}</p>
+    <h1
+      class:list={[
+        'mt-5 max-w-xl leading-[1.2] text-forest-600',
+        c.titleSerif ? 'font-serif text-4xl italic sm:text-5xl' : 'text-4xl sm:text-5xl',
+      ]}
+    >
+      {c.title}
+    </h1>
+    <p class="mt-5 max-w-md text-lg leading-relaxed text-forest-700 sm:text-xl">{c.text}</p>
+    <a href={`${localized('/challenge', lang)}#register`} class="btn-primary mt-8 px-8 text-base">{c.cta}</a>
+  </div>
 
-  <div class="container-page relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:gap-16 lg:py-24">
-    <div class="text-center lg:text-start">
-      <p class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-sm font-medium tracking-[0.16em] text-cocoa-600 ring-1 ring-olive-100" dir="ltr">
-        HAPPY KETO
-      </p>
-      <h1 class="h-display xl:text-[3.5rem]">
-        תזונה קטוגנית
-        <span class="block text-olive-600">טבעית, פשוטה וטעימה</span>
-      </h1>
-      <p class="lead mx-auto mt-6 max-w-xl lg:mx-0">
-        בלי שעות במטבח, בלי ספירת קלוריות ובלי לוותר על אוכל טעים!
-      </p>
-      <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-        <a href="/challenge" class="btn-primary px-7 text-lg shadow-lg shadow-olive-900/10">
-          תתחילו עם 3 ימי ניסיון חינם
-          <Icon name="arrow" size={20} />
-        </a>
-        <a href="/recipes" class="btn-secondary bg-white/60 px-7 text-lg">למתכונים</a>
-      </div>
-    </div>
-
-    <div class="relative mx-auto w-full max-w-[17rem] sm:max-w-sm lg:max-w-none">
-      <Image
-        src={heroImg}
-        alt="ידיים מניחות תותים על קרפ קטוגני"
-        width={880}
-        height={1100}
-        fit="cover"
-        widths={[320, 480, 640, 880]}
-        sizes="(min-width: 1024px) 40vw, (min-width: 640px) 24rem, 17rem"
-        class="aspect-[4/5] w-full rounded-t-[12rem] rounded-b-[2rem] object-cover shadow-[var(--shadow-card)]"
+  <div class="relative order-first h-[min(62vw,24rem)] lg:order-none lg:h-auto">
+    <picture>
+      <source media="(min-width: 1024px)" srcset={srcset(tall)} sizes="50vw" type="image/webp" />
+      <img
+        src={wide[1].src}
+        srcset={srcset(wide)}
+        sizes="100vw"
+        alt={c.imageAlt}
+        width={wide[1].attributes.width}
+        height={wide[1].attributes.height}
+        class="absolute inset-0 size-full object-cover"
         loading="eager"
         fetchpriority="high"
+        decoding="async"
       />
-      <Image
-        src={sticker}
-        alt=""
-        width={160}
-        class="absolute -bottom-6 -start-6 w-24 rotate-[-8deg] drop-shadow-lg sm:w-32 lg:-start-10 lg:w-36"
-        loading="eager"
-      />
-    </div>
+    </picture>
   </div>
 </section>
