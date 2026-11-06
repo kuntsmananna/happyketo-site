@@ -22,7 +22,7 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
   - Buttons: `btn-primary` (mustard), `btn-secondary` (green), `btn-outline`, `btn-sm` (all ≥ 44px tall). Surfaces: `card`, `card-interactive`, `surface-navy` (navy + leaf-shadow artwork).
   - Forms: `input-field` (+ `input-pill` for single-line pill inputs), `field-label`; errors show via `:user-invalid`.
 - Images: give `<Image>` the displayed aspect via `width`/`height` + `fit="cover"` and realistic `sizes`, so generated files are cropped to what is shown. Images are optimized at build time (adapter `imageService: false`).
-- Fonts are free look-alikes of the original's Wix-only fonts, self-hosted from npm `@fontsource*` packages via Astro's fonts API (local provider, `family()` helper in `astro.config.mjs`): Assistant = `font-sans` (body), Varela Round = `font-display` (headings), Syne = `font-logo`, Georgia/Gelasio = `font-serif` (italic English accents). Don't add Google Fonts links.
+- Fonts are free look-alikes of the original's Wix-only fonts, self-hosted from npm `@fontsource*` packages via Astro's fonts API (local provider, `family()` helper in `astro.config.mjs`): Alef 400/700 = `font-sans` and `font-display` (text and headings; Anna's choice — Alef has old-style numerals and only two weights), Syne = `font-logo`, Georgia/Gelasio = `font-serif` (italic English accents). Don't add Google Fonts links.
 - Don't reuse Wix stock images (file ids `11062b_*`, `c837a6_*` etc.) — they are licensed for Wix only.
 - Hebrew next to an LTR inline element (phone, email) across a line break loses its space in compressed HTML: add `{' '}` explicitly.
 - Import alias `@/` → `src/`.

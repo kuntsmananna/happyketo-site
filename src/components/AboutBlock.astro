@@ -1,5 +1,10 @@
 ---
-/** Lime "about" section: centered story, green button, salmon photo + round portrait + Low Carb sticker. */
+/**
+ * Lime "about" section as on the original: centered story, green button, then the photo composition –
+ * desktop: salmon photo with Anna's arched portrait overlapping its lower corner and the Low Carb sticker;
+ * phones (original mobile layout): Anna's arched portrait only, sticker on its top corner.
+ * Positions are percentages of the original's 843×606 composition.
+ */
 import { Image } from 'astro:assets';
 import { homeFor } from '@/data/home';
 import { getLang, localized } from '@/i18n';
@@ -11,48 +16,59 @@ const lang = getLang(Astro.url);
 const c = homeFor(lang).about;
 ---
 
-<section class="overflow-x-clip bg-lime-100 section-y" aria-labelledby="about-title">
-  <div class="container-page max-w-4xl text-center">
-    {
-      c.heading ? (
-        <h2 id="about-title" class="font-serif text-3xl italic sm:text-4xl">
-          {c.heading}
-        </h2>
-      ) : (
-        <h2 id="about-title" class="sr-only">
-          {c.cta}
-        </h2>
-      )
-    }
-    <div class:list={['mx-auto max-w-3xl space-y-3 font-display text-xl leading-relaxed text-forest-600 sm:text-2xl', c.heading && 'mt-6']}>
-      {c.paragraphs.map((p) => <p>{p}</p>)}
-    </div>
-    <a href={localized('/about', lang)} class="btn-secondary mt-8">{c.cta}</a>
+<section class="overflow-x-clip bg-lime-100 px-[5%] pt-[52px] pb-12 text-center text-forest-600 lg:px-0 lg:pt-[67px] lg:pb-[55px]" aria-labelledby="about-title">
+  {
+    c.heading ? (
+      <h2 id="about-title" class="mb-4 font-serif text-[1.8rem] italic lg:text-3xl">
+        {c.heading}
+      </h2>
+    ) : (
+      <h2 id="about-title" class="sr-only">
+        {c.cta}
+      </h2>
+    )
+  }
+  <div class="mx-auto max-w-[690px] font-display text-[1.6rem] leading-[1.2] lg:text-[1.5625rem]">
+    {c.paragraphs.map((p) => <p>{p}</p>)}
+  </div>
+  <a
+    href={localized('/about', lang)}
+    class="mt-6 inline-flex min-h-[51px] w-[62%] items-center justify-center rounded-full bg-forest-600 px-6 text-[1.2rem] text-lime-100 transition-colors hover:bg-forest-700 lg:mt-12 lg:min-h-[45px] lg:w-auto lg:min-w-[177px] lg:text-base"
+  >
+    {c.cta}
+  </a>
 
-    <figure class="relative mx-auto mt-14 max-w-2xl">
+  <div class="mx-auto mt-14 w-[80%] lg:relative lg:-left-[31px] lg:mt-[49px] lg:w-full lg:max-w-[843px]" dir="ltr">
+    <figure class="relative lg:aspect-[843/606]">
       <Image
         src={salmon}
         alt={c.salmonAlt}
-        width={1200}
-        height={760}
+        width={900}
+        height={568}
         fit="cover"
-        widths={[480, 720, 960, 1200]}
-        sizes="(min-width: 672px) 36rem, 78vw"
-        class="aspect-[1200/760] w-[85%] object-cover"
+        widths={[706, 900]}
+        sizes="706px"
+        class="absolute top-0 left-0 hidden h-[73.6%] w-[83.75%] object-cover lg:block"
+        loading="lazy"
       />
       <Image
         src={anna}
         alt={c.annaAlt}
-        width={640}
-        height={640}
+        width={644}
+        height={886}
         fit="cover"
         position="top"
-        widths={[240, 360, 480, 640]}
-        sizes="(min-width: 672px) 18rem, 39vw"
-        class="absolute -bottom-10 end-0 aspect-square w-[42%] rounded-full border-4 border-lime-100 object-cover"
+        widths={[322, 480, 644]}
+        sizes="(min-width: 1024px) 322px, 72vw"
+        class="relative aspect-[322/443] w-full rounded-t-full object-cover lg:absolute lg:top-[26.9%] lg:left-[61.8%] lg:h-[73.1%] lg:w-[38.2%]"
       />
-      <Image src={sticker} alt="" width={160} class="absolute -top-8 end-[30%] w-20 rotate-[10deg] drop-shadow-md sm:w-28" />
-      <figcaption class="mt-6 w-[55%] text-start text-lg text-forest-600">{c.name}</figcaption>
+      <Image
+        src={sticker}
+        alt=""
+        width={268}
+        class="absolute -top-[11.7%] -left-[4%] w-[41%] lg:top-[77.5%] lg:left-[53.5%] lg:w-[12.5%]"
+      />
     </figure>
+    <p class="mt-2.5 text-[1.07rem] leading-[1.4] lg:mt-[30px] lg:ml-[61.8%] lg:w-[38.2%] lg:text-xl" dir="auto">{c.name}</p>
   </div>
 </section>

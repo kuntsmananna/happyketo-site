@@ -1,6 +1,5 @@
 ---
-/** "Going Keto" section: navy with leaf shadows, italic eyebrow, mustard title and button (as on the original). */
-import Perks from './Perks.astro';
+/** "Going Keto" section as on the original: navy with leaf shadows, italic eyebrow, mustard title, ✔ list, mustard button. */
 import { homeFor } from '@/data/home';
 import { getLang, localized } from '@/i18n';
 
@@ -8,14 +7,21 @@ const lang = getLang(Astro.url);
 const c = homeFor(lang).challenge;
 ---
 
-<section class="surface-navy section-y" aria-labelledby="challenge-title">
-  <div class="container-page max-w-3xl text-center">
-    <p class="eyebrow text-cream-100"><span dir="ltr">{c.eyebrow}</span></p>
-    <h2 id="challenge-title" class="text-2xl text-mustard-400 sm:text-3xl">{c.title}</h2>
-    <div class="mx-auto mt-6 max-w-2xl space-y-4 text-lg leading-relaxed text-cream-100 sm:text-xl">
+<section class="surface-navy px-[4%] pt-11 pb-12 text-center text-cream-100 lg:min-h-[580px] lg:px-0 lg:pt-[81px] lg:pb-[78px]" aria-labelledby="challenge-title">
+  <div class="mx-auto max-w-[677px]">
+    <p class="font-serif text-[1.8rem] leading-[1.4] italic lg:text-[2.25rem]" dir="ltr">{c.eyebrow}</p>
+    <h2 id="challenge-title" class="text-[1.6rem] leading-[1.4] text-mustard-400 lg:text-2xl">{c.title}</h2>
+    <div class="mt-5 text-[1.3rem] leading-[1.4] lg:mt-6 lg:text-xl">
       {c.paragraphs.map((p) => <p>{p}</p>)}
     </div>
-    <Perks tone="dark" class="mt-8" />
-    <a href={localized('/challenge', lang)} class="btn-primary mt-10 px-8">{c.cta}</a>
+    <ul class="mt-4 text-[1.3rem] leading-[1.4] lg:mt-5 lg:text-xl">
+      {c.perks.map((p) => <li>✔ {p}</li>)}
+    </ul>
+    <a
+      href={localized('/challenge', lang)}
+      class="mt-8 inline-flex min-h-[51px] w-[75%] items-center justify-center rounded-full bg-mustard-400 px-6 text-[1.2rem] text-navy-700 transition-colors hover:bg-mustard-300 lg:mt-[50px] lg:min-h-[45px] lg:w-auto lg:min-w-[226px] lg:text-base"
+    >
+      {c.cta}
+    </a>
   </div>
 </section>

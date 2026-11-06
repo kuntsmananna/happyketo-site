@@ -53,17 +53,20 @@ export default defineConfig({
   // Free look-alikes of the original Wix brand fonts, self-hosted from npm (no network at build time).
   // Each family gets Hebrew + Latin faces split by unicode-range (a face downloads only when used),
   // and a metric-matched fallback so text doesn't shift when the font arrives.
-  //   body    Assistant      ≈ Almoni (text)        display Varela Round ≈ Asimon (headings)
-  //   logo    Syne           = original logo font   serif   Gelasio (Georgia twin) for italic Latin labels
+  //   sans    Alef (400/700) for headings and text, replacing the original's Asimon + Almoni (chosen by Anna)
+  //   logo    Syne = original logo font               serif   Gelasio (Georgia twin) for italic Latin labels
   fonts: [
-    family('Assistant', '--font-assistant', '300 800', {
-      latin: '@fontsource-variable/assistant/files/assistant-latin-wght-normal.woff2',
-      hebrew: '@fontsource-variable/assistant/files/assistant-hebrew-wght-normal.woff2',
-    }),
-    family('Varela Round', '--font-varela', '400', {
-      latin: '@fontsource/varela-round/files/varela-round-latin-400-normal.woff2',
-      hebrew: '@fontsource/varela-round/files/varela-round-hebrew-400-normal.woff2',
-    }),
+    {
+      ...family('Alef', '--font-alef', '400', {}),
+      options: {
+        variants: ['400', '700'].flatMap((weight) =>
+          /** @type {const} */ (['latin', 'hebrew']).map((subset) => ({
+            src: [`@fontsource/alef/files/alef-${subset}-${weight}-normal.woff2`],
+            weight, style: 'normal', display: 'swap', unicodeRange: RANGES[subset],
+          })),
+        ),
+      },
+    },
     family('Syne', '--font-syne', '400 800', {
       latin: '@fontsource-variable/syne/files/syne-latin-wght-normal.woff2',
     }),

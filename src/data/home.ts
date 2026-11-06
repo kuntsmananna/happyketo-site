@@ -26,9 +26,12 @@ const he = {
   band: { title: 'אני לא עושה דיאטה,\nאני בוחרת במזון בריא', imageAlt: 'טאקו בעלי חסה במילוי עוף ואבוקדו' },
   about: {
     heading: null as string | null,
+    // Line by line, with the original's line breaks.
     paragraphs: [
-      'HAPPY KETO נולד מתוך חקירה ורצון למצוא את נקודת האיזון שבג׳ינגול בין העבודה, המשפחה, הילדים, קריירה, פיתוח אישי ויתר ענייני היום יום... אבל גם תזונה קטוגנית מיטיבה ואוכל טעים.',
-      'להשקיע בבריאות שלנו מבלי לחכות לפנסיה או שהילדים יגדלו. אלא, עכשיו, עם העבודה, עם הילדים ועם הסל כביסה והכלים בכיור...',
+      'HAPPY KETO נולד מתוך חקירה ורצון למצוא את נקודת האיזון שבג׳ינגול בין העבודה, המשפחה, הילדים, קריירה, פיתוח אישי ויתר ענייני היום יום...',
+      'אבל גם תזונה קטוגנית מיטיבה ואוכל טעים.',
+      'להשקיע בבריאות שלנו מבלי לחכות לפנסיה או שהילדים יגדלו. אלא, עכשיו, עם העבודה, עם הילדים',
+      'ועם הסל כביסה והכלים בכיור...',
       'דברים קלים והרגלים פשוטים שעושים הבדל גדול.',
     ],
     cta: 'אודות Happy Keto',
@@ -52,7 +55,6 @@ const he = {
     { key: 'blog', eyebrow: 'Keto Blog', title: 'מידע בנושא תזונה דלת פחמימות', text: 'כל מה שחשוב לדעת לתהליך מוצלח במעבר לתזונה טבעית קטוגנית.', cta: 'להמשך קריאה', href: '/blog', alt: 'ידיים מחזיקות עגבניות שרי' },
     { key: 'favorites', eyebrow: 'Happy Favorites', title: 'המזווה הקטוגני', text: 'ניסיתי, אהבתי, ממליצה בחום!', cta: 'מעניין מה יש שם', href: '/favorites', alt: 'שקית ממתיק אלולוז' },
   ],
-  latest: { eyebrow: 'Tasty Keto', title: 'מתכונים חדשים מהמטבח', all: 'לכל המתכונים' },
   newsletter: {
     title: 'תשארו בקשר!',
     text: 'לחדשות ועדכונים נא השאירו פרטים, מבטיחה לא לחפור ;)',
@@ -111,7 +113,6 @@ const en: typeof he = {
     { key: 'blog', eyebrow: 'Keto Blog', title: 'Information on low-carb diets', text: 'Everything you need to know for a successful transition to a natural ketogenic diet. (In Hebrew)', cta: 'Continue reading', href: '/blog', alt: 'Hands holding cherry tomatoes' },
     { key: 'recipes', eyebrow: 'Tasty Keto', title: 'Low-carb recipes that make the body and soul happy', text: 'If you are worried that you will not have anything to eat, remove worry from your heart! (In Hebrew)', cta: 'Let’s make something delicious', href: '/recipes', alt: 'Fried eggs on toast with greens' },
   ],
-  latest: { eyebrow: 'Tasty Keto', title: 'Fresh from the kitchen', all: 'All recipes (Hebrew)' },
   newsletter: {
     title: 'Stay in touch!',
     // fixed: original "I promise not to dig" (a literal translation of the Hebrew idiom)

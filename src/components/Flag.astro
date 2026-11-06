@@ -1,0 +1,43 @@
+---
+/** Round flag icons for the language switch (as on the original site). Decorative: the link text names the language. */
+interface Props {
+  code: 'he' | 'en';
+  size?: number;
+  class?: string;
+}
+const { code, size = 18, class: className } = Astro.props;
+---
+
+<svg width={size} height={size} viewBox="0 0 20 20" aria-hidden="true" class:list={['shrink-0 rounded-full', className]}>
+  <defs>
+    <clipPath id={`flag-${code}`}><circle cx="10" cy="10" r="10" /></clipPath>
+  </defs>
+  {
+    code === 'he' ? (
+      <g clip-path="url(#flag-he)">
+        <rect width="20" height="20" fill="#fff" />
+        <rect y="3" width="20" height="2.4" fill="#2b4fa8" />
+        <rect y="14.6" width="20" height="2.4" fill="#2b4fa8" />
+        <path d="M10 6.6 12.9 11.6H7.1Z M10 13.4 7.1 8.4H12.9Z" fill="none" stroke="#2b4fa8" stroke-width="0.9" />
+      </g>
+    ) : (
+      <g clip-path="url(#flag-en)">
+        <rect width="20" height="20" fill="#fff" />
+        {[0, 2, 4, 6, 8, 10, 12].map((i) => (
+          <rect y={i * 1.54} height="1.54" width="20" fill="#c8313e" />
+        ))}
+        <rect width="10" height="10.8" fill="#3c3b6e" />
+        <g fill="#fff">
+          <circle cx="2.5" cy="2.5" r="0.6" />
+          <circle cx="5" cy="2.5" r="0.6" />
+          <circle cx="7.5" cy="2.5" r="0.6" />
+          <circle cx="3.7" cy="5" r="0.6" />
+          <circle cx="6.2" cy="5" r="0.6" />
+          <circle cx="2.5" cy="7.5" r="0.6" />
+          <circle cx="5" cy="7.5" r="0.6" />
+          <circle cx="7.5" cy="7.5" r="0.6" />
+        </g>
+      </g>
+    )
+  }
+</svg>
