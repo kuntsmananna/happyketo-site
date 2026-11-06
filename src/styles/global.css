@@ -14,8 +14,8 @@
  */
 @theme {
   /* Fonts (self-hosted, see astro.config.mjs → fonts). */
-  --font-sans: var(--font-assistant), system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-  --font-display: var(--font-varela), var(--font-assistant), system-ui, sans-serif;
+  --font-sans: var(--font-alef), system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-display: var(--font-alef), system-ui, sans-serif;
   --font-logo: var(--font-syne), "Segoe UI", Arial, sans-serif;
   --font-serif: Georgia, var(--font-gelasio), "Times New Roman", serif;
 
