@@ -3,7 +3,10 @@ import { Font } from 'astro:assets';
 import '@/styles/global.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
+import KickstartBadge from '@/components/KickstartBadge.astro';
 import { site } from '@/data/site';
+import { alternates, dirOf, getLang, localeOf } from '@/i18n';
+import { t } from '@/i18n/ui';
 
 interface Props {
   title?: string;
@@ -12,23 +15,31 @@ interface Props {
   ogImage?: string;
   ogType?: 'website' | 'article';
   noindex?: boolean;
+  /** Hide the floating Keto Kickstart badge (e.g. on the challenge page itself). */
+  hideBadge?: boolean;
 }
 
+const lang = getLang(Astro.url);
 const {
   title,
-  description = site.description,
+  description = lang === 'en'
+    ? 'Happy Keto – a natural, simple and tasty ketogenic (keto) diet. A 4-week challenge that fits real life, with no calorie counting.'
+    : site.description,
   ogImage = '/og-default.jpg',
   ogType = 'website',
   noindex = false,
+  hideBadge = false,
 } = Astro.props;
 
-const pageTitle = title ? `${title} | ${site.name}` : site.title;
+const pageTitle = title ? `${title} | ${site.name}` : lang === 'en' ? 'Happy Keto | Mediterranean Keto Diet' : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImageUrl = new URL(ogImage, Astro.site);
+const alt = alternates(Astro.url.pathname);
+const altLocale = lang === 'he' ? 'en' : 'he';
 ---
 
 <!doctype html>
-<html lang="he" dir="rtl">
+<html lang={lang} dir={dirOf(lang)}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -36,30 +47,43 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex" />}
+    {
+      alt.en && !noindex && (
+        <>
+          <link rel="alternate" hreflang="he" href={new URL(alt.he!, Astro.site)} />
+          <link rel="alternate" hreflang="en" href={new URL(alt.en, Astro.site)} />
+          <link rel="alternate" hreflang="x-default" href={new URL(alt.he!, Astro.site)} />
+        </>
+      )
+    }
 
     <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:locale" content={site.locale} />
+    <meta property="og:locale" content={localeOf(lang)} />
+    {alt.en && <meta property="og:locale:alternate" content={localeOf(altLocale)} />}
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImageUrl} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <meta name="theme-color" content="#627232" />
+    <meta name="theme-color" content="#235b47" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
-    <Font cssVariable="--font-rubik" preload />
+    <Font cssVariable="--font-assistant" preload />
+    <Font cssVariable="--font-varela" preload />
+    <Font cssVariable="--font-syne" />
+    <Font cssVariable="--font-gelasio" />
 
     <slot name="head" />
   </head>
   <body class="flex min-h-dvh flex-col">
     <a
       href="#main"
-      class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-olive-700 focus:px-4 focus:py-2 focus:text-cream-50"
+      class="sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-forest-700 focus:px-4 focus:py-2 focus:text-cream-50"
     >
-      דילוג לתוכן הראשי
+      {t(lang).skip}
     </a>
 
     <Header />
@@ -69,5 +93,6 @@ const ogImageUrl = new URL(ogImage, Astro.site);
     </main>
 
     <Footer />
+    {!hideBadge && <KickstartBadge />}
   </body>
 </html>

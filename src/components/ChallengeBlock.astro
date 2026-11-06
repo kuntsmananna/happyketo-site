@@ -1,55 +1,21 @@
 ---
-import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
+/** "Going Keto" section: navy with leaf shadows, italic eyebrow, mustard title and button (as on the original). */
 import Perks from './Perks.astro';
-import tacos from '@/assets/home/challenge-lettuce-tacos.jpg';
-import salmon from '@/assets/home/challenge-salmon.jpg';
+import { homeFor } from '@/data/home';
+import { getLang, localized } from '@/i18n';
 
+const lang = getLang(Astro.url);
+const c = homeFor(lang).challenge;
 ---
 
-<section class="section-y" aria-labelledby="challenge-title">
-  <div class="container-page grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-    <div class="relative order-2 mx-auto grid w-full max-w-lg grid-cols-2 gap-4 lg:order-1">
-      <Image
-        src={tacos}
-        alt="טאקו בעלי חסה במילוי עוף ואבוקדו"
-        width={600}
-        height={800}
-        fit="cover"
-        widths={[240, 360, 480, 600]}
-        sizes="(min-width: 1024px) 16rem, 45vw"
-        class="aspect-[3/4] w-full rounded-[var(--radius-card)] object-cover shadow-[var(--shadow-card)]"
-      />
-      <Image
-        src={salmon}
-        alt="סלמון ברוטב קארי וקוקוס במחבת"
-        width={600}
-        height={800}
-        fit="cover"
-        widths={[240, 360, 480, 600]}
-        sizes="(min-width: 1024px) 16rem, 45vw"
-        class="mt-12 aspect-[3/4] w-full rounded-[var(--radius-card)] object-cover shadow-[var(--shadow-card)]"
-      />
-      <div class="absolute inset-x-0 -top-5 mx-auto w-fit rounded-full bg-olive-600 px-5 py-2 text-sm font-medium text-cream-50 shadow-lg">
-        4 שבועות · 3 ימי ניסיון חינם
-      </div>
+<section class="surface-navy section-y" aria-labelledby="challenge-title">
+  <div class="container-page max-w-3xl text-center">
+    <p class="eyebrow text-cream-100"><span dir="ltr">{c.eyebrow}</span></p>
+    <h2 id="challenge-title" class="text-2xl text-mustard-400 sm:text-3xl">{c.title}</h2>
+    <div class="mx-auto mt-6 max-w-2xl space-y-4 text-lg leading-relaxed text-cream-100 sm:text-xl">
+      {c.paragraphs.map((p) => <p>{p}</p>)}
     </div>
-
-    <div class="order-1 lg:order-2">
-      <p class="eyebrow"><span dir="ltr">Going Keto</span></p>
-      <h2 id="challenge-title" class="h-section">אתגר 4 שבועות</h2>
-      <p class="lead mt-5">
-        מעבר לתזונה קטוגנית בשיטה הדרגתית וטעימה (לא תאמינו עד כמה), אפשרית וקלה להתמדה לסופרמן וסופרוומן המג׳נגלים
-        בין עבודה, משפחה, חוגים, נסיעות, חופשות, מסעדות, סופי שבוע, אירוח… או בקיצור… החיים.
-      </p>
-      <p class="mt-4 text-lg leading-relaxed text-cocoa-700">
-        עם הנחיות פשוטות שאפשר לשלב ולתרגל ביום יום העמוס. אהה, ולא סופרים קלוריות!
-      </p>
-      <Perks class="mt-6" />
-      <a href="/challenge" class="btn-primary mt-8 px-8 text-lg">
-        לפרטים והרשמה
-        <Icon name="arrow" size={20} />
-      </a>
-    </div>
+    <Perks tone="dark" class="mt-8" />
+    <a href={localized('/challenge', lang)} class="btn-primary mt-10 px-8">{c.cta}</a>
   </div>
 </section>

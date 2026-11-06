@@ -1,96 +1,66 @@
 ---
-import { Image } from 'astro:assets';
+/** Footer in the original's style: navy band with a cream "Call / Email / Follow" card. */
 import Icon from './Icon.astro';
-import { nav, site } from '@/data/site';
-import { recipeCategories } from '@/data/categories';
-import logo from '@/assets/brand/sticker-happy-keto.png';
+import { navFor, site } from '@/data/site';
+import { getLang, localized } from '@/i18n';
+import { t } from '@/i18n/ui';
 
+const lang = getLang(Astro.url);
+const s = t(lang).footer;
 const year = new Date().getFullYear();
-const pages = nav.filter((i) => !i.children && i.href !== '/');
+const links = navFor(lang).filter((i) => i.href !== '/' && i.href !== '/en');
+const ig = site.social[0];
 ---
 
-<footer class="mt-auto bg-olive-900 text-cream-100 print:hidden">
-  <div class="container-page grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-[1.15fr_1.35fr_1fr_0.8fr]">
-    <div>
-      <a href="/" class="inline-flex items-center gap-3" aria-label={`${site.name} – לעמוד הבית`}>
-        <Image src={logo} alt="" width={56} height={64} class="size-14 object-contain" />
-        <span class="text-xl font-bold tracking-[0.12em] text-cream-50" dir="ltr">HAPPY KETO</span>
-      </a>
-      <p class="mt-4 max-w-xs leading-relaxed text-cream-200/90">
-        תזונה קטוגנית טבעית, פשוטה וטעימה. בלי שעות במטבח ובלי ספירת קלוריות.
+<footer class="surface-navy mt-auto pb-28 sm:pb-12 print:hidden">
+  <div class="container-page pt-14">
+    <div class="mx-auto grid max-w-4xl gap-8 rounded-[var(--radius-card)] bg-cream-100 px-6 py-8 text-center text-forest-700 sm:grid-cols-3 sm:px-10">
+      <div>
+        <p class="font-serif text-xl italic" dir="ltr">{s.call}</p>
+        <a href={site.contact.phoneHref} class="mt-2 inline-flex min-h-11 items-center gap-1.5 hover:underline">
+          <span dir="ltr">{site.contact.phone.replace('-', '.')}</span>
+          {s.phoneSuffix}
+        </a>
+        <a href={site.contact.whatsappHref} class="flex items-center justify-center gap-1.5 text-sm hover:underline" target="_blank" rel="noopener">
+          <Icon name="whatsapp" size={16} />
+          WhatsApp
+        </a>
+      </div>
+      <div>
+        <p class="font-serif text-xl italic" dir="ltr">{s.email}</p>
+        <a href={`mailto:${site.contact.email}`} class="mt-2 inline-flex min-h-11 items-center hover:underline [overflow-wrap:anywhere]">
+          {site.contact.email}
+        </a>
+      </div>
+      <div>
+        <p class="font-serif text-xl italic" dir="ltr">{s.follow}</p>
+        <a href={ig.href} class="mt-2 inline-flex min-h-11 items-center gap-1.5 hover:underline" target="_blank" rel="noopener">
+          <Icon name="instagram" size={18} />
+          <span dir="ltr">{ig.handle}</span>
+        </a>
+      </div>
+    </div>
+
+    <nav aria-label={s.links} class="mt-10">
+      <ul class="flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm text-cream-100/90">
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} hreflang={l.hreflang} class="inline-flex min-h-11 items-center hover:text-lime-100 hover:underline">
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="mt-4 space-y-1 text-center text-sm text-cream-100/85">
+      <p>
+        <a href={localized('/privacy', lang)} class="underline hover:text-lime-100">{s.privacy}</a> 🤫
       </p>
-    </div>
-
-    <div>
-      <h2 class="mb-4 text-base font-medium text-cream-50">צרו קשר</h2>
-      <ul class="space-y-3">
-        <li>
-          <a href={site.contact.phoneHref} class="inline-flex items-center gap-2.5 hover:text-white hover:underline">
-            <Icon name="phone" size={18} class="text-olive-300" />
-            <span dir="ltr">{site.contact.phone}</span> – אנה
-          </a>
-        </li>
-        <li>
-          <a href={site.contact.whatsappHref} class="inline-flex items-center gap-2.5 hover:text-white hover:underline" rel="noopener" target="_blank">
-            <Icon name="whatsapp" size={18} class="text-olive-300" />
-            וואטסאפ
-          </a>
-        </li>
-        <li>
-          <a href={`mailto:${site.contact.email}`} class="inline-flex items-center gap-2.5 hover:text-white hover:underline [overflow-wrap:anywhere]">
-            <Icon name="mail" size={18} class="text-olive-300" />
-            {site.contact.email}
-          </a>
-        </li>
-        {
-          site.social.map((s) => (
-            <li>
-              <a href={s.href} class="inline-flex items-center gap-2.5 hover:text-white hover:underline" rel="noopener" target="_blank">
-                <Icon name="instagram" size={18} class="text-olive-300" />
-                <span dir="ltr">{s.handle}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-
-    <div>
-      <h2 class="mb-4 text-base font-medium text-cream-50">מתכונים</h2>
-      <ul class="grid grid-cols-2 gap-x-4 gap-y-2 text-cream-200/90">
-        {
-          recipeCategories.map((c) => (
-            <li>
-              <a href={`/recipes/category/${c.slug}`} class="hover:text-white hover:underline">
-                {c.label}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-
-    <div>
-      <h2 class="mb-4 text-base font-medium text-cream-50">Happy Keto</h2>
-      <ul class="space-y-2 text-cream-200/90">
-        {
-          pages.map((p) => (
-            <li>
-              <a href={p.href} class="hover:text-white hover:underline">
-                {p.label}
-              </a>
-            </li>
-          ))
-        }
-        <li><a href="/privacy" class="hover:text-white hover:underline">מדיניות פרטיות</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="border-t border-white/10">
-    <div class="container-page flex flex-col gap-2 py-5 text-sm text-cream-200/75 sm:flex-row sm:items-center sm:justify-between">
-      <p>{site.healthDisclaimer} ❤️</p>
-      <p>© {year} {site.name} · {site.author}</p>
+      <p>{s.disclaimer} ❤️</p>
+      <p class="pt-3 text-cream-100/70">© {year} {site.name} · {lang === 'en' ? 'Anna Kuntsman Rosenberg' : site.author}</p>
     </div>
   </div>
 </footer>

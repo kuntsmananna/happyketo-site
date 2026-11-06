@@ -1,0 +1,110 @@
+---
+/** Happy Favorites (both languages): the original's mustard band and lime product cards, grouped. */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Icon from '@/components/Icon.astro';
+import PageHero from '@/components/PageHero.astro';
+import { favoriteGroups, favorites } from '@/data/favorites';
+import { getLang } from '@/i18n';
+
+const lang = getLang(Astro.url);
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/favorites/*.webp', { eager: true });
+const imageFor = (slug: string) => images[`/src/assets/favorites/${slug}.webp`]?.default;
+
+const copy = {
+  he: {
+    crumb: 'מוצרים מומלצים',
+    title: 'המזווה הקטוגני',
+    intro: 'ניסיתי, אהבתי, ממליצה בחום!',
+    disclosureLabel: 'גילוי נאות:',
+    disclosure: 'הקישורים לחנות הם קישורי שותפים. אם תרכשו דרכם, ייתכן שאקבל עמלה קטנה – ללא עלות נוספת עבורכם. אני ממליצה רק על מוצרים שאני משתמשת בהם בעצמי.',
+    groups: 'קטגוריות מוצרים',
+    ingredients: 'רכיבים:',
+    buy: 'לרכישה ב-iHerb',
+  },
+  en: {
+    crumb: 'Recommended products',
+    title: 'The Ketogenic Pantry',
+    intro: 'I tried it, I loved it, I highly recommend it!',
+    disclosureLabel: 'Disclosure:',
+    disclosure: 'The shop links are affiliate links. If you buy through them I may earn a small commission, at no extra cost to you. I only recommend products I use myself.',
+    groups: 'Product categories',
+    ingredients: 'Ingredients:',
+    buy: 'Buy now',
+  },
+}[lang];
+---
+
+<PageHero variant="marquee" marquee="Favorites" title={copy.title} intro={copy.intro} breadcrumbs={[{ label: copy.crumb }]}>
+  <nav aria-label={copy.groups} class="mt-6 flex flex-wrap gap-2">
+    {
+      favoriteGroups.map((g) => (
+        <a
+          href={`#${g.id}`}
+          class="inline-flex min-h-11 items-center rounded-full border border-forest-600/40 bg-white px-4 text-sm font-medium text-forest-700 transition-colors hover:bg-lime-100"
+        >
+          {g.title[lang]}
+        </a>
+      ))
+    }
+  </nav>
+</PageHero>
+
+<div class="bg-cream-100 pt-8 pb-16">
+  <div class="container-page">
+    <p class="mb-12 max-w-3xl text-sm leading-relaxed text-bark-600">
+      <strong class="font-semibold">{copy.disclosureLabel}</strong>
+      {copy.disclosure}
+    </p>
+
+    {
+      favoriteGroups.map((group) => {
+        const items = favorites.filter((f) => f.group === group.id);
+        return (
+          <section id={group.id} class="mb-16 scroll-mt-28" aria-labelledby={`${group.id}-title`}>
+            <h2 id={`${group.id}-title`} class="h-section mb-6">
+              {group.title[lang]}
+            </h2>
+            <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {items.map((item) => {
+                const img = imageFor(item.slug);
+                return (
+                  <li class="flex flex-col overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-card)]" lang="en" dir="ltr">
+                    <div class="relative aspect-square bg-white">
+                      {img && (
+                        <Image
+                          src={img}
+                          alt={item.name}
+                          widths={[240, 400, 600]}
+                          sizes="(min-width: 1280px) 16rem, (min-width: 640px) 40vw, 80vw"
+                          class="absolute inset-0 size-full object-contain p-6"
+                        />
+                      )}
+                    </div>
+                    <div class="flex flex-1 flex-col bg-lime-100 p-5 text-forest-700">
+                      <h3 class="font-logo text-lg leading-snug font-bold text-forest-600">{item.name}</h3>
+                      {item.note && <p class="mt-2 text-sm leading-relaxed">{item.note}</p>}
+                      <details class="group mt-3 text-sm">
+                        <summary class="inline-flex min-h-11 cursor-pointer list-none items-center gap-1 font-medium underline [&::-webkit-details-marker]:hidden">
+                          {copy.ingredients}
+                          <Icon name="chevron" size={14} class="transition-transform group-open:rotate-180" />
+                        </summary>
+                        <p class="leading-relaxed">{item.ingredients}</p>
+                      </details>
+                      <div class="mt-auto pt-4" lang={lang} dir={lang === 'he' ? 'rtl' : 'ltr'}>
+                        <a href={item.href} target="_blank" rel="sponsored noopener" class="btn-secondary btn-sm">
+                          {copy.buy}
+                          <Icon name="arrow" size={16} />
+                        </a>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        );
+      })
+    }
+  </div>
+</div>

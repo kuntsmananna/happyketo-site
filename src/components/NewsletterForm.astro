@@ -1,40 +1,50 @@
 ---
+/** "Stay in touch" – lime panel beside an arched photo, single email field (as on the original). */
 import { Image } from 'astro:assets';
 import Web3Form from './Web3Form.astro';
+import { homeFor } from '@/data/home';
+import { getLang } from '@/i18n';
+import photo from '@/assets/posts/cfc025_e74ea0b6525b430f8abb8afd91247984.jpg';
 import sticker from '@/assets/brand/sticker-happy-keto.png';
+
+const lang = getLang(Astro.url);
+const c = homeFor(lang).newsletter;
 ---
 
-<section class="section-y" aria-labelledby="newsletter-title">
-  <div class="container-page">
-    <div class="relative overflow-hidden rounded-[2rem] bg-olive-700 px-6 py-12 text-center text-cream-50 sm:px-12">
-      <div aria-hidden="true" class="pointer-events-none absolute -end-16 -top-16 size-64 rounded-full bg-olive-500/40 blur-2xl"></div>
-      <Image src={sticker} alt="" width={120} class="absolute -bottom-4 start-4 hidden w-24 rotate-[-12deg] opacity-90 sm:block" />
+<section class="bg-cream-100 section-y" aria-labelledby="newsletter-title">
+  <div class="container-page grid items-center lg:grid-cols-[1fr_1.3fr]">
+    <div class="relative z-10 mx-auto w-full max-w-sm lg:-me-16">
+      <Image
+        src={photo}
+        alt=""
+        width={600}
+        height={760}
+        fit="cover"
+        widths={[320, 480, 600]}
+        sizes="(min-width: 1024px) 24rem, 80vw"
+        class="aspect-[600/760] w-full rounded-t-full object-cover shadow-[var(--shadow-card)]"
+      />
+      <Image src={sticker} alt="" width={120} class="absolute -top-6 -end-4 w-20 rotate-[8deg] drop-shadow-md" />
+    </div>
 
-      <h2 id="newsletter-title" class="h-section relative text-cream-50">תשארו בקשר!</h2>
-      <p class="relative mx-auto mt-3 max-w-lg text-lg text-cream-100">
-        לחדשות ועדכונים נא השאירו פרטים, מבטיחה לא לחפור ;)
-      </p>
-
-      <Web3Form
-        subject="הרשמה לניוזלטר – Happy Keto"
-        successMessage="איזה כיף שהצטרפת! 🎉 נתראה בתיבת המייל."
-        class="relative mx-auto mt-8 max-w-2xl [&_[data-form-status]]:text-start"
-      >
-        <div class="flex flex-col gap-3 sm:flex-row">
-          <label class="sr-only" for="nl-name">שם</label>
-          <input id="nl-name" name="name" type="text" required autocomplete="given-name" placeholder="שם" class="input-field input-pill sm:flex-1" />
-          <label class="sr-only" for="nl-email">אימייל</label>
-          <input
-            id="nl-email"
-            name="email"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="אימייל"
-            dir="ltr"
-            class="input-field input-pill text-end placeholder:text-end sm:flex-[1.4]"
-          />
-          <button type="submit" class="btn bg-cream-50 px-8 text-olive-800 hover:bg-white active:bg-cream-100">הצטרפות</button>
+    <div class="-mt-16 bg-lime-100 px-6 pt-24 pb-12 sm:px-12 lg:mt-0 lg:py-16 lg:ps-28">
+      <h2 id="newsletter-title" class="h-section">{c.title}</h2>
+      <p class="mt-3 text-lg text-forest-800">{c.text}</p>
+      <Web3Form subject={c.subject} successMessage={c.success} class="mt-8 max-w-md">
+        <div class="flex items-end gap-4">
+          <label class="flex-1">
+            <span class="sr-only">{c.email}</span>
+            <input
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+              placeholder={c.email}
+              dir="ltr"
+              class="min-h-12 w-full border-0 border-b-2 border-forest-600 bg-transparent px-1 text-lg text-forest-900 placeholder:text-forest-600/70 focus:border-forest-800 focus:ring-0 focus:outline-none user-invalid:border-red-600 rtl:text-end rtl:placeholder:text-end"
+            />
+          </label>
+          <button type="submit" class="btn-secondary">{c.cta}</button>
         </div>
       </Web3Form>
     </div>

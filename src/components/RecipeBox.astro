@@ -17,20 +17,20 @@ let stepNo = 0;
   hasRecipe && (
     <section
       id="recipe"
-      class="not-prose my-10 scroll-mt-28 overflow-hidden rounded-[2rem] bg-white shadow-[var(--shadow-card)] ring-1 ring-olive-100 print:shadow-none print:ring-0"
+      class="not-prose my-10 scroll-mt-28 overflow-hidden rounded-[2rem] bg-white shadow-[var(--shadow-card)] ring-1 ring-forest-100 print:shadow-none print:ring-0"
       aria-label="המתכון"
     >
       {(prepTime || cookTime || servings) && (
-        <div class="flex flex-wrap gap-x-6 gap-y-2 border-b border-olive-100 bg-sage-50 px-6 py-4 text-cocoa-800 sm:px-8">
+        <div class="flex flex-wrap gap-x-6 gap-y-2 border-b border-forest-100 bg-mint-50 px-6 py-4 text-bark-800 sm:px-8">
           {prepTime && (
             <span class="inline-flex items-center gap-1.5">
-              <Icon name="clock" size={18} class="text-olive-600" />
+              <Icon name="clock" size={18} class="text-forest-600" />
               זמן הכנה: <strong class="font-medium">{formatMinutes(prepTime)}</strong>
             </span>
           )}
           {cookTime && (
             <span class="inline-flex items-center gap-1.5">
-              <Icon name="clock" size={18} class="text-olive-600" />
+              <Icon name="clock" size={18} class="text-forest-600" />
               זמן בישול: <strong class="font-medium">{formatMinutes(cookTime)}</strong>
             </span>
           )}
@@ -40,22 +40,22 @@ let stepNo = 0;
 
       <div class="grid lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         {ingredients.length > 0 && (
-          <div class="border-olive-100 bg-cream-50 p-6 sm:p-8 lg:border-e">
+          <div class="border-forest-100 bg-cream-50 p-6 sm:p-8 lg:border-e">
             <h2 class="flex items-baseline justify-between gap-3 text-2xl">
               מצרכים
-              <span class="text-sm font-normal text-cocoa-500">{ingredientCount} פריטים</span>
+              <span class="text-sm font-normal text-bark-500">{ingredientCount} פריטים</span>
             </h2>
-            <p class="mt-1 text-sm text-cocoa-500 print:hidden">אפשר לסמן מה כבר הוצאתם 👇</p>
+            <p class="mt-1 text-sm text-bark-500 print:hidden">אפשר לסמן מה כבר הוצאתם 👇</p>
             {ingredients.map((group) => (
               <div class="mt-6 first-of-type:mt-5">
-                {group.title && <h3 class="mb-2 text-lg text-olive-700">{group.title}</h3>}
+                {group.title && <h3 class="mb-2 text-lg text-forest-700">{group.title}</h3>}
                 <ul class="space-y-1">
                   {group.items.map((item) => (
                     <li>
-                      <label class="flex cursor-pointer items-start gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-sage-50 has-[:checked]:text-cocoa-400 has-[:checked]:line-through">
+                      <label class="flex cursor-pointer items-start gap-3 rounded-xl px-2 py-1.5 transition-colors hover:bg-mint-50 has-[:checked]:text-bark-400 has-[:checked]:line-through">
                         <input
                           type="checkbox"
-                          class="mt-1.5 size-4 shrink-0 cursor-pointer rounded accent-olive-600 print:hidden"
+                          class="mt-1.5 size-4 shrink-0 cursor-pointer rounded accent-forest-600 print:hidden"
                         />
                         <span class="leading-relaxed">{item}</span>
                       </label>
@@ -72,7 +72,7 @@ let stepNo = 0;
             <h2 class="text-2xl">אופן ההכנה</h2>
             {instructions.map((group) => (
               <div class="mt-6 first-of-type:mt-5">
-                {group.title && <h3 class="mb-3 text-lg text-olive-700">{group.title}</h3>}
+                {group.title && <h3 class="mb-3 text-lg text-forest-700">{group.title}</h3>}
                 <ol class="space-y-4">
                   {group.steps.map((step) => {
                     stepNo++;
@@ -80,11 +80,11 @@ let stepNo = 0;
                       <li class="flex gap-4">
                         <span
                           aria-hidden="true"
-                          class="grid size-8 shrink-0 place-items-center rounded-full bg-olive-600 text-sm font-bold text-cream-50 print:border print:border-olive-600 print:bg-transparent print:text-olive-700"
+                          class="grid size-8 shrink-0 place-items-center rounded-full bg-forest-600 text-sm font-bold text-cream-50 print:border print:border-forest-600 print:bg-transparent print:text-forest-700"
                         >
                           {stepNo}
                         </span>
-                        <p class="pt-0.5 leading-relaxed text-cocoa-800">{step}</p>
+                        <p class="pt-0.5 leading-relaxed text-bark-800">{step}</p>
                       </li>
                     );
                   })}

@@ -1,0 +1,29 @@
+---
+/** Full-width photo band with a dimmed overlay and the "I'm not dieting…" statement (as on the original). */
+import { Image } from 'astro:assets';
+import { homeFor } from '@/data/home';
+import { getLang } from '@/i18n';
+import band from '@/assets/home/challenge-lettuce-tacos.jpg';
+
+const lang = getLang(Astro.url);
+const c = homeFor(lang).band;
+---
+
+<section class="relative isolate grid min-h-[20rem] place-items-center overflow-hidden sm:min-h-[26rem]" aria-label={c.title.replace('\n', ' ')}>
+  <Image
+    src={band}
+    alt=""
+    widths={[640, 960, 1280, 1600]}
+    sizes="100vw"
+    class="absolute inset-0 -z-10 size-full object-cover"
+  />
+  <div aria-hidden="true" class="absolute inset-0 -z-10 bg-navy-900/55"></div>
+  <p
+    class:list={[
+      'container-page text-center text-3xl leading-snug whitespace-pre-line text-cream-100 drop-shadow sm:text-5xl',
+      lang === 'en' ? 'font-serif italic' : 'font-display',
+    ]}
+  >
+    {c.title}
+  </p>
+</section>

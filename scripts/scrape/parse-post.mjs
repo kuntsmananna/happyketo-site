@@ -107,6 +107,16 @@ export function parsePost(html, url) {
     ),
   ];
 
+  // Wix post tags ("תיוגים"): links to /recipes/tags/<tag>, shown under the post.
+  const wixTags = [
+    ...new Set(
+      $('a[href*="/recipes/tags/"]')
+        .map((_, a) => clean($(a).text()))
+        .get()
+        .filter(Boolean),
+    ),
+  ];
+
   // --- body blocks. Each content block is followed by a marker <div data-hook="rcv-blockN" type="...">.
   const viewer = $('[data-hook="post-description"] [data-id="content-viewer"]').first();
   const blocks = [];
@@ -184,6 +194,7 @@ export function parsePost(html, url) {
     dateModified: ld.dateModified,
     coverUri,
     wixCategories,
+    wixTags,
     blocks,
   };
 }

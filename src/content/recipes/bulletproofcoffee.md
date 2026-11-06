@@ -8,7 +8,10 @@ updatedDate: 2023-08-29T04:13:03.079Z
 wixUrl: "https://www.happyketoforme.com/post/bulletproofcoffee"
 category:
   - "drinks"
-tags: []
+tags:
+  - "מתכוני קיטו"
+  - "משקאות"
+  - "קפה"
 ingredients: []
 instructions: []
 ---

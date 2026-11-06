@@ -38,20 +38,20 @@ const related = all
   <JsonLd data={postJsonLd(post, url, shareImage ? new URL(shareImage.src, Astro.site).href : undefined)} />
 
   <article>
-    <header class="bg-sage-50">
+    <header class="bg-mint-50">
       <div class="container-page max-w-4xl py-8 sm:py-12">
         <div class="mb-5"><Breadcrumbs items={[{ label: 'בלוג', href: '/blog' }, { label: title }]} /></div>
         {
           tags.length > 0 && (
             <ul class="mb-3 flex flex-wrap gap-2" aria-label="נושאים">
               {tags.map((t) => (
-                <li class="rounded-full bg-white px-3 py-1 text-sm font-medium text-cocoa-700 ring-1 ring-cream-300">{t}</li>
+                <li class="rounded-full bg-white px-3 py-1 text-sm font-medium text-bark-700 ring-1 ring-cream-300">{t}</li>
               ))}
             </ul>
           )
         }
         <h1 class="h-display">{title}</h1>
-        <p class="mt-4 text-sm text-cocoa-600">
+        <p class="mt-4 text-sm text-bark-600">
           אנה קונצמן רוזנברג · <time datetime={publishDate.toISOString()}>{formatDate(publishDate)}</time>
         </p>
       </div>
@@ -75,12 +75,12 @@ const related = all
         <Content />
       </Prose>
 
-      <aside class="mt-14 flex flex-col items-start gap-4 rounded-[2rem] bg-olive-700 p-8 text-cream-50 sm:flex-row sm:items-center sm:justify-between">
+      <aside class="mt-14 flex flex-col items-start gap-4 rounded-[2rem] bg-forest-700 p-8 text-cream-50 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p class="text-xl font-bold">רוצים לעשות את זה ביחד?</p>
           <p class="mt-1 text-cream-100">אתגר 4 שבועות למעבר הדרגתי וטעים לקיטו. מתחילים ב-3 ימי ניסיון חינם.</p>
         </div>
-        <a href="/challenge" class="btn shrink-0 bg-cream-50 text-olive-800 hover:bg-white">
+        <a href="/challenge" class="btn shrink-0 bg-cream-50 text-forest-800 hover:bg-white">
           לפרטים
           <Icon name="arrow" size={18} />
         </a>

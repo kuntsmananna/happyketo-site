@@ -26,8 +26,13 @@ export const forms = {
   accessKey: import.meta.env.PUBLIC_WEB3FORMS_KEY || 'cd1ca8aa-feae-486b-816e-7182af47e400',
 } as const;
 
-/** `cta`: shown as the header's call-to-action button instead of a plain link. */
-export type NavItem = { label: string; href: string; cta?: boolean; children?: NavItem[] };
+import type { Lang } from '@/i18n';
+
+/**
+ * `cta`: shown as the header's call-to-action button instead of a plain link.
+ * `hreflang`: set when the target page is in the other language (English menu → Hebrew recipes).
+ */
+export type NavItem = { label: string; href: string; cta?: boolean; hreflang?: Lang; children?: NavItem[] };
 
 /** Mirrors the original Wix menu. */
 export const nav: NavItem[] = [
@@ -54,3 +59,32 @@ export const nav: NavItem[] = [
   { label: 'אודות', href: '/about' },
   { label: 'יצירת קשר', href: '/contact' },
 ];
+
+/** English menu, mirroring the original /en menu. Recipes and the blog exist in Hebrew only. */
+export const navEn: NavItem[] = [
+  { label: 'Home', href: '/en' },
+  { label: 'Keto challenge', href: '/en/challenge', cta: true },
+  {
+    label: 'Recipes',
+    href: '/recipes',
+    hreflang: 'he',
+    children: [
+      { label: 'Paleo recipes', href: '/recipes/category/paleo', hreflang: 'he' },
+      { label: 'Pastries', href: '/recipes/category/pastry', hreflang: 'he' },
+      { label: 'Drinks', href: '/recipes/category/drinks', hreflang: 'he' },
+      { label: 'Meat recipes', href: '/recipes/category/meat', hreflang: 'he' },
+      { label: 'Fish recipes', href: '/recipes/category/fish', hreflang: 'he' },
+      { label: 'Soups', href: '/recipes/category/soups', hreflang: 'he' },
+      { label: 'Egg recipes', href: '/recipes/category/eggs', hreflang: 'he' },
+      { label: 'Vegetable recipes', href: '/recipes/category/vegetables', hreflang: 'he' },
+      { label: 'Desserts', href: '/recipes/category/desserts', hreflang: 'he' },
+      { label: 'Spreads and sauces', href: '/recipes/category/spreads', hreflang: 'he' },
+    ],
+  },
+  { label: 'Recommended products', href: '/en/favorites' },
+  { label: 'Low Carb Blog', href: '/blog', hreflang: 'he' },
+  { label: 'About', href: '/en/about' },
+  { label: 'Contact us', href: '/en/contact' },
+];
+
+export const navFor = (lang: Lang) => (lang === 'en' ? navEn : nav);

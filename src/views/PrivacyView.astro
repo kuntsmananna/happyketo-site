@@ -1,0 +1,115 @@
+---
+/**
+ * Privacy policy (both languages). Sections 4–6 are from the original Wix policy; sections 1–3 describe what this
+ * site actually does (no AdSense; cookieless analytics; Web3Forms; privacy-enhanced YouTube) – review before launch.
+ * The English text is a translation of the Hebrew (the original's English page was never translated).
+ */
+import PageHero from '@/components/PageHero.astro';
+import Prose from '@/components/Prose.astro';
+import { site } from '@/data/site';
+import { getLang } from '@/i18n';
+
+const lang = getLang(Astro.url);
+const mail = site.contact.email;
+---
+
+{
+  lang === 'he' ? (
+    <PageHero
+      title="מדיניות פרטיות"
+      intro="ב-Happy Keto, אנו מעריכים את פרטיות המבקרים שלנו. מסמך זה מפרט את סוגי המידע האישי שנאסף על ידינו וכיצד אנו משתמשים בו."
+      breadcrumbs={[{ label: 'מדיניות פרטיות' }]}
+    />
+  ) : (
+    <PageHero
+      title="Privacy Policy"
+      intro="At Happy Keto, we value the privacy of our visitors. This document describes the types of personal information we collect and how we use it."
+      breadcrumbs={[{ label: 'Privacy Policy' }]}
+    />
+  )
+}
+
+<div class="bg-cream-100 pb-16 sm:pb-24">
+  <div class="container-page max-w-3xl">
+    <Prose>
+      {
+        lang === 'he' ? (
+          <>
+            <h2>1. סטטיסטיקת גלישה</h2>
+            <p>
+              האתר משתמש בכלי סטטיסטיקה של Vercel (ספקית האחסון של האתר) כדי להבין אילו עמודים נקראים ולשפר את האתר. הכלי אינו משתמש
+              בעוגיות, אינו עוקב אחריכם בין אתרים, והנתונים נאספים באופן מצטבר בלבד ואינם מקושרים למידע המאפשר זיהוי אישי. כמו בכל
+              אתר, שרתי האחסון שומרים קבצי לוג טכניים (כגון כתובת IP, סוג דפדפן ושעת הביקור) לצורכי אבטחה ותפעול.
+            </p>
+            <h2>2. טפסים באתר</h2>
+            <p>
+              כשאתם ממלאים טופס באתר (הרשמה לעדכונים, הרשמה לאתגר או יצירת קשר), הפרטים שמסרתם – כגון שם, אימייל, טלפון ותוכן ההודעה –
+              נשלחים אליי במייל באמצעות שירות הטפסים Web3Forms. הפרטים משמשים רק כדי לחזור אליכם ולשלוח את העדכונים שביקשתם, ולא
+              יועברו לצד שלישי. אפשר לבקש בכל עת לעיין בפרטים, לתקן אותם או למחוק אותם בפנייה ל-<a href={`mailto:${mail}`}>{mail}</a>.
+            </p>
+            <h2>3. עוגיות ותוכן מוטמע</h2>
+            <p>
+              האתר עצמו אינו משתמש בעוגיות פרסום ואינו מציג מודעות. חלק מהעמודים כוללים סרטוני YouTube המוטמעים במצב פרטיות מוגבר
+              (youtube-nocookie.com); YouTube עשויה לשמור עוגיות רק אם תפעילו את הסרטון. קישורים לאתרים חיצוניים (כמו iHerb או
+              אינסטגרם) כפופים למדיניות הפרטיות של אותם אתרים.
+            </p>
+            <h2>4. קישורי שותפים (Affiliate Disclosure)</h2>
+            <p>
+              האתר משתתף בתוכניות שותפים (כגון iHerb, אמזון או תוכניות מקומיות). המשמעות היא שאם תלחצו על קישור למוצר ותרכשו אותו, אנו
+              עשויים לקבל עמלה קטנה ללא עלות נוספת עבורכם. אנו ממליצים רק על מוצרים שאנו מאמינים באיכותם.
+            </p>
+            <h2>5. הצהרת אחריות בנושא בריאות (Medical Disclaimer)</h2>
+            <p>
+              <strong>חשוב:</strong> התוכן באתר Happy Keto (כולל מאמרים על תזונה קטוגנית) נועד למטרות מידע בלבד ואינו מהווה ייעוץ
+              רפואי, אבחנה או טיפול. יש להיוועץ תמיד עם רופא או תזונאי מוסמך לפני ביצוע שינויים תזונתיים משמעותיים.
+            </p>
+            <h2>6. הסכמה</h2>
+            <p>בעצם השימוש באתר שלנו, אתם מסכימים למדיניות הפרטיות שלנו ומסכימים לתנאיה.</p>
+            <p class="text-sm">
+              לשאלות בנושא פרטיות: <a href={`mailto:${mail}`}>{mail}</a>
+            </p>
+          </>
+        ) : (
+          <>
+            <h2>1. Site statistics</h2>
+            <p>
+              The site uses Vercel’s analytics (Vercel is the site’s hosting provider) to understand which pages are read and to improve
+              the site. It does not use cookies, does not track you across websites, and only collects aggregated data that is not linked
+              to personally identifiable information. As with any website, the hosting servers keep technical log files (such as IP
+              address, browser type and time of visit) for security and operations.
+            </p>
+            <h2>2. Forms on the site</h2>
+            <p>
+              When you fill in a form on the site (newsletter, challenge sign-up or contact), the details you provide – such as name,
+              email, phone and message – are sent to me by email through the Web3Forms form service. They are used only to get back to you
+              and send the updates you asked for, and are not passed on to third parties. You can ask at any time to see, correct or delete
+              your details by writing to <a href={`mailto:${mail}`}>{mail}</a>.
+            </p>
+            <h2>3. Cookies and embedded content</h2>
+            <p>
+              The site itself does not use advertising cookies and does not show ads. Some pages include YouTube videos embedded in
+              privacy-enhanced mode (youtube-nocookie.com); YouTube may set cookies only if you play the video. Links to other websites
+              (such as iHerb or Instagram) are subject to those websites’ privacy policies.
+            </p>
+            <h2>4. Affiliate disclosure</h2>
+            <p>
+              The site takes part in affiliate programs (such as iHerb, Amazon or local programs). This means that if you click a product
+              link and buy it, we may receive a small commission at no extra cost to you. We only recommend products we believe in.
+            </p>
+            <h2>5. Medical disclaimer</h2>
+            <p>
+              <strong>Important:</strong> the content on Happy Keto (including articles about the ketogenic diet) is for information only
+              and does not constitute medical advice, diagnosis or treatment. Always consult a doctor or a qualified dietitian before
+              making significant dietary changes.
+            </p>
+            <h2>6. Consent</h2>
+            <p>By using our site, you agree to this privacy policy and its terms.</p>
+            <p class="text-sm">
+              Privacy questions: <a href={`mailto:${mail}`}>{mail}</a>
+            </p>
+          </>
+        )
+      }
+    </Prose>
+  </div>
+</div>

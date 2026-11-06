@@ -5,6 +5,8 @@
  * Put the fields in the default slot; give the submit button type="submit".
  */
 import { forms, site } from '@/data/site';
+import { getLang, localized } from '@/i18n';
+import { t } from '@/i18n/ui';
 import type { HTMLAttributes } from 'astro/types';
 
 interface Props extends Omit<HTMLAttributes<'form'>, 'action' | 'method'> {
@@ -13,14 +15,25 @@ interface Props extends Omit<HTMLAttributes<'form'>, 'action' | 'method'> {
   successMessage?: string;
 }
 
-const { subject, successMessage = 'תודה! הפרטים התקבלו ואחזור אליכם בהקדם ❤️', class: className, ...rest } = Astro.props;
+const lang = getLang(Astro.url);
+const s = t(lang).form;
+const { subject, successMessage = s.success, class: className, ...rest } = Astro.props;
 ---
 
-<form action={forms.endpoint} method="POST" class:list={['relative', className]} data-web3form data-success={successMessage} {...rest}>
+<form
+  action={forms.endpoint}
+  method="POST"
+  class:list={['relative', className]}
+  data-web3form
+  data-success={successMessage}
+  data-sending={s.sending}
+  data-error={s.error}
+  {...rest}
+>
   <input type="hidden" name="access_key" value={forms.accessKey} />
   <input type="hidden" name="subject" value={subject} />
-  <input type="hidden" name="from_name" value="Happy Keto – אתר" />
-  <input type="hidden" name="redirect" value={`${site.url}/thanks`} />
+  <input type="hidden" name="from_name" value={s.fromName} />
+  <input type="hidden" name="redirect" value={`${site.url}${localized('/thanks', lang)}`} />
   <!-- Honeypot: real people never see or tick this. -->
   <input type="checkbox" name="botcheck" class="hidden" style="display: none" tabindex="-1" autocomplete="off" />
   <slot />
@@ -29,7 +42,7 @@ const { subject, successMessage = 'תודה! הפרטים התקבלו ואחז�
 
 <script>
   const STATUS = {
-    success: 'block bg-sage-100 text-sage-700',
+    success: 'block bg-mint-100 text-mint-700',
     error: 'block bg-red-50 text-red-800',
   };
 
@@ -47,7 +60,7 @@ const { subject, successMessage = 'תודה! הפרטים התקבלו ואחז�
       const label = button?.innerHTML;
       if (button) {
         button.disabled = true;
-        button.textContent = 'שולח…';
+        button.textContent = form.dataset.sending!;
       }
 
       const data = Object.fromEntries(new FormData(form));
@@ -63,7 +76,7 @@ const { subject, successMessage = 'תודה! הפרטים התקבלו ואחז�
         form.reset();
         show('success', form.dataset.success!);
       } catch {
-        show('error', 'אופס, משהו השתבש. אפשר לנסות שוב או לכתוב לי ישירות במייל או בוואטסאפ.');
+        show('error', form.dataset.error!);
       } finally {
         if (button) {
           button.disabled = false;

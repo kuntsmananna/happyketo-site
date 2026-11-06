@@ -1,0 +1,49 @@
+---
+/** Homepage body (both languages), in the original's section order. */
+import Hero from '@/components/Hero.astro';
+import ChallengeBlock from '@/components/ChallengeBlock.astro';
+import PhotoBand from '@/components/PhotoBand.astro';
+import AboutBlock from '@/components/AboutBlock.astro';
+import CuisineBlock from '@/components/CuisineBlock.astro';
+import ServiceTrio from '@/components/ServiceTrio.astro';
+import RecipeCard from '@/components/RecipeCard.astro';
+import NewsletterForm from '@/components/NewsletterForm.astro';
+import FaqAccordion from '@/components/FaqAccordion.astro';
+import Icon from '@/components/Icon.astro';
+import { homeFor } from '@/data/home';
+import { getLang } from '@/i18n';
+import { getRecipes } from '@/lib/recipes';
+
+const lang = getLang(Astro.url);
+const c = homeFor(lang).latest;
+const latest = (await getRecipes()).filter((r) => r.data.image).slice(0, 3);
+---
+
+<Hero />
+<ChallengeBlock />
+<PhotoBand />
+<AboutBlock />
+<CuisineBlock />
+<ServiceTrio />
+
+<!-- Addition (not on the original): the newest recipes. -->
+<section class="bg-cream-50 section-y" aria-labelledby="latest-title">
+  <div class="container-page">
+    <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow"><span dir="ltr">{c.eyebrow}</span></p>
+        <h2 id="latest-title" class="h-section">{c.title}</h2>
+      </div>
+      <a href="/recipes" hreflang={lang === 'en' ? 'he' : undefined} class="link-arrow text-forest-600">
+        {c.all}
+        <Icon name="arrowLong" size={22} />
+      </a>
+    </div>
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" lang="he" dir="rtl">
+      {latest.map((recipe) => <RecipeCard recipe={recipe} />)}
+    </div>
+  </div>
+</section>
+
+<NewsletterForm />
+<FaqAccordion />

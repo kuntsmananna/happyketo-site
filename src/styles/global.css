@@ -13,46 +13,81 @@
  * Spacing: section-y (standard section padding), section-y-sm (compact).
  */
 @theme {
-  /* Self-hosted Rubik (astro.config.mjs → fonts) with a metric-matched fallback. */
-  --font-sans: var(--font-rubik), system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  /* Fonts (self-hosted, see astro.config.mjs → fonts). */
+  --font-sans: var(--font-assistant), system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --font-display: var(--font-varela), var(--font-assistant), system-ui, sans-serif;
+  --font-logo: var(--font-syne), "Segoe UI", Arial, sans-serif;
+  --font-serif: Georgia, var(--font-gelasio), "Times New Roman", serif;
 
-  --color-olive-50: #f6f7ee;
-  --color-olive-100: #eaedd8;
-  --color-olive-200: #d5dbb3;
-  --color-olive-300: #b8c385;
-  --color-olive-400: #9aab5d;
-  --color-olive-500: #7d8f41;
-  --color-olive-600: #627232;
-  --color-olive-700: #4b5729;
-  --color-olive-800: #3e4725;
-  --color-olive-900: #353d22;
+  /* Brand palette – taken from the original Happy Keto Wix theme (marked "orig"). */
+  --color-forest-50: #eef5f1;
+  --color-forest-100: #d9eadf;
+  --color-forest-200: #b5d3c3;
+  --color-forest-300: #86b49f;
+  --color-forest-400: #5a937b;
+  --color-forest-500: #3f7652; /* orig: in-section buttons */
+  --color-forest-600: #235b47; /* orig: primary green (header, headings) */
+  --color-forest-700: #1c4d3c;
+  --color-forest-800: #124633; /* orig */
+  --color-forest-900: #153529; /* orig */
 
-  --color-sage-50: #f4f7f3;
-  --color-sage-100: #e5ece2;
-  --color-sage-200: #cbd9c6;
-  --color-sage-300: #a7bfa0;
-  --color-sage-400: #81a078;
-  --color-sage-500: #62835a;
-  --color-sage-600: #4d6847;
-  --color-sage-700: #3f543b;
+  --color-mint-50: #f2f8f5;
+  --color-mint-100: #e2efe9;
+  --color-mint-200: #bfd9cf; /* orig */
+  --color-mint-300: #90b4a7; /* orig */
+  --color-mint-400: #6f9a8a;
+  --color-mint-500: #557f70;
+  --color-mint-600: #43675a;
+  --color-mint-700: #34524a;
 
-  --color-cream-50: #fffdf8;
-  --color-cream-100: #fdf8ec;
-  --color-cream-200: #f8eed6;
-  --color-cream-300: #f1e0b8;
+  --color-cream-50: #faf9f2;
+  --color-cream-100: #f3f1e4; /* orig: page background */
+  --color-cream-200: #e9e5cf;
+  --color-cream-300: #dcd5b5;
 
-  --color-cocoa-300: #c9a98c;
-  --color-cocoa-400: #b08866;
-  --color-cocoa-500: #8a6548; /* ≥ 4.5:1 on cream-50, sage-50 and white */
-  --color-cocoa-600: #74543c;
-  --color-cocoa-700: #5c4231;
-  --color-cocoa-800: #4a3628;
-  --color-cocoa-900: #3a2a20;
+  --color-bark-300: #c4b49c;
+  --color-bark-400: #9a8669;
+  --color-bark-500: #6b5a45; /* orig #70604b, darkened slightly for 4.5:1 on cream */
+  --color-bark-600: #6b4b1e; /* orig */
+  --color-bark-700: #563c16;
+  --color-bark-800: #402d12; /* orig: body text */
+  --color-bark-900: #2e2009;
+
+  --color-navy-50: #eef2fa;
+  --color-navy-100: #dbe3f4;
+  --color-navy-200: #b4c5e8; /* orig */
+  --color-navy-300: #8ba1d1; /* orig */
+  --color-navy-400: #6481c4;
+  --color-navy-500: #3d65ba; /* orig */
+  --color-navy-600: #2e4f94;
+  --color-navy-700: #223766; /* orig: section background */
+  --color-navy-800: #1b2c52;
+  --color-navy-900: #14223e; /* orig */
+
+  --color-mustard-50: #fff8eb;
+  --color-mustard-100: #fde3b6; /* orig */
+  --color-mustard-200: #fbd492; /* orig */
+  --color-mustard-300: #fac35d;
+  --color-mustard-400: #f9ac28; /* orig: call-to-action */
+  --color-mustard-500: #e3961a;
+  --color-mustard-600: #a6731b; /* orig */
+  --color-mustard-700: #83590f;
+  --color-mustard-800: #53390d; /* orig */
+
+  --color-lime-50: #fbfee9;
+  --color-lime-100: #f1fbbd; /* orig: logo, light sections */
+  --color-lime-200: #e5f598;
+  --color-lime-300: #d2eb6a;
+
+  --color-coral-100: #ffbcac; /* orig */
+  --color-coral-400: #ff7858; /* orig */
+  --color-coral-600: #bf5a42; /* orig */
+  --color-coral-800: #803c2c; /* orig */
 
   --radius-card: 1.25rem; /* cards, panels */
   --radius-media: 2rem; /* large photos, feature blocks */
-  --shadow-card: 0 1px 2px rgb(58 42 32 / 0.06), 0 8px 24px -8px rgb(58 42 32 / 0.12);
-  --shadow-card-hover: 0 2px 4px rgb(58 42 32 / 0.06), 0 16px 40px -12px rgb(58 42 32 / 0.25);
+  --shadow-card: 0 1px 2px rgb(64 45 18 / 0.06), 0 8px 24px -8px rgb(64 45 18 / 0.14);
+  --shadow-card-hover: 0 2px 4px rgb(64 45 18 / 0.06), 0 16px 40px -12px rgb(64 45 18 / 0.26);
 
   --header-height: 4rem;
 }
@@ -85,16 +120,17 @@
   }
 
   body {
-    @apply bg-cream-50 text-cocoa-900 font-sans antialiased;
+    @apply bg-cream-100 text-bark-800 font-sans text-[1.0625rem] antialiased;
     /* Safety net against decorative overflow; `clip` (unlike hidden) keeps position: sticky working. */
     overflow-x: clip;
   }
 
+  /* Headings: rounded display face at regular weight, like the original site. */
   h1,
   h2,
   h3,
   h4 {
-    @apply text-olive-800 font-bold text-balance;
+    @apply font-display font-normal text-forest-600 text-balance;
   }
 
   p,
@@ -108,11 +144,11 @@
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-olive-500;
+    @apply outline-2 outline-offset-2 outline-mustard-500;
   }
 
   ::selection {
-    @apply bg-olive-200 text-olive-900;
+    @apply bg-lime-100 text-forest-900;
   }
 }
 
@@ -131,7 +167,7 @@
 
 /* ---------- Typography ---------- */
 @utility h-display {
-  @apply text-4xl leading-[1.12] sm:text-5xl xl:text-6xl;
+  @apply text-4xl leading-[1.15] sm:text-5xl;
 }
 
 @utility h-section {
@@ -143,11 +179,34 @@
 }
 
 @utility lead {
-  @apply text-lg leading-relaxed text-cocoa-700 sm:text-xl;
+  @apply text-lg leading-relaxed text-bark-700 sm:text-xl;
 }
 
+/* Latin label above a title ("Going Keto", "Tasty Keto"): Georgia italic, as on the original site. */
 @utility eyebrow {
-  @apply mb-2 text-sm font-medium tracking-[0.16em] text-cocoa-600;
+  @apply mb-1 font-serif text-2xl leading-tight italic text-forest-600 sm:text-3xl;
+}
+
+/* "HAPPY KETO" wordmark */
+@utility wordmark {
+  @apply font-logo font-bold tracking-[0.14em] uppercase;
+}
+
+/* Text link with the original's long arrow ("לפרטים, צרו קשר ⟵"). */
+@utility link-arrow {
+  @apply inline-flex items-center gap-2 font-medium underline-offset-4 hover:underline;
+}
+
+/* ✦ bullets used in the original's lists */
+@utility list-star {
+  @apply space-y-2;
+  & > li {
+    @apply relative ps-7;
+  }
+  & > li::before {
+    content: "✦";
+    @apply absolute start-0 top-0 text-current opacity-80;
+  }
 }
 
 /* ---------- Buttons (min 48px tall: comfortable touch target) ---------- */
@@ -155,12 +214,19 @@
   @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-2.5 font-medium transition-colors duration-200 select-none disabled:cursor-not-allowed disabled:opacity-60;
 }
 
+/* Mustard call-to-action (the original's main button). */
 @utility btn-primary {
-  @apply btn bg-olive-600 text-cream-50 hover:bg-olive-700 active:bg-olive-800;
+  @apply btn bg-mustard-400 text-forest-900 hover:bg-mustard-300 active:bg-mustard-500;
 }
 
+/* Green pill with lime text (the original's secondary button, e.g. "אודות Happy Keto"). */
 @utility btn-secondary {
-  @apply btn border border-olive-600 bg-white/70 text-olive-700 hover:bg-olive-50 active:bg-olive-100;
+  @apply btn bg-forest-600 text-lime-100 hover:bg-forest-700 active:bg-forest-800;
+}
+
+/* Quiet outline button for tertiary actions on light backgrounds. */
+@utility btn-outline {
+  @apply btn border border-forest-600 bg-transparent text-forest-700 hover:bg-forest-50 active:bg-forest-100;
 }
 
 /* Compact variant for dense places (cards, toolbars) – still ≥ 44px. */
@@ -179,7 +245,7 @@
 
 /* ---------- Forms ---------- */
 @utility input-field {
-  @apply min-h-12 rounded-2xl border border-olive-200 bg-white px-4 py-3 text-cocoa-900 transition-shadow placeholder:text-cocoa-500 focus:border-olive-500 focus:ring-4 focus:ring-olive-200/60 focus:outline-none;
+  @apply min-h-12 rounded-2xl border border-bark-300 bg-white px-4 py-3 text-bark-900 transition-shadow placeholder:text-bark-500 focus:border-forest-600 focus:ring-4 focus:ring-forest-200/60 focus:outline-none;
   /* Show errors only after the person has interacted with the field. */
   &:user-invalid {
     @apply border-red-600 ring-4 ring-red-100;
@@ -191,5 +257,15 @@
 }
 
 @utility field-label {
-  @apply mb-1.5 block font-medium text-cocoa-900;
+  @apply mb-1.5 block font-medium text-bark-900;
+}
+
+/* ---------- Brand surfaces ---------- */
+/* Navy sections with the soft leaf-shadow texture of the original (our own SVG artwork). */
+@utility surface-navy {
+  @apply relative isolate bg-navy-700 text-cream-100;
+  background-image: url("/leaf-shadow.svg");
+  background-repeat: no-repeat;
+  background-position: -8rem -6rem;
+  background-size: 46rem auto;
 }

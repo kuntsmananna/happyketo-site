@@ -9,7 +9,12 @@ wixUrl: "https://www.happyketoforme.com/post/cinnabonrecipe"
 category:
   - "pastry"
   - "desserts"
-tags: []
+tags:
+  - "צמחוני"
+  - "אפיה"
+  - "קינוחים"
+  - "מאפים"
+  - "קינמון"
 ingredients:
   - title: "יבשים"
     items:

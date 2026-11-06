@@ -48,7 +48,7 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
   <JsonLd data={recipeJsonLd(recipe, url, shareImageUrl)} />
 
   <article>
-    <header class="bg-sage-50">
+    <header class="bg-mint-50">
       <div class="container-page grid items-center gap-8 py-8 sm:py-12 lg:grid-cols-[1fr_minmax(0,28rem)] lg:gap-14">
         <div>
           <div class="mb-5 print:hidden">
@@ -66,7 +66,7 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
                 <li>
                   <a
                     href={categoryUrl(c)}
-                    class="rounded-full bg-white px-3 py-1 text-sm font-medium text-sage-700 ring-1 ring-sage-200 transition-colors hover:bg-sage-100"
+                    class="rounded-full bg-white px-3 py-1 text-sm font-medium text-mint-700 ring-1 ring-mint-200 transition-colors hover:bg-mint-100"
                   >
                     {categoryLabel(c)}
                   </a>
@@ -77,11 +77,11 @@ const whatsapp = `https://wa.me/?text=${encodeURIComponent(`${title} – מתכ�
           <h1 class="h-display">{title}</h1>
           {description && description !== title && <p class="lead mt-4 max-w-2xl">{description}</p>}
 
-          <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-cocoa-600">
+          <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-bark-600">
             {
               prepTime && (
                 <span class="inline-flex items-center gap-1.5">
-                  <Icon name="clock" size={16} class="text-olive-600" />
+                  <Icon name="clock" size={16} class="text-forest-600" />
                   {formatMinutes(prepTime)}
                 </span>
               )

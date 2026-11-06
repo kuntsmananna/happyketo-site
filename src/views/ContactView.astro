@@ -1,0 +1,126 @@
+---
+/** Contact page (both languages): the original's centered text, contact channels and a form. */
+import Icon from '@/components/Icon.astro';
+import PageHero from '@/components/PageHero.astro';
+import Web3Form from '@/components/Web3Form.astro';
+import { site } from '@/data/site';
+import { getLang } from '@/i18n';
+
+const lang = getLang(Astro.url);
+const ig = site.social[0];
+
+const copy = {
+  he: {
+    crumb: 'יצירת קשר',
+    title: 'היי! שמחה שאתם כאן.',
+    intro:
+      'יש לכם שאלה על אחד המתכונים?\nרוצים להתייעץ לגבי אתגר הקיטו או לשמוע עוד על הקורסים שלי?\nאני כאן לכל שאלה, מחשבה או שיתוף בתהליך שלכם.',
+    ways: 'ניתן ליצור איתי קשר בכמה דרכים:',
+    instagram: 'מוזמנים לעקוב ולכתוב לי בפרטי באינסטגרם',
+    whatsapp: 'וואטסאפ',
+    formTitle: 'או כתבו לי כאן',
+    name: 'שם *',
+    phone: 'טלפון',
+    optional: '(לא חובה)',
+    email: 'אימייל *',
+    topic: 'נושא',
+    message: 'הודעה *',
+    send: 'שליחה',
+    subject: 'פנייה מהאתר – Happy Keto',
+    fields: { phone: 'טלפון', topic: 'נושא', message: 'הודעה' },
+    topics: [
+      { value: 'question', label: 'שאלה על מתכון' },
+      { value: 'challenge', label: 'אתגר הקיטו / ליווי' },
+      { value: 'events', label: 'ארוחה או אירוע ב-Keto Cuisine' },
+      { value: 'other', label: 'משהו אחר' },
+    ],
+  },
+  en: {
+    crumb: 'Contact',
+    title: 'Hi! Glad you’re here.',
+    intro:
+      'Do you have a question about one of the recipes?\nWant to get advice about the keto challenge or hear more about my courses?\nI am here for any questions, thoughts, or sharing in your process.',
+    ways: 'You can contact me in several ways:',
+    instagram: 'You are welcome to follow and write to me privately on Instagram',
+    whatsapp: 'WhatsApp',
+    formTitle: 'Or write to me here',
+    name: 'Name *',
+    phone: 'Phone',
+    optional: '(optional)',
+    email: 'Email *',
+    topic: 'Topic',
+    message: 'Message *',
+    send: 'Send',
+    subject: 'Website enquiry (EN) – Happy Keto',
+    fields: { phone: 'Phone', topic: 'Topic', message: 'Message' },
+    topics: [
+      { value: 'question', label: 'A question about a recipe' },
+      { value: 'challenge', label: 'The keto challenge / coaching' },
+      { value: 'events', label: 'A meal or event with Keto Cuisine' },
+      { value: 'other', label: 'Something else' },
+    ],
+  },
+}[lang];
+---
+
+<PageHero variant="plain" title={copy.title} intro={copy.intro} breadcrumbs={[{ label: copy.crumb }]} />
+
+<section class="bg-cream-100 pb-16 sm:pb-24">
+  <div class="container-page max-w-3xl text-center text-lg text-bark-800">
+    <p>{copy.ways}</p>
+    <ul class="mt-3 flex flex-wrap justify-center gap-3">
+      <li>
+        <a href={`mailto:${site.contact.email}`} class="btn-outline gap-2 text-base"><Icon name="mail" size={18} />{site.contact.email}</a>
+      </li>
+      <li>
+        <a href={site.contact.phoneHref} class="btn-outline gap-2 text-base"><Icon name="phone" size={18} /><span dir="ltr">{site.contact.phone.replace('-', '.')}</span></a>
+      </li>
+      <li>
+        <a href={site.contact.whatsappHref} class="btn-outline gap-2 text-base" target="_blank" rel="noopener"><Icon name="whatsapp" size={18} />{copy.whatsapp}</a>
+      </li>
+    </ul>
+    <p class="mt-5">
+      {copy.instagram}{' '}
+      <a href={ig.href} class="font-medium text-forest-600 underline" target="_blank" rel="noopener" dir="ltr">{ig.handle}</a>
+    </p>
+  </div>
+
+  <div class="container-page mt-12 max-w-2xl">
+    <Web3Form subject={copy.subject} class="card space-y-5 p-6 sm:p-8" id="contact-form">
+      <h2 class="h-card text-2xl">{copy.formTitle}</h2>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="ct-name" class="field-label">{copy.name}</label>
+          <input id="ct-name" name="name" required autocomplete="name" class="input-field w-full" />
+        </div>
+        <div>
+          <label for="ct-phone" class="field-label">{copy.phone} <span class="font-normal text-bark-500">{copy.optional}</span></label>
+          <input id="ct-phone" name={copy.fields.phone} type="tel" autocomplete="tel" dir="ltr" class="input-field w-full rtl:text-end" />
+        </div>
+      </div>
+      <div>
+        <label for="ct-email" class="field-label">{copy.email}</label>
+        <input id="ct-email" name="email" type="email" required autocomplete="email" dir="ltr" class="input-field w-full rtl:text-end" />
+      </div>
+      <div>
+        <label for="ct-topic" class="field-label">{copy.topic}</label>
+        <select id="ct-topic" name={copy.fields.topic} class="input-field w-full" data-topic>
+          {copy.topics.map((t) => <option value={t.label} data-key={t.value}>{t.label}</option>)}
+        </select>
+      </div>
+      <div>
+        <label for="ct-message" class="field-label">{copy.message}</label>
+        <textarea id="ct-message" name={copy.fields.message} rows="5" required class="input-field w-full resize-y"></textarea>
+      </div>
+      <button type="submit" class="btn-secondary w-full text-lg">{copy.send}</button>
+    </Web3Form>
+  </div>
+</section>
+
+<script>
+  // ?topic=events preselects the topic (used by the Keto Cuisine section).
+  const key = new URLSearchParams(location.search).get('topic');
+  const select = document.querySelector<HTMLSelectElement>('[data-topic]');
+  const option = key && select?.querySelector<HTMLOptionElement>(`option[data-key="${CSS.escape(key)}"]`);
+  if (select && option) select.value = option.value;
+</script>
