@@ -1,49 +1,58 @@
 ---
-/** Split hero as on the original: photo half (left) + cream text half with wordmark, title and mustard CTA. */
-import { getImage } from 'astro:assets';
+/**
+ * Hero as on the original. Desktop: photo half + cream text half (wordmark, title, text, mustard button), 572px tall.
+ * Phones (original mobile layout): title, arched photo with the egg sticker, text, button.
+ */
+import { Image, getImage } from 'astro:assets';
 import { homeFor } from '@/data/home';
 import { getLang, localized } from '@/i18n';
 import heroImg from '@/assets/home/hero-crepes.jpg';
+import egg from '@/assets/brand/sticker-happy-keto.png';
 
 const lang = getLang(Astro.url);
 const c = homeFor(lang).hero;
 
-// Phones show a wide strip, desktop a tall half-screen: generate a matching crop for each.
-const wide = await Promise.all([480, 720, 960, 1280].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 0.62), fit: 'cover', format: 'webp' })));
-const tall = await Promise.all([640, 900, 1086].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 1.33), fit: 'cover', format: 'webp' })));
-const srcset = (imgs: typeof wide) => imgs.map((i) => `${i.src} ${i.attributes.width}w`).join(', ');
+// Phones show a tall arch (261×343 on the original), desktop a half-screen (640×572): one crop for each.
+const arch = await Promise.all([320, 480, 640].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 1.314), fit: 'cover', position: 'bottom', format: 'webp' })));
+const half = await Promise.all([640, 900, 1086].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 0.894), fit: 'cover', position: 'top', format: 'webp' })));
+const srcset = (imgs: typeof arch) => imgs.map((i) => `${i.src} ${i.attributes.width}w`).join(', ');
 ---
 
-<section class="grid bg-cream-100 lg:min-h-[min(calc(100dvh-5rem),48rem)] lg:grid-cols-2">
-  <div class="flex flex-col items-center justify-center px-6 py-12 text-center sm:py-16 lg:px-12">
-    <p class="wordmark text-2xl text-forest-600 sm:text-4xl" dir="ltr">{c.wordmark}</p>
-    <h1
-      class:list={[
-        'mt-5 max-w-xl leading-[1.2] text-forest-600',
-        c.titleSerif ? 'font-serif text-4xl italic sm:text-5xl' : 'text-4xl sm:text-5xl',
-      ]}
-    >
-      {c.title}
-    </h1>
-    <p class="mt-5 max-w-md text-lg leading-relaxed text-forest-700 sm:text-xl">{c.text}</p>
-    <a href={`${localized('/challenge', lang)}#register`} class="btn-primary mt-8 px-8 text-base">{c.cta}</a>
-  </div>
+<section class="grid justify-items-center bg-cream-100 px-[10%] pt-10 pb-12 text-center text-forest-600 lg:h-[572px] lg:grid-cols-2 lg:grid-rows-[1fr_auto_auto_auto_auto_1fr] lg:px-0 lg:py-0">
+  <p class="wordmark hidden text-[2.3rem] leading-[1.4] lg:col-start-1 lg:row-start-2 lg:block" dir="ltr">{c.wordmark}</p>
+  <h1
+    class:list={[
+      'max-w-[490px] text-[2.1rem] leading-[1.2] lg:col-start-1 lg:row-start-3 lg:mt-6 lg:text-[2.625rem]',
+      c.titleSerif && 'font-serif italic',
+    ]}
+  >
+    {c.title}
+  </h1>
 
-  <div class="relative order-first h-[min(62vw,24rem)] lg:order-none lg:h-auto">
-    <picture>
-      <source media="(min-width: 1024px)" srcset={srcset(tall)} sizes="50vw" type="image/webp" />
+  <div class="relative mt-8 w-full lg:col-start-2 lg:row-span-full lg:row-start-1 lg:mt-0 lg:h-full">
+    <picture class="block aspect-[261/343] overflow-hidden rounded-t-full lg:aspect-auto lg:h-full lg:rounded-none">
+      <source media="(min-width: 1024px)" srcset={srcset(half)} sizes="50vw" type="image/webp" />
       <img
-        src={wide[1].src}
-        srcset={srcset(wide)}
-        sizes="100vw"
+        src={arch[1].src}
+        srcset={srcset(arch)}
+        sizes="80vw"
         alt={c.imageAlt}
-        width={wide[1].attributes.width}
-        height={wide[1].attributes.height}
-        class="absolute inset-0 size-full object-cover"
+        width={arch[1].attributes.width}
+        height={arch[1].attributes.height}
+        class="size-full object-cover"
         loading="eager"
         fetchpriority="high"
         decoding="async"
       />
     </picture>
+    <Image src={egg} alt="" width={120} densities={[1, 2]} class="absolute top-0 left-[6%] w-[27%] lg:hidden" loading="eager" />
   </div>
+
+  <p class="mt-6 text-[1.375rem] leading-[1.4] lg:col-start-1 lg:row-start-4 lg:mt-1.5 lg:max-w-[560px] lg:text-xl">{c.text}</p>
+  <a
+    href={`${localized('/challenge', lang)}#register`}
+    class="mt-6 inline-flex min-h-[51px] w-[94%] items-center justify-center rounded-full bg-mustard-400 px-6 text-[1.2rem] text-forest-800 transition-colors hover:bg-mustard-300 lg:col-start-1 lg:row-start-5 lg:mt-9 lg:min-h-[45px] lg:w-auto lg:min-w-[226px] lg:text-base"
+  >
+    {c.cta}
+  </a>
 </section>

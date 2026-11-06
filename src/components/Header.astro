@@ -1,14 +1,14 @@
 ---
 /**
- * Site header in the original's style: deep-green bar, lime "HAPPY KETO" wordmark, lime menu pill on phones.
- * Desktop adds the full menu (recipes dropdown), the challenge call-to-action and the language switch.
+ * Site header as on the original: deep-green bar, centered lime "HAPPY KETO" wordmark,
+ * flag language switch on the left and a lime "Menu" pill on the right that opens a side panel.
+ * Phones (as the original's mobile site): wordmark left, flag dropdown, three-line menu icon right.
  */
-import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
-import { navFor, site, type NavItem } from '@/data/site';
+import Flag from './Flag.astro';
+import { navFor, type NavItem } from '@/data/site';
 import { alternates, getLang } from '@/i18n';
 import { t } from '@/i18n/ui';
-import logo from '@/assets/brand/sticker-happy-keto.png';
 
 const lang = getLang(Astro.url);
 const s = t(lang);
@@ -16,256 +16,204 @@ const nav = navFor(lang);
 const homeHref = lang === 'en' ? '/en' : '/';
 const alt = alternates(Astro.url.pathname);
 // The switch goes to the same page in the other language, or to its home page.
-const switchHref = lang === 'he' ? (alt.en ?? '/en') : (alt.he ?? '/');
-const otherLang = lang === 'he' ? 'en' : 'he';
+const hrefFor = (l: 'he' | 'en') => (l === lang ? Astro.url.pathname : l === 'en' ? (alt.en ?? '/en') : (alt.he ?? '/'));
+const langs = [
+  { code: 'he', label: 'עברית' },
+  { code: 'en', label: 'English' },
+] as const;
+const other = langs.find((l) => l.code !== lang)!;
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isCurrent = (href: string) => path === href;
 const isSection = (href: string) => href !== '/' && href !== '/en' && (path === href || path.startsWith(href + '/'));
 const active = (href: string) => isCurrent(href) || isSection(href);
-const cta = nav.find((i) => i.cta);
-const links = nav.filter((i) => !i.cta);
 const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
-const linkBase = 'rounded-full transition-colors hover:bg-white/10 hover:text-lime-100';
-const linkActive = 'bg-white/10 text-lime-100';
 ---
 
-<header
-  class="sticky top-0 z-40 bg-forest-600 text-cream-100 transition-shadow duration-300 data-[scrolled]:shadow-[0_8px_24px_-10px_rgb(18_70_51/0.6)] print:hidden"
-  data-site-header
->
-  <div class="container-page flex h-16 items-center justify-between gap-3 lg:h-20">
-    <a href={homeHref} class="flex items-center gap-2.5 rounded-full text-lime-100" aria-label={s.homeLabel}>
-      <Image src={logo} alt="" width={48} height={55} class="size-9 object-contain lg:size-11" loading="eager" />
-      <span class="wordmark text-lg lg:text-xl" dir="ltr">HAPPY KETO</span>
+<header class="sticky top-0 z-40 bg-forest-600 text-lime-100 print:hidden">
+  <div class="relative flex h-24 items-center justify-between px-3 sm:px-6 lg:h-[81px] lg:px-12" dir="ltr">
+    <!-- Language switch: two flag segments (desktop) / flag dropdown (phones) -->
+    <div class="order-2 ms-auto me-5 lg:order-1 lg:ms-0 lg:me-0">
+      <div class="hidden h-[38px] overflow-hidden rounded-full border border-lime-100/80 lg:flex" role="group" aria-label={s.langSwitch.label}>
+        {
+          langs.map((l) =>
+            l.code === lang ? (
+              <span class="grid w-[58px] place-items-center bg-lime-100" aria-current="true">
+                <Flag code={l.code} size={17} />
+                <span class="sr-only">{l.label}</span>
+              </span>
+            ) : (
+              <a href={hrefFor(l.code)} hreflang={l.code} lang={l.code} class="grid w-[58px] place-items-center transition-colors hover:bg-white/10">
+                <Flag code={l.code} size={17} />
+                <span class="sr-only">{l.label}</span>
+              </a>
+            ),
+          )
+        }
+      </div>
+      <details class="group relative lg:hidden" data-lang-menu>
+        <summary class="flex h-11 cursor-pointer list-none items-center gap-3 rounded-full border border-lime-100 px-4 [&::-webkit-details-marker]:hidden">
+          <Flag code={lang} size={20} />
+          <Icon name="chevron" size={16} class="transition-transform group-open:rotate-180" />
+          <span class="sr-only">{s.langSwitch.label}</span>
+        </summary>
+        <a
+          href={hrefFor(other.code)}
+          hreflang={other.code}
+          lang={other.code}
+          class="absolute top-full left-0 mt-2 flex min-h-11 items-center gap-2 rounded-2xl bg-lime-100 px-4 text-forest-700 shadow-lg"
+        >
+          <Flag code={other.code} size={20} />
+          {other.label}
+        </a>
+      </details>
+    </div>
+
+    <a
+      href={homeHref}
+      class="wordmark order-1 text-[1.45rem] text-lime-100 lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:text-[2.3rem]"
+      aria-label={s.homeLabel}
+    >
+      HAPPY KETO
     </a>
 
-    <!-- Desktop navigation -->
-    <nav aria-label={s.nav} class="hidden lg:block">
-      <ul class="flex items-center gap-0.5 text-[0.95rem]">
-        {
-          links.map((item) =>
-            item.children ? (
-              <li class="group relative" data-dropdown>
-                <div class="flex items-center">
+    <button
+      type="button"
+      class="order-3 inline-flex items-center gap-2.5 lg:h-[38px] lg:w-[117px] lg:justify-center lg:rounded-full lg:bg-lime-100 lg:text-forest-600 lg:transition-colors lg:hover:bg-lime-200"
+      aria-haspopup="dialog"
+      aria-controls="site-menu"
+      data-menu-open
+    >
+      <span class="hidden lg:inline" lang="en">Menu</span>
+      <span aria-hidden="true" class="hidden size-[7px] rounded-full bg-forest-600 lg:block"></span>
+      <!-- Phones: the original's staggered three-line icon -->
+      <span aria-hidden="true" class="grid w-8 gap-[5px] p-1 lg:hidden">
+        <span class="h-[3px] w-5 rounded-full bg-lime-100"></span>
+        <span class="h-[3px] w-8 rounded-full bg-lime-100"></span>
+        <span class="ms-auto h-[3px] w-4 rounded-full bg-lime-100"></span>
+      </span>
+      <span class="sr-only">{s.menuOpen}</span>
+    </button>
+  </div>
+</header>
+
+<!-- Side menu panel (as on the original: green panel from the right, centered links, lime close button) -->
+<dialog
+  id="site-menu"
+  aria-label={s.nav}
+  class="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-full max-w-none bg-forest-600 p-0 text-lime-100 backdrop:bg-black/25 lg:w-[60%]"
+  data-menu
+>
+  <div class="flex h-[81px] items-center justify-end px-6 lg:px-[60px]" dir="ltr">
+    <button type="button" class="grid size-9 place-items-center rounded-full bg-lime-100 text-forest-900 transition-colors hover:bg-lime-200" data-menu-close>
+      <Icon name="close" size={20} />
+      <span class="sr-only">{s.menuClose}</span>
+    </button>
+  </div>
+  <nav aria-label={s.nav} class="px-6 pt-10 pb-12">
+    <ul class="mx-auto flex max-w-md flex-col items-center text-xl">
+      {
+        nav.map((item) => (
+          <li class="w-full text-center">
+            {item.children ? (
+              <>
+                <div class="relative">
                   <a
                     href={item.href}
                     {...hl(item)}
-                    class:list={['py-2 ps-3 pe-1', linkBase, active(item.href) && linkActive]}
+                    class:list={['inline-block py-1 hover:text-mustard-400', active(item.href) && 'text-mustard-400']}
                     aria-current={isCurrent(item.href) ? 'page' : undefined}
                   >
                     {item.label}
                   </a>
                   <button
                     type="button"
-                    class="rounded-full p-2 transition-colors hover:bg-white/10 hover:text-lime-100"
+                    class="group absolute top-1/2 left-0 grid size-11 -translate-y-1/2 place-items-center hover:text-mustard-400"
                     aria-expanded="false"
-                    aria-controls="nav-dropdown-recipes"
-                    aria-label={`${s.submenu} ${item.label}`}
-                    data-dropdown-toggle
+                    aria-controls="menu-sub"
+                    data-sub-toggle
                   >
-                    <Icon name="chevron" size={16} class="transition-transform group-data-[open]:rotate-180" />
+                    <Icon name="chevron" size={16} class="transition-transform group-aria-expanded:rotate-180" />
+                    <span class="sr-only">{`${s.submenu} ${item.label}`}</span>
                   </button>
                 </div>
-                <div
-                  id="nav-dropdown-recipes"
-                  class="invisible absolute start-0 top-full z-50 pt-2 opacity-0 transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100 group-data-[open]:visible group-data-[open]:opacity-100"
-                >
-                  <ul class="card grid w-max grid-cols-2 gap-x-2 bg-cream-50 p-3 text-bark-800">
-                    {item.children.map((child) => (
-                      <li>
-                        <a
-                          href={child.href}
-                          {...hl(child)}
-                          class:list={[
-                            'block rounded-xl px-3 py-2 whitespace-nowrap transition-colors hover:bg-mint-100 hover:text-forest-700',
-                            isCurrent(child.href) && 'bg-mint-100 text-forest-700',
-                          ]}
-                          aria-current={isCurrent(child.href) ? 'page' : undefined}
-                        >
-                          {child.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </li>
+                <ul id="menu-sub" class="hidden pb-2 text-lg" data-sub>
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={child.href}
+                        {...hl(child)}
+                        class:list={['inline-block py-0.5 text-lime-100/85 hover:text-mustard-400', isCurrent(child.href) && 'text-mustard-400']}
+                        aria-current={isCurrent(child.href) ? 'page' : undefined}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </>
             ) : (
-              <li>
-                <a
-                  href={item.href}
-                  {...hl(item)}
-                  class:list={['block px-3 py-2', linkBase, active(item.href) && linkActive]}
-                  aria-current={isCurrent(item.href) ? 'page' : undefined}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ),
-          )
-        }
-        {
-          cta && (
-            <li class="ms-2">
-              <a href={cta.href} class="btn-primary btn-sm" aria-current={isCurrent(cta.href) ? 'page' : undefined}>
-                {cta.label}
+              <a
+                href={item.href}
+                {...hl(item)}
+                class:list={['inline-block py-1 hover:text-mustard-400', active(item.href) && 'text-mustard-400']}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
               </a>
-            </li>
-          )
-        }
-        <li class="ms-1">
-          <a
-            href={switchHref}
-            hreflang={otherLang}
-            lang={otherLang}
-            class="inline-flex min-h-11 items-center rounded-full border border-lime-100/40 px-3 text-sm font-medium text-lime-100 transition-colors hover:bg-white/10"
-          >
-            {s.langSwitch.short}<span class="sr-only">{s.langSwitch.hidden}</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-
-    <!-- Phones/tablets: language switch + the original's lime "Menu" pill -->
-    <div class="flex items-center gap-2 lg:hidden">
-      <a
-        href={switchHref}
-        hreflang={otherLang}
-        lang={otherLang}
-        class="inline-flex min-h-11 items-center rounded-full border border-lime-100/40 px-3 text-sm font-medium text-lime-100"
-      >
-        {s.langSwitch.short}<span class="sr-only">{s.langSwitch.hidden}</span>
-      </a>
-      <button
-        type="button"
-        class="group inline-flex min-h-11 items-center gap-2 rounded-full bg-lime-100 px-4 text-sm font-medium text-forest-700 transition-colors hover:bg-lime-200"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        data-menu-toggle
-      >
-        <span data-menu-label class="sr-only">{s.menuOpen}</span>
-        <span aria-hidden="true">{s.menu}</span>
-        <span aria-hidden="true" class="size-2 rounded-full bg-forest-700 group-aria-expanded:hidden"></span>
-        <Icon name="close" size={16} class="hidden group-aria-expanded:block" />
-      </button>
-    </div>
-  </div>
-
-  <!-- Mobile menu -->
-  <nav
-    id="mobile-menu"
-    aria-label={s.nav}
-    class="hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-cream-50 text-bark-800 lg:hidden"
-    data-menu
-  >
-    <ul class="container-page flex flex-col py-3 text-lg">
-      {
-        nav.map((item) => (
-          <li class="border-b border-bark-300/40 last:border-0">
-            <a
-              href={item.href}
-              {...hl(item)}
-              class:list={['block py-3', active(item.href) ? 'font-semibold text-forest-600' : 'text-bark-800']}
-              aria-current={isCurrent(item.href) ? 'page' : undefined}
-            >
-              {item.label}
-            </a>
-            {item.children && (
-              <ul class="flex flex-wrap gap-2 pb-4">
-                {item.children.map((child) => (
-                  <li>
-                    <a
-                      href={child.href}
-                      {...hl(child)}
-                      class:list={[
-                        'inline-flex min-h-11 items-center rounded-full border px-4 text-sm transition-colors',
-                        isCurrent(child.href)
-                          ? 'border-forest-600 bg-forest-600 text-lime-100'
-                          : 'border-bark-300 bg-white text-bark-800 hover:border-forest-400',
-                      ]}
-                      aria-current={isCurrent(child.href) ? 'page' : undefined}
-                    >
-                      {child.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
             )}
           </li>
         ))
       }
     </ul>
-    <div class="container-page grid gap-3 pb-6">
-      {
-        cta && (
-          <a href={cta.href} class="btn-primary w-full">
-            {s.joinChallenge}
-            <Icon name="arrow" size={18} />
-          </a>
-        )
-      }
-      <div class="flex gap-3">
-        <a href={site.contact.phoneHref} class="btn-outline flex-1 text-base">
-          <Icon name="phone" size={18} />
-          <span dir="ltr">{site.contact.phone}</span>
-        </a>
-        <a href={site.social[0].href} class="btn-outline px-3.5" aria-label="Instagram" rel="noopener" target="_blank">
-          <Icon name="instagram" size={20} />
-        </a>
-      </div>
-    </div>
   </nav>
-</header>
+</dialog>
+
+<style>
+  dialog[open] {
+    animation: menu-in 0.25s ease-out;
+  }
+  @keyframes menu-in {
+    from {
+      transform: translateX(100%);
+    }
+  }
+  :global(html:has(dialog[open])) {
+    overflow: hidden;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    dialog[open] {
+      animation: none;
+    }
+  }
+</style>
 
 <script>
-  // Soft shadow once the page is scrolled.
-  const header = document.querySelector<HTMLElement>('[data-site-header]');
-  const onScroll = () => header?.toggleAttribute('data-scrolled', scrollY > 8);
-  addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  const toggle = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
-  const menu = document.querySelector<HTMLElement>('[data-menu]');
-  const label = toggle?.querySelector('[data-menu-label]');
-  const isHe = document.documentElement.lang === 'he';
-
-  function setMenu(open: boolean) {
-    if (!toggle || !menu) return;
-    toggle.setAttribute('aria-expanded', String(open));
-    menu.classList.toggle('hidden', !open);
-    if (label) label.textContent = open ? (isHe ? 'סגירת תפריט' : 'Close menu') : isHe ? 'פתיחת תפריט' : 'Open menu';
-  }
-
-  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
-  menu?.addEventListener('click', (e) => {
-    if ((e.target as HTMLElement).closest('a')) setMenu(false);
-  });
-  matchMedia('(min-width: 64rem)').addEventListener('change', (e) => e.matches && setMenu(false));
-
-  // Desktop dropdown: hover/focus open it via CSS; the chevron button toggles it for click/touch/keyboard users.
-  const dropdowns = document.querySelectorAll<HTMLElement>('[data-dropdown]');
-  function setDropdown(el: HTMLElement, open: boolean) {
-    el.toggleAttribute('data-open', open);
-    el.querySelector('[data-dropdown-toggle]')?.setAttribute('aria-expanded', String(open));
-  }
-  dropdowns.forEach((el) => {
-    el.querySelector('[data-dropdown-toggle]')?.addEventListener('click', () => setDropdown(el, !el.hasAttribute('data-open')));
-  });
-  document.addEventListener('click', (e) => {
-    dropdowns.forEach((el) => !el.contains(e.target as Node) && setDropdown(el, false));
-  });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key !== 'Escape') return;
-    if (toggle?.getAttribute('aria-expanded') === 'true') {
-      setMenu(false);
-      toggle.focus();
+  const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
+  const opener = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+  opener?.addEventListener('click', () => dialog?.showModal());
+  dialog?.querySelector('[data-menu-close]')?.addEventListener('click', () => dialog.close());
+  dialog?.addEventListener('click', (e) => {
+    // A click on the backdrop (outside the panel) or on a link closes the menu.
+    if (e.target === dialog) {
+      const r = dialog.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dialog.close();
     }
-    dropdowns.forEach((el) => {
-      if (el.hasAttribute('data-open') || el.contains(document.activeElement)) {
-        setDropdown(el, false);
-        el.querySelector<HTMLElement>('[data-dropdown-toggle]')?.focus();
-      }
-    });
+    if ((e.target as HTMLElement).closest('a')) dialog.close();
+  });
+  dialog?.addEventListener('close', () => opener?.focus());
+
+  const subToggle = dialog?.querySelector<HTMLButtonElement>('[data-sub-toggle]');
+  const sub = dialog?.querySelector<HTMLElement>('[data-sub]');
+  subToggle?.addEventListener('click', () => {
+    const open = subToggle.getAttribute('aria-expanded') !== 'true';
+    subToggle.setAttribute('aria-expanded', String(open));
+    sub?.classList.toggle('hidden', !open);
+  });
+
+  // Close the phone language dropdown when tapping elsewhere.
+  const langMenu = document.querySelector<HTMLDetailsElement>('[data-lang-menu]');
+  document.addEventListener('click', (e) => {
+    if (langMenu?.open && !langMenu.contains(e.target as Node)) langMenu.open = false;
   });
 </script>

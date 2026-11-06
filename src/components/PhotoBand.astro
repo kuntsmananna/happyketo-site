@@ -9,7 +9,7 @@ const lang = getLang(Astro.url);
 const c = homeFor(lang).band;
 ---
 
-<section class="relative isolate grid min-h-[20rem] place-items-center overflow-hidden sm:min-h-[26rem]" aria-label={c.title.replace('\n', ' ')}>
+<section class="relative isolate grid h-[204px] place-items-center overflow-hidden lg:h-[403px]" aria-label={c.title.replace('\n', ' ')}>
   <Image
     src={band}
     alt=""
@@ -23,7 +23,7 @@ const c = homeFor(lang).band;
   <div aria-hidden="true" class="absolute inset-0 -z-10 bg-navy-900/55"></div>
   <p
     class:list={[
-      'container-page text-center text-3xl leading-snug whitespace-pre-line text-cream-100 drop-shadow sm:text-5xl',
+      'mx-auto max-w-[304px] text-center text-[2.1rem] leading-[1.2] whitespace-pre-line text-cream-100 lg:max-w-[490px] lg:text-[2.625rem]',
       lang === 'en' ? 'font-serif italic' : 'font-display',
     ]}
   >

@@ -9,11 +9,13 @@ interface Props {
   title?: string;
   /** FAQPage structured data – emit on one page per language only (the homepages). */
   schema?: boolean;
+  /** Open the first answer (as on the original homepage). */
+  openFirst?: boolean;
 }
 
 const lang = getLang(Astro.url);
 const faq = faqFor(lang);
-const { title = homeFor(lang).faqTitle, schema = true } = Astro.props;
+const { title = homeFor(lang).faqTitle, schema = true, openFirst = false } = Astro.props;
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -27,18 +29,18 @@ const jsonLd = {
 };
 ---
 
-<section class="surface-navy section-y" aria-labelledby="faq-title">
-  <div class="container-page max-w-3xl">
-    <h2 id="faq-title" class="h-section mb-10 text-center text-cream-100">{title}</h2>
-    <div class="border-t border-navy-300/40">
+<section class:list={['surface-navy pt-12 pb-12 lg:pb-[50px]', openFirst ? 'lg:pt-0' : 'lg:pt-20']} aria-labelledby="faq-title">
+  <div class="mx-auto w-[86%] lg:w-[796px]">
+    <h2 id="faq-title" class="text-[1.85rem] leading-[1.2] text-cream-100 lg:text-center lg:text-[2.3rem]">{title}</h2>
+    <div class="mt-6 lg:mt-[60px]">
       {
-        faq.map(({ q, a }) => (
-          <details name="faq" class="group border-b border-navy-300/40">
-            <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 text-lg text-lime-100 transition-colors hover:text-mustard-300 [&::-webkit-details-marker]:hidden">
+        faq.map(({ q, a }, i) => (
+          <details name="faq" class="group border-b border-navy-300/40" open={openFirst && i === 0}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[1.5rem] leading-[1.4] text-lime-100 transition-colors hover:text-mustard-300 lg:py-[38px] lg:text-xl [&::-webkit-details-marker]:hidden">
               {q}
-              <Icon name="chevron" size={20} class="shrink-0 text-cream-100 transition-transform duration-300 group-open:rotate-180" />
+              <Icon name="chevron" size={22} class="shrink-0 text-cream-100 transition-transform duration-300 group-open:rotate-180" />
             </summary>
-            <div class="space-y-3 pb-6 text-lg leading-relaxed text-cream-100/95">
+            <div class="pb-10 text-[1.5rem] leading-[1.5] text-cream-100 lg:-mt-2 lg:pb-[50px] lg:text-xl">
               {a.map((p) => (
                 <p>{p}</p>
               ))}

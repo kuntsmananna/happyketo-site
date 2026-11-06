@@ -1,9 +1,14 @@
 ---
-/** "Stay in touch" – lime panel beside an arched photo, single email field (as on the original). */
+/**
+ * "Stay in touch" as on the original. Desktop: navy section, arched photo on the left, lime panel running to the
+ * page edge with the egg sticker on its corner, underlined email field and a square green button.
+ * Phones (original mobile layout): lime panel only, full-width button.
+ * Photo: the original used a Wix stock photo (licensed for Wix only), so this is Anna's own pancakes photo.
+ */
 import { Image } from 'astro:assets';
 import Web3Form from './Web3Form.astro';
 import { homeFor } from '@/data/home';
-import { getLang } from '@/i18n';
+import { dirOf, getLang } from '@/i18n';
 import photo from '@/assets/posts/cfc025_e74ea0b6525b430f8abb8afd91247984.jpg';
 import sticker from '@/assets/brand/sticker-happy-keto.png';
 
@@ -11,42 +16,43 @@ const lang = getLang(Astro.url);
 const c = homeFor(lang).newsletter;
 ---
 
-<section class="overflow-x-clip bg-cream-100 section-y" aria-labelledby="newsletter-title">
-  <div class="container-page grid items-center lg:grid-cols-[1fr_1.3fr]">
-    <div class="relative z-10 mx-auto w-full max-w-sm lg:-me-16">
-      <Image
-        src={photo}
-        alt=""
-        width={600}
-        height={760}
-        fit="cover"
-        widths={[320, 480, 600]}
-        sizes="(min-width: 1024px) 24rem, 80vw"
-        class="aspect-[600/760] w-full rounded-t-full object-cover shadow-[var(--shadow-card)]"
-      />
-      <Image src={sticker} alt="" width={120} class="absolute -top-6 -end-4 w-20 rotate-[8deg] drop-shadow-md" />
-    </div>
-
-    <div class="-mt-16 bg-lime-100 px-6 pt-24 pb-12 sm:px-12 lg:mt-0 lg:py-16 lg:ps-28">
-      <h2 id="newsletter-title" class="h-section">{c.title}</h2>
-      <p class="mt-3 text-lg text-forest-800">{c.text}</p>
-      <Web3Form subject={c.subject} successMessage={c.success} class="mt-8 max-w-md">
-        <div class="flex items-end gap-4">
-          <label class="flex-1">
-            <span class="sr-only">{c.email}</span>
-            <input
-              name="email"
-              type="email"
-              required
-              autocomplete="email"
-              placeholder={c.email}
-              dir="ltr"
-              class="min-h-12 w-full border-0 border-b-2 border-forest-600 bg-transparent px-1 text-lg text-forest-900 placeholder:text-forest-600/70 focus:border-forest-800 focus:ring-0 focus:outline-none user-invalid:border-red-600 rtl:text-end rtl:placeholder:text-end"
-            />
-          </label>
-          <button type="submit" class="btn-secondary">{c.cta}</button>
-        </div>
-      </Web3Form>
+<section class="bg-lime-100 lg:surface-navy lg:h-[785px]" aria-labelledby="newsletter-title">
+  <div class="relative lg:h-full" dir="ltr">
+    <Image
+      src={photo}
+      alt=""
+      width={853}
+      height={1112}
+      fit="cover"
+      widths={[531, 853]}
+      sizes="531px"
+      class="absolute top-1.5 left-[115px] hidden h-[692px] w-[531px] rounded-t-full object-cover lg:block"
+    />
+    <div class="px-[7%] pt-14 pb-9 lg:absolute lg:top-[160px] lg:right-0 lg:left-[646px] lg:h-[418px] lg:bg-lime-100 lg:px-0 lg:pt-[98px] lg:pb-0">
+      <Image src={sticker} alt="" width={200} class="absolute top-[-62px] left-[79px] hidden w-[100px] lg:block" />
+      <div class="text-forest-600 lg:ms-auto lg:me-[95px] lg:w-[473px]" dir={dirOf(lang)}>
+        <h2 id="newsletter-title" class="text-[1.8rem] leading-[1.2] lg:text-[2.3rem]">{c.title}</h2>
+        <p class="mt-3 text-[1.3rem] leading-[1.4] text-forest-800 lg:mt-3 lg:text-xl">{c.text}</p>
+        <Web3Form subject={c.subject} successMessage={c.success} class="mt-10 lg:mt-12">
+          <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-[13px]">
+            <label class="flex-1">
+              <span class="sr-only">{c.email}</span>
+              <input
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder={c.email}
+                dir="ltr"
+                class="min-h-11 w-full border-0 border-b-2 border-forest-800 bg-transparent px-0 text-lg text-forest-900 placeholder:text-forest-600 focus:border-forest-900 focus:ring-0 focus:outline-none user-invalid:border-red-600 rtl:text-end rtl:placeholder:text-end"
+              />
+            </label>
+            <button type="submit" class="min-h-[51px] w-full bg-forest-600 px-6 text-[1.1rem] text-cream-100 transition-colors hover:bg-forest-700 lg:min-h-[45px] lg:w-[109px] lg:text-base">
+              {c.cta}
+            </button>
+          </div>
+        </Web3Form>
+      </div>
     </div>
   </div>
 </section>
