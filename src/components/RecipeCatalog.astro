@@ -18,7 +18,8 @@ const { recipes, all, active } = Astro.props;
   <div id="recipe-list" class="grid gap-8 sm:grid-cols-2">
     {recipes.map((recipe, i) => <RecipeCard recipe={recipe} eager={i < 3} headingLevel={2} />)}
   </div>
-  <p data-filter-empty hidden class="py-16 text-center text-lg text-bark-600">
-    לא נמצאו מתכונים 🤔 נסו מילה אחרת או קטגוריה אחרת.
-  </p>
+  <div data-filter-empty hidden class="py-16 text-center text-lg text-bark-600">
+    <p>לא נמצאו מתכונים <span aria-hidden="true">🤔</span> נסו מילה אחרת או קטגוריה אחרת.</p>
+    <button type="button" class="btn-outline btn-sm mt-5" data-filter-reset>ניקוי החיפוש</button>
+  </div>
 </section>

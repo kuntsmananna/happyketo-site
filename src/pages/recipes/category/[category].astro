@@ -20,11 +20,9 @@ const bandWord: Record<string, string> = { paleo: 'Paleo', pastry: 'Pastry', mea
 
 <BaseLayout title={`${title} קטוגניים`} description={`${recipes.length} ${title} קטוגניים ודלי פחמימות מהמטבח של Happy Keto: פשוטים, טעימים, בלי סוכר ובלי קמח.`}>
   <PageHero
-    variant="marquee"
     marquee={bandWord[category.slug] ?? 'Recipes'}
     title={title}
     intro={`${recipes.length} מתכונים דלי פחמימות, פשוטים וטעימים.`}
-    breadcrumbs={[{ label: 'מתכונים', href: '/recipes' }, { label: category.label }]}
   />
   <RecipeCatalog recipes={recipes} all={all} active={category.slug} />
 </BaseLayout>

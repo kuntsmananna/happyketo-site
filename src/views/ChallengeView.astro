@@ -23,7 +23,7 @@ const copy = {
       { id: 'full', name: 'Going Keto - 4 שבועות', price: '250.00 ₪', value: 'Going Keto – 4 שבועות (₪250)', image: planFull, alt: 'ביצי עין עם קייל ופקאנים' },
     ],
     join: 'להצטרפות',
-    programJoin: 'הצטרף',
+    programJoin: 'להצטרפות', // the original said 'הצטרף' (masculine); the page otherwise addresses everyone
     programTitle: 'Going Keto - 4 שבועות',
     programLead: 'תוכנית למעבר לתזונה קטוגנית שמתאימה לא.נשים (מאוד) עסוקות',
     method: [
@@ -133,13 +133,13 @@ const f = copy.form;
 ---
 
 <section class="surface-navy px-[6%] pt-6 pb-12 text-center text-cream-100 lg:px-0 lg:pt-[88px] lg:pb-9">
-  <h1 class="text-[1.75rem] leading-[1.2] text-cream-100 lg:text-[2.3rem]">{copy.title}</h1>
-  <p class="mx-auto mt-3 text-[1.3rem] leading-[1.4] whitespace-pre-line lg:mt-[30px] lg:w-[714px] lg:text-xl">{copy.intro}</p>
+  <h1 data-reveal class="h-section text-cream-100">{copy.title}</h1>
+  <p data-reveal class="text-body mx-auto mt-3 whitespace-pre-line lg:mt-[30px] lg:w-[714px]">{copy.intro}</p>
 
   <div class="mx-auto mt-12 grid w-[75%] gap-12 lg:mt-[110px] lg:w-[940px] lg:grid-cols-2 lg:gap-8">
     {
       copy.plans.map((p) => (
-        <article class="flex flex-col bg-cream-100 text-bark-800">
+        <article data-reveal class="group flex flex-col overflow-hidden bg-cream-100 text-bark-800 transition-[translate,box-shadow] duration-500 ease-(--ease-out-soft) hover:-translate-y-1.5 hover:shadow-[0_24px_48px_-20px_rgb(0_0_0/0.55)]">
           <Image
             src={p.image}
             alt={p.alt}
@@ -148,12 +148,12 @@ const f = copy.form;
             fit="cover"
             widths={[480, 680, 908]}
             sizes="(min-width: 1024px) 454px, 75vw"
-            class="aspect-[454/341] w-full object-cover"
+            class="hover-zoom aspect-[454/341] w-full object-cover"
           />
           <div class="flex flex-1 flex-col items-center px-[13%] pt-8 pb-6 text-center lg:px-8">
-            <h2 class="font-sans text-[1.5rem] leading-[1.4] text-bark-800 lg:text-xl">{p.name}</h2>
+            <h2 class="h-card font-sans text-bark-800">{p.name}</h2>
             <p class="mt-7 text-[1.2rem] lg:text-base">{p.price}</p>
-            <a href="#register" data-plan={p.id} class="mt-5 inline-flex min-h-[51px] w-full items-center justify-center bg-forest-600 text-[1.2rem] text-cream-100 lg:text-base transition-colors hover:bg-mustard-400 hover:text-forest-600 lg:min-h-9">
+            <a href="#register" data-plan={p.id} class="btn-secondary btn-lg mt-5 w-full lg:[--btn-w:0]">
               {copy.join}
             </a>
           </div>
@@ -165,8 +165,8 @@ const f = copy.form;
 
 <!-- The original program page's text (plain lines, blank line between groups) -->
 <section class="bg-cream-100 px-[6%] py-14 text-bark-800 lg:px-0 lg:py-20" aria-labelledby="program-title">
-  <div class="mx-auto max-w-[648px] text-base leading-[1.4]">
-    <h2 id="program-title" class="font-sans text-[2rem] leading-[1.25] text-bark-800">{copy.programTitle}</h2>
+  <div data-reveal class="text-body mx-auto max-w-[648px]">
+    <h2 id="program-title" class="h-section">{copy.programTitle}</h2>
     <div class="mt-8 space-y-[1.4em]">
       <p>{copy.programLead}</p>
       <div>{copy.method.map((m) => <p>{m}</p>)}</div>
@@ -181,7 +181,7 @@ const f = copy.form;
       </div>
     </div>
     <p class="mt-12">{copy.plans[1].price}</p>
-    <a href="#register" data-plan="full" class="mt-6 inline-flex min-h-[43px] items-center justify-center bg-forest-600 px-10 text-lg text-cream-100 transition-colors hover:bg-mustard-400 hover:text-forest-600">
+    <a href="#register" data-plan="full" class="btn-secondary btn-lg mt-6">
       {copy.programJoin}
     </a>
   </div>
@@ -190,7 +190,7 @@ const f = copy.form;
 <!-- Registration -->
 <section id="register" class="scroll-mt-24 bg-lime-100 section-y" aria-labelledby="register-title">
   <div class="container-page grid items-start gap-10 lg:grid-cols-[1fr_1.3fr]">
-    <div class="lg:sticky lg:top-28">
+    <div data-reveal class="lg:sticky lg:top-28">
       <h2 id="register-title" class="h-section">{copy.registerTitle}</h2>
       <p class="mt-4 text-lg leading-relaxed text-forest-800">{copy.registerText}</p>
       <p class="mt-6 text-bark-700">
@@ -205,16 +205,16 @@ const f = copy.form;
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
           <label for="ch-name" class="field-label">{f.name}</label>
-          <input id="ch-name" name="name" required autocomplete="name" class="input-field w-full" />
+          <input id="ch-name" name="name" required maxlength="100" autocomplete="name" class="input-field w-full" />
         </div>
         <div>
           <label for="ch-phone" class="field-label">{f.phone}</label>
-          <input id="ch-phone" name={f.fields.phone} type="tel" required autocomplete="tel" dir="ltr" class="input-field w-full rtl:text-end" />
+          <input id="ch-phone" name={f.fields.phone} type="tel" required maxlength="30" autocomplete="tel" dir="ltr" class="input-field w-full rtl:text-end" />
         </div>
       </div>
       <div>
         <label for="ch-email" class="field-label">{f.email}</label>
-        <input id="ch-email" name="email" type="email" required autocomplete="email" dir="ltr" class="input-field w-full rtl:text-end" />
+        <input id="ch-email" name="email" type="email" required maxlength="200" autocomplete="email" dir="ltr" class="input-field w-full rtl:text-end" />
       </div>
 
       <fieldset>
@@ -242,7 +242,7 @@ const f = copy.form;
 
       <div>
         <label for="ch-notes" class="field-label">{f.notes} <span class="font-normal text-bark-500">{f.optional}</span></label>
-        <textarea id="ch-notes" name={f.fields.notes} rows="3" class="input-field w-full resize-y"></textarea>
+        <textarea id="ch-notes" name={f.fields.notes} rows="3" maxlength="2000" class="input-field w-full resize-y"></textarea>
       </div>
 
       <label class="flex items-start gap-3 text-sm leading-relaxed text-bark-700">
@@ -261,6 +261,9 @@ const f = copy.form;
     a.addEventListener('click', () => {
       const radio = document.querySelector<HTMLInputElement>(`[data-plan-radio="${a.dataset.plan}"]`);
       if (radio) radio.checked = true;
+      // After the smooth scroll, move focus to the form's first field so the next step is obvious.
+      const first = document.querySelector<HTMLInputElement>('#register input:not([type=hidden]):not([tabindex="-1"])');
+      setTimeout(() => first?.focus({ preventScroll: true }), 600);
     }),
   );
 

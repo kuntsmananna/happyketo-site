@@ -1,6 +1,7 @@
 ---
 /** FAQ on navy with thin dividers and lime questions (as on the original). Exclusive accordion via <details name>. */
 import Icon from './Icon.astro';
+import JsonLd from './JsonLd.astro';
 import { faqFor } from '@/data/faq';
 import { homeFor } from '@/data/home';
 import { getLang } from '@/i18n';
@@ -31,16 +32,16 @@ const jsonLd = {
 
 <section class:list={['surface-navy pt-12 pb-12 lg:pb-[50px]', openFirst ? 'lg:pt-0' : 'lg:pt-20']} aria-labelledby="faq-title">
   <div class="mx-auto w-[86%] lg:w-[796px]">
-    <h2 id="faq-title" class="text-[1.85rem] leading-[1.2] text-cream-100 lg:text-center lg:text-[2.3rem]">{title}</h2>
+    <h2 data-reveal id="faq-title" class="h-section text-cream-100 lg:text-center">{title}</h2>
     <div class="mt-6 lg:mt-[60px]">
       {
         faq.map(({ q, a }, i) => (
-          <details name="faq" class="group border-b border-navy-300/40" open={openFirst && i === 0}>
-            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[1.5rem] leading-[1.4] text-lime-100 transition-colors hover:text-mustard-300 lg:py-[38px] lg:text-xl [&::-webkit-details-marker]:hidden">
+          <details data-reveal data-smooth name="faq" class="group border-b border-navy-300/40" open={openFirst && i === 0}>
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-[1.3rem] leading-[1.4] text-lime-100 transition-colors hover:text-mustard-300 focus-visible:outline-mustard-400 lg:py-[38px] lg:text-xl [&::-webkit-details-marker]:hidden">
               {q}
               <Icon name="chevron" size={22} class="shrink-0 text-cream-100 transition-transform duration-300 group-open:rotate-180" />
             </summary>
-            <div class="pb-10 text-[1.5rem] leading-[1.5] text-cream-100 lg:-mt-2 lg:pb-[50px] lg:text-xl">
+            <div class="space-y-3 pb-10 text-[1.2rem] leading-[1.5] text-cream-100/90 lg:-mt-2 lg:pb-[50px] lg:text-xl">
               {a.map((p) => (
                 <p>{p}</p>
               ))}
@@ -50,5 +51,5 @@ const jsonLd = {
       }
     </div>
   </div>
-  {schema && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  {schema && <JsonLd data={jsonLd} />}
 </section>

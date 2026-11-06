@@ -2,6 +2,7 @@
 import { Image, getImage } from 'astro:assets';
 import { render } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import Prose from '@/components/Prose.astro';
 import RecipeBox from '@/components/RecipeBox.astro';
@@ -22,7 +23,8 @@ interface Props {
 }
 
 const { recipe, all } = Astro.props;
-const { title, description, image, imageAlt, category, tags } = recipe.data;
+const { title, description, image, imageAlt, category, tags, ingredients, instructions } = recipe.data;
+const hasRecipe = ingredients.length > 0 || instructions.length > 0;
 const { Content } = await render(recipe);
 const url = new URL(recipeUrl(recipe), Astro.site).href;
 
@@ -46,7 +48,15 @@ const related = all
 
   <!-- One 740px column, as on the original: title, intro, photo, the recipe, the rest of the post, tags, share, related. -->
   <article class="mx-auto w-[89%] pt-10 lg:w-[740px] lg:pt-[100px]">
-    <h1 class="text-[2rem] leading-[1.2] lg:text-[2.3rem]">{title}</h1>
+    <h1 data-reveal class="h-section">{title}</h1>
+    {
+      hasRecipe && (
+        <a href="#recipe" data-jump data-reveal class="group btn-secondary btn-sm mt-5 gap-1.5 text-base">
+          למתכון
+          <Icon name="arrowDown" size={18} class="transition-transform duration-300 group-hover:translate-y-0.5" />
+        </a>
+      )
+    }
     <Prose class="mt-5">
       <SplitContent>
         <Content />
@@ -78,7 +88,7 @@ const related = all
             <ul class="mt-3 flex flex-wrap gap-2">
               {tags.map((t) => (
                 <li>
-                  <a href={`/recipes?q=${encodeURIComponent(t)}`} class="inline-flex min-h-[31px] items-center border border-bark-300 px-3 hover:border-forest-600 hover:text-forest-700">
+                  <a href={`/recipes?q=${encodeURIComponent(t)}`} class="inline-flex min-h-11 items-center rounded-full border border-bark-300 px-4 transition-colors hover:border-forest-600 hover:bg-forest-600 hover:text-lime-100">
                     {t}
                   </a>
                 </li>

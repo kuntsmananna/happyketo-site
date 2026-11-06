@@ -26,13 +26,14 @@ const c = homeFor(lang).newsletter;
       fit="cover"
       widths={[531, 853]}
       sizes="531px"
+      data-reveal="fade"
       class="absolute top-1.5 left-[115px] hidden h-[692px] w-[531px] rounded-t-full object-cover lg:block"
     />
-    <div class="px-[7%] pt-14 pb-9 lg:absolute lg:top-[160px] lg:right-0 lg:left-[646px] lg:h-[418px] lg:bg-lime-100 lg:px-0 lg:pt-[98px] lg:pb-0">
-      <Image src={sticker} alt="" width={200} class="absolute top-[-62px] left-[79px] hidden w-[100px] lg:block" />
+    <div data-reveal data-reveal-delay="150" class="px-[7%] pt-14 pb-9 lg:absolute lg:top-[160px] lg:right-0 lg:left-[646px] lg:h-[418px] lg:bg-lime-100 lg:px-0 lg:pt-[98px] lg:pb-0">
+      <Image src={sticker} alt="" width={200} data-reveal="zoom" data-reveal-delay="600" class="absolute top-[-62px] left-[79px] hidden w-[100px] lg:block" />
       <div class="text-forest-600 lg:ms-auto lg:me-[95px] lg:w-[473px]" dir={dirOf(lang)}>
-        <h2 id="newsletter-title" class="text-[1.8rem] leading-[1.2] lg:text-[2.3rem]">{c.title}</h2>
-        <p class="mt-3 text-[1.3rem] leading-[1.4] text-forest-800 lg:mt-3 lg:text-xl">{c.text}</p>
+        <h2 id="newsletter-title" class="h-section">{c.title}</h2>
+        <p class="text-body mt-3 text-forest-800">{c.text}</p>
         <Web3Form subject={c.subject} successMessage={c.success} class="mt-10 lg:mt-12">
           <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-[13px]">
             <label class="flex-1">
@@ -47,7 +48,7 @@ const c = homeFor(lang).newsletter;
                 class="min-h-11 w-full border-0 border-b-2 border-forest-800 bg-transparent px-0 text-lg text-forest-900 placeholder:text-forest-600 focus:border-forest-900 focus:ring-0 focus:outline-none user-invalid:border-red-600 rtl:text-end rtl:placeholder:text-end"
               />
             </label>
-            <button type="submit" class="min-h-[51px] w-full border border-forest-600 bg-forest-600 px-6 text-[1.1rem] text-cream-100 transition-colors hover:bg-cream-100 hover:text-forest-600 lg:min-h-[45px] lg:w-[109px] lg:text-base">
+            <button type="submit" class="btn-secondary btn-lg w-full lg:w-auto lg:[--btn-w:8rem]">
               {c.cta}
             </button>
           </div>

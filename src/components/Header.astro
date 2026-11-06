@@ -30,10 +30,10 @@ const active = (href: string) => isCurrent(href) || isSection(href);
 const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
 ---
 
-<header class="sticky top-0 z-40 bg-forest-600 text-lime-100 print:hidden">
+<header class="sticky top-0 z-40 bg-forest-600 text-lime-100 [view-transition-name:site-header] print:hidden">
   <div class="relative flex h-24 items-center justify-between px-3 sm:px-6 lg:h-[81px] lg:px-12" dir="ltr">
     <!-- Language switch: two flag segments (desktop) / flag dropdown (phones) -->
-    <div class="order-2 ms-auto me-5 lg:order-1 lg:ms-0 lg:me-0">
+    <div class="order-2 ms-auto me-3 sm:me-5 lg:order-1 lg:ms-0 lg:me-0">
       <div class="hidden h-[38px] overflow-hidden rounded-full border border-lime-100/80 lg:flex" role="group" aria-label={s.langSwitch.label}>
         {
           langs.map((l) =>
@@ -52,7 +52,7 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
         }
       </div>
       <details class="group relative lg:hidden" data-lang-menu>
-        <summary class="flex h-11 cursor-pointer list-none items-center gap-3 rounded-full border border-lime-100 px-4 [&::-webkit-details-marker]:hidden">
+        <summary class="flex h-11 cursor-pointer list-none items-center gap-2 rounded-full border border-lime-100 px-3 transition-colors hover:bg-white/10 [&::-webkit-details-marker]:hidden">
           <Flag code={lang} size={20} />
           <Icon name="chevron" size={16} class="transition-transform group-open:rotate-180" />
           <span class="sr-only">{s.langSwitch.label}</span>
@@ -77,9 +77,24 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
       HAPPY KETO
     </a>
 
+    <!-- Recipes shortcut (an addition, Anna's choice: recipes are the main reason people visit) -->
+    <div class="order-3 flex items-center gap-4 lg:gap-7">
+    <a
+      href="/recipes"
+      hreflang={lang === 'en' ? 'he' : undefined}
+      class:list={[
+        'relative inline-flex min-h-11 items-center text-[1.05rem] transition-colors hover:text-mustard-400 lg:text-lg',
+        "after:absolute after:inset-x-0 after:bottom-2 after:h-px after:origin-center after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:after:scale-x-100",
+        isSection('/recipes') && 'after:scale-x-100',
+      ]}
+      aria-current={isCurrent('/recipes') ? 'page' : undefined}
+      lang={lang === 'en' ? 'en' : undefined}
+    >
+      {s.recipesLink}
+    </a>
     <button
       type="button"
-      class="order-3 inline-flex items-center gap-2.5 lg:h-[38px] lg:w-[117px] lg:justify-center lg:rounded-full lg:bg-lime-100 lg:text-forest-600 lg:transition-colors lg:hover:bg-mustard-400"
+      class="inline-flex items-center gap-2.5 lg:h-[38px] lg:w-[117px] lg:justify-center lg:rounded-full lg:bg-lime-100 lg:text-forest-600 lg:transition-colors lg:hover:bg-mustard-400"
       aria-haspopup="dialog"
       aria-controls="site-menu"
       data-menu-open
@@ -94,6 +109,7 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
       </span>
       <span class="sr-only">{s.menuOpen}</span>
     </button>
+    </div>
   </div>
 </header>
 
@@ -101,7 +117,7 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
 <dialog
   id="site-menu"
   aria-label={s.nav}
-  class="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-full max-w-none bg-forest-600 p-0 text-lime-100 backdrop:bg-black/25 lg:w-[60%]"
+  class="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-full max-w-none bg-forest-600 p-0 text-lime-100 lg:w-[60%]"
   data-menu
 >
   <div class="flex h-[81px] items-center justify-end px-6 lg:px-[60px]" dir="ltr">
@@ -113,8 +129,8 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
   <nav aria-label={s.nav} class="px-6 pt-10 pb-12">
     <ul class="mx-auto flex max-w-md flex-col items-center text-xl">
       {
-        nav.map((item) => (
-          <li class="w-full text-center">
+        nav.map((item, i) => (
+          <li class="w-full text-center" style={`--i:${i}`}>
             {item.children ? (
               <>
                 <div class="relative">
@@ -125,6 +141,7 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
                     aria-current={isCurrent(item.href) ? 'page' : undefined}
                   >
                     {item.label}
+                    {item.hreflang && <span class="ms-1.5 text-base opacity-70">(Hebrew)</span>}
                   </a>
                   <button
                     type="button"
@@ -160,6 +177,7 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
                 aria-current={isCurrent(item.href) ? 'page' : undefined}
               >
                 {item.label}
+                {item.hreflang && <span class="ms-1.5 text-base opacity-70">(Hebrew)</span>}
               </a>
             )}
           </li>
@@ -170,19 +188,56 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
 </dialog>
 
 <style>
-  dialog[open] {
-    animation: menu-in 0.25s ease-out;
+  /* Slide in from the right and out again; the backdrop fades. Links fade up one after another. */
+  dialog {
+    translate: 100% 0;
+    transition:
+      translate 0.45s var(--ease-out-soft),
+      overlay 0.45s allow-discrete,
+      display 0.45s allow-discrete;
   }
-  @keyframes menu-in {
+  dialog[open] {
+    translate: 0 0;
+  }
+  @starting-style {
+    dialog[open] {
+      translate: 100% 0;
+    }
+  }
+  dialog::backdrop {
+    background-color: rgb(0 0 0 / 0);
+    transition:
+      background-color 0.45s,
+      overlay 0.45s allow-discrete,
+      display 0.45s allow-discrete;
+  }
+  dialog[open]::backdrop {
+    background-color: rgb(0 0 0 / 0.3);
+  }
+  @starting-style {
+    dialog[open]::backdrop {
+      background-color: rgb(0 0 0 / 0);
+    }
+  }
+  dialog[open] nav > ul > li {
+    animation: menu-item 0.5s var(--ease-out-soft) both;
+    animation-delay: calc(0.12s + var(--i, 0) * 0.05s);
+  }
+  @keyframes menu-item {
     from {
-      transform: translateX(100%);
+      opacity: 0;
+      transform: translateY(0.75rem);
     }
   }
   :global(html:has(dialog[open])) {
     overflow: hidden;
   }
   @media (prefers-reduced-motion: reduce) {
-    dialog[open] {
+    dialog,
+    dialog::backdrop {
+      transition: none;
+    }
+    dialog[open] nav > ul > li {
       animation: none;
     }
   }
@@ -191,7 +246,10 @@ const hl = (i: NavItem) => (i.hreflang ? { hreflang: i.hreflang } : {});
 <script>
   const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
   const opener = document.querySelector<HTMLButtonElement>('[data-menu-open]');
-  opener?.addEventListener('click', () => dialog?.showModal());
+  opener?.addEventListener('click', () => {
+    document.querySelector<HTMLDetailsElement>('[data-lang-menu]')?.removeAttribute('open');
+    dialog?.showModal();
+  });
   dialog?.querySelector('[data-menu-close]')?.addEventListener('click', () => dialog.close());
   dialog?.addEventListener('click', (e) => {
     // A click on the backdrop (outside the panel) or on a link closes the menu.

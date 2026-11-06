@@ -1,5 +1,6 @@
 ---
-/** The original site's long thin arrow (its own SVG path). Points backwards: left in Hebrew, right in English. */
+/** The original site's long thin arrow (its own SVG path). Points backwards: left in Hebrew, right in English.
+ * Slides a little further that way while its link is hovered. */
 interface Props {
   width?: number;
   class?: string;
@@ -7,6 +8,6 @@ interface Props {
 const { width = 32, class: className } = Astro.props;
 ---
 
-<svg width={width} height={Math.round(width * 0.41)} viewBox="20 67 160 66" fill="currentColor" aria-hidden="true" class:list={['shrink-0 ltr:-scale-x-100', className]}>
+<svg width={width} height={Math.round(width * 0.41)} viewBox="20 67 160 66" fill="currentColor" aria-hidden="true" class:list={['shrink-0 transition-transform duration-300 ease-(--ease-out-soft) ltr:-scale-x-100 rtl:in-[a:hover]:-translate-x-1.5 ltr:in-[a:hover]:translate-x-1.5', className]}>
   <path d="M179.7 96.3H55.9c10.4-6 15.6-15.8 15.6-29.1h-7.3c0 7.2 0 28.9-43 29.1h-.9v7.3c43.2.2 43.2 22 43.2 29.1h7.3c0-13.4-5.3-23.1-15.8-29.1h124.6v-7.3z" />
 </svg>

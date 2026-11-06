@@ -76,6 +76,10 @@ const altLocale = lang === 'he' ? 'en' : 'he';
     <Font cssVariable="--font-gelasio" />
 
     <slot name="head" />
+    <!-- Scroll reveal: hide [data-reveal] elements only once we know JS runs (see global.css → Motion). -->
+    <script is:inline>
+      if ('IntersectionObserver' in window) document.documentElement.classList.add('reveal-ready');
+    </script>
   </head>
   <body class="flex min-h-dvh flex-col">
     <a
@@ -93,5 +97,33 @@ const altLocale = lang === 'he' ? 'en' : 'he';
 
     <Footer />
     {!hideBadge && <KickstartBadge />}
+
+    <script>
+      // Reveal [data-reveal] elements as they scroll into view. Elements entering together get a short stagger
+      // (90ms apart, capped), so a row of cards builds up one by one; data-reveal-delay="<ms>" overrides it.
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const show = (el: HTMLElement) => el.classList.add('is-revealed');
+      if (!('IntersectionObserver' in window)) els.forEach(show);
+      else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            const entering = entries.filter((e) => e.isIntersecting).map((e) => e.target as HTMLElement);
+            entering.forEach((el, i) => {
+              const delay = el.dataset.revealDelay ?? String(Math.min(i, 5) * 90);
+              el.style.setProperty('--reveal-delay', `${delay}ms`);
+              show(el);
+              io.unobserve(el);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0 },
+        );
+        els.forEach((el) => io.observe(el));
+        // Clear the delay after the entrance so hover transitions on revealed elements aren't delayed.
+        document.addEventListener('transitionend', (e) => {
+          const el = e.target as HTMLElement;
+          if (el.classList?.contains('is-revealed')) el.style.removeProperty('--reveal-delay');
+        });
+      }
+    </script>
   </body>
 </html>

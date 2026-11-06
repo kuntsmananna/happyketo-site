@@ -19,10 +19,11 @@ const title = lang === 'he' ? 'המזווה הקטוגני – מוצרים מו
 const columns = [0, 1, 2].map((c) => favorites.map((item, i) => ({ item, i })).filter(({ i }) => i % 3 === c));
 ---
 
-<h1 class="sr-only">{title}</h1>
 <Marquee word="Favorites" />
+<!-- Visible title (an addition, Anna's choice: the band is English and decorative). -->
+<h1 data-reveal class="h-section mx-auto w-[88%] pt-10 pb-8 text-center lg:pt-14 lg:pb-12">{title}</h1>
 
-<div class="bg-cream-100 pb-16 lg:pt-[91px] lg:pb-24" lang="en" dir="ltr">
+<div class="bg-cream-100 pb-16 lg:pb-24" lang="en" dir="ltr">
   <div class="grid gap-5 lg:grid-cols-3">
     {
       columns.map((col) => (
@@ -30,7 +31,7 @@ const columns = [0, 1, 2].map((c) => favorites.map((item, i) => ({ item, i })).f
           {col.map(({ item, i }) => {
             const img = imageFor(item.slug);
             return (
-              <li class="flex flex-col" style={`order:${i}`}>
+              <li data-reveal class="group flex flex-col" style={`order:${i}`}>
                 <div class="relative aspect-[413/349] overflow-hidden bg-white">
                   {img && (
                     <Image
@@ -38,7 +39,7 @@ const columns = [0, 1, 2].map((c) => favorites.map((item, i) => ({ item, i })).f
                       alt={item.name}
                       widths={[413, 600, 826]}
                       sizes="(min-width: 1024px) 413px, 100vw"
-                      class="absolute inset-0 size-full object-cover"
+                      class="hover-zoom absolute inset-0 size-full object-cover"
                     />
                   )}
                 </div>

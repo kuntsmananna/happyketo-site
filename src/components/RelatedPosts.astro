@@ -14,7 +14,8 @@ const { items, label } = Astro.props;
   <ul class="grid gap-8 sm:grid-cols-3 sm:gap-[33px]">
     {
       items.map((it) => (
-        <li class="group relative">
+        <li data-reveal class="group relative">
+          <div class="overflow-hidden">
           {it.image ? (
             <Image
               src={it.image}
@@ -24,12 +25,13 @@ const { items, label } = Astro.props;
               fit="cover"
               widths={[291, 582]}
               sizes="(min-width: 640px) 291px, 89vw"
-              class="aspect-[291/163] w-full object-cover"
+              class="hover-zoom aspect-[291/163] w-full object-cover"
             />
           ) : (
             <div class="aspect-[291/163] w-full bg-mint-100" />
           )}
-          <a href={it.href} class="mt-5 block px-6 font-display text-lg leading-tight text-forest-600 after:absolute after:inset-0 group-hover:underline">
+          </div>
+          <a href={it.href} class="mt-5 block px-6 font-display text-lg leading-tight text-forest-600 after:absolute after:inset-0 transition-colors group-hover:text-forest-800 group-hover:underline">
             {it.title}
           </a>
         </li>

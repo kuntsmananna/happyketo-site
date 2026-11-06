@@ -1,4 +1,5 @@
-// Post-build QA: internal links resolve, JSON-LD parses, recipe pages are complete.
+// Post-build QA: internal links resolve, JSON-LD parses, recipe pages are complete, and the Markdown content
+// (rendered as raw HTML) holds no script, event handler, javascript: URL or non-YouTube iframe.
 //   npm run build && node scripts/check-dist.mjs
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
@@ -48,6 +49,20 @@ for (const file of pages) {
   if (rel.startsWith('recipes/') && !rel.startsWith('recipes/category') && rel !== 'recipes/index.html') {
     if (html.includes('<!-- recipe -->')) problems.push(`${rel}: unreplaced recipe marker`);
     if (!/"@type":"Recipe"/.test(html)) problems.push(`${rel}: no Recipe JSON-LD`);
+  }
+}
+// Content safety: posts are rendered with raw HTML allowed, so keep anything executable out of the Markdown.
+const CONTENT = path.resolve(import.meta.dirname, '../src/content');
+for (const dir of readdirSync(CONTENT)) {
+  for (const f of readdirSync(path.join(CONTENT, dir)).filter((n) => n.endsWith('.md'))) {
+    const md = readFileSync(path.join(CONTENT, dir, f), 'utf8');
+    const rel = `src/content/${dir}/${f}`;
+    if (/<script\b|<object\b|<embed\b|<base\b|<form\b/i.test(md)) problems.push(`${rel}: disallowed HTML element`);
+    if (/<[a-z][^>]*\son[a-z]+\s*=/i.test(md)) problems.push(`${rel}: inline event handler`);
+    if (/javascript:/i.test(md)) problems.push(`${rel}: javascript: URL`);
+    for (const [, src] of md.matchAll(/<iframe[^>]*\ssrc="([^"]*)"/gi)) {
+      if (!src.startsWith('https://www.youtube-nocookie.com/')) problems.push(`${rel}: iframe from ${src}`);
+    }
   }
 }
 console.log({ pages: pages.length, internalLinks: links, jsonLd: ldTypes });

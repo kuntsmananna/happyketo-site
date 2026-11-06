@@ -2,6 +2,7 @@
 /**
  * Typography for migrated posts, as on the original blog: 20px/30px text, 37px display headings in green,
  * plain bullets and numbers, full-width images (phones: 1.2rem text, 2rem headings).
+ * List/heading rules skip the recipe box (RecipeBox styles itself).
  */
 interface Props {
   class?: string;
@@ -13,14 +14,14 @@ const { class: className } = Astro.props;
   class:list={[
     'max-w-none text-[1.2rem] leading-[1.5] text-bark-800 lg:text-xl',
     '[&_p]:my-0 [&_p+p]:mt-0 [&_p:empty]:h-[1.5em]',
-    '[&_h2]:mt-0 [&_h2]:font-display [&_h2]:text-[2rem] [&_h2]:leading-[1.2] [&_h2]:font-normal [&_h2]:text-forest-600 lg:[&_h2]:text-[2.3rem]',
-    '[&_h3]:mt-6 [&_h3]:font-display [&_h3]:text-[2rem] [&_h3]:leading-[1.2] [&_h3]:font-normal [&_h3]:text-forest-600 lg:[&_h3]:text-[2.3rem]',
-    '[&_h4]:mt-4 [&_h4]:font-display [&_h4]:text-2xl [&_h4]:font-normal [&_h4]:text-forest-600',
-    '[&_ul]:my-0 [&_ul]:list-disc [&_ul]:ps-10 [&_ol]:my-0 [&_ol]:list-decimal [&_ol]:ps-10 [&_li]:ps-1',
+    '[&_h2:not(.recipe-box_*)]:mt-0 [&_h2:not(.recipe-box_*)]:font-display [&_h2:not(.recipe-box_*)]:text-[2rem] [&_h2:not(.recipe-box_*)]:leading-[1.2] [&_h2:not(.recipe-box_*)]:font-normal [&_h2:not(.recipe-box_*)]:text-forest-600 lg:[&_h2:not(.recipe-box_*)]:text-[2.3rem]',
+    '[&_h3:not(.recipe-box_*)]:mt-6 [&_h3:not(.recipe-box_*)]:font-display [&_h3:not(.recipe-box_*)]:text-[1.5rem] [&_h3:not(.recipe-box_*)]:leading-[1.3] [&_h3:not(.recipe-box_*)]:font-normal [&_h3:not(.recipe-box_*)]:text-forest-600 lg:[&_h3:not(.recipe-box_*)]:text-[1.75rem]',
+    '[&_h4:not(.recipe-box_*)]:mt-4 [&_h4:not(.recipe-box_*)]:font-display [&_h4:not(.recipe-box_*)]:text-2xl [&_h4:not(.recipe-box_*)]:font-normal [&_h4:not(.recipe-box_*)]:text-forest-600',
+    '[&_ul:not(.recipe-box_*)]:my-0 [&_ul:not(.recipe-box_*)]:list-disc [&_ul:not(.recipe-box_*)]:ps-10 [&_ol:not(.recipe-box_*)]:my-0 [&_ol:not(.recipe-box_*)]:list-decimal [&_ol:not(.recipe-box_*)]:ps-10 [&_li:not(.recipe-box_*)]:ps-1',
     '[&_a]:text-forest-700 [&_a]:underline [&_a]:underline-offset-4 [&_strong]:font-bold',
     '[&_img]:my-8 [&_img]:h-auto [&_img]:w-full [&_video]:my-8 [&_video]:w-full',
     '[&_iframe]:my-8 [&_iframe]:aspect-video [&_iframe]:h-auto [&_iframe]:w-full',
-    '[&_section+*]:mt-[1.5em] [&_*+h2]:mt-10 [&_*+h3]:mt-10',
+    '[&_section+*]:mt-[1.5em] [&_*+h2:not(.recipe-box_*)]:mt-10 [&_*+h3:not(.recipe-box_*)]:mt-8',
     className,
   ]}
 >

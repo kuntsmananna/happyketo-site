@@ -19,7 +19,7 @@ const c = homeFor(lang).about;
 <section class="overflow-x-clip bg-lime-100 px-[5%] pt-[52px] pb-12 text-center text-forest-600 lg:px-0 lg:pt-[67px] lg:pb-[55px]" aria-labelledby="about-title">
   {
     c.heading ? (
-      <h2 id="about-title" class="mb-4 font-serif text-[1.8rem] italic lg:text-3xl">
+      <h2 data-reveal id="about-title" class="mb-4 font-serif text-[1.8rem] italic lg:text-3xl">
         {c.heading}
       </h2>
     ) : (
@@ -28,12 +28,13 @@ const c = homeFor(lang).about;
       </h2>
     )
   }
-  <div class="mx-auto max-w-[690px] font-display text-[1.6rem] leading-[1.2] lg:text-[1.5625rem]">
+  <div data-reveal class="mx-auto max-w-[690px] font-display text-[1.6rem] leading-[1.2] lg:text-[1.5625rem]">
     {c.paragraphs.map((p) => <p>{p}</p>)}
   </div>
   <a
     href={localized('/about', lang)}
-    class="mt-6 inline-flex min-h-[51px] w-[62%] items-center justify-center rounded-full bg-forest-600 px-6 text-[1.2rem] text-lime-100 transition-colors hover:bg-mustard-400 hover:text-forest-600 lg:mt-12 lg:min-h-[45px] lg:w-auto lg:min-w-[177px] lg:text-base"
+    data-reveal
+    class="btn-secondary btn-lg mt-6 w-[62%] lg:mt-12 lg:w-auto lg:[--btn-w:177px]"
   >
     {c.cta}
   </a>
@@ -48,6 +49,7 @@ const c = homeFor(lang).about;
         fit="cover"
         widths={[706, 900]}
         sizes="706px"
+        data-reveal="fade"
         class="absolute top-0 left-0 hidden h-[73.6%] w-[83.75%] object-cover lg:block"
         loading="lazy"
       />
@@ -60,15 +62,19 @@ const c = homeFor(lang).about;
         position="top"
         widths={[322, 480, 644]}
         sizes="(min-width: 1024px) 322px, 72vw"
+        data-reveal
+        data-reveal-delay="150"
         class="relative aspect-[322/443] w-full rounded-t-full object-cover lg:absolute lg:top-[26.9%] lg:left-[61.8%] lg:h-[73.1%] lg:w-[38.2%]"
       />
       <Image
         src={sticker}
         alt=""
         width={268}
+        data-reveal="zoom"
+        data-reveal-delay="450"
         class="absolute -top-[11.7%] -left-[4%] w-[41%] lg:top-[77.5%] lg:left-[53.5%] lg:w-[12.5%]"
       />
     </figure>
-    <p class="mt-2.5 text-[1.07rem] leading-[1.4] lg:mt-[30px] lg:ml-[61.8%] lg:w-[38.2%] lg:text-xl" dir="auto">{c.name}</p>
+    <p data-reveal class="mt-2.5 text-[1.07rem] leading-[1.4] lg:mt-[30px] lg:ml-[61.8%] lg:w-[38.2%] lg:text-xl" dir="auto">{c.name}</p>
   </div>
 </section>

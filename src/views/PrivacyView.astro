@@ -12,8 +12,8 @@ const lang = getLang(Astro.url);
 const mail = site.contact.email;
 ---
 
-<div class="bg-cream-100 px-[6%] pt-7 pb-16 text-[1.16rem] leading-[1.4] text-bark-800 lg:px-0 lg:pt-[105px] lg:pb-[46px] lg:text-xl">
-  <div class="mx-auto lg:w-[980px] [&_a]:underline [&_h2]:font-sans [&_h2]:text-[length:inherit] [&_h2]:leading-[inherit] [&_h2]:text-bark-800">
+<div class="bg-cream-100 px-[6%] pt-7 pb-16 text-body text-bark-800 lg:px-0 lg:pt-[105px] lg:pb-[46px]">
+  <div data-reveal="fade" class="mx-auto lg:w-[980px] [&_a]:underline [&_h2]:font-sans [&_h2]:text-[length:inherit] [&_h2]:leading-[inherit] [&_h2]:text-bark-800">
     {
       lang === 'he' ? (
         <>

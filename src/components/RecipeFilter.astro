@@ -37,7 +37,8 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
     />
   </div>
 
-  <nav aria-label="סינון לפי קטגוריה" class="-mx-4 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+  <!-- Phones: the chips scroll sideways; faded edges hint that there are more. -->
+  <nav aria-label="סינון לפי קטגוריה" class="-mx-4 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(to_left,transparent,black_1.25rem,black_calc(100%-2.5rem),transparent)] sm:mx-0 sm:px-0 sm:[mask-image:none]">
     <ul class="flex w-max gap-2 sm:w-auto sm:flex-wrap">
       {
         chips.map((c) => (
@@ -46,7 +47,7 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
               href={c.href}
               data-filter-category={c.slug}
               aria-current={c.slug === active ? 'page' : undefined}
-              class="group inline-flex min-h-11 items-center gap-1.5 rounded-full border border-forest-200 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-bark-800 transition-colors hover:border-forest-400 aria-[current]:border-forest-600 aria-[current]:bg-forest-600 aria-[current]:text-cream-50"
+              class="group inline-flex min-h-11 items-center gap-1.5 rounded-full border border-forest-200 bg-white px-4 py-2 text-sm font-medium whitespace-nowrap text-bark-800 transition-[color,background-color,border-color,scale] duration-200 active:scale-95 hover:border-forest-400 aria-[current]:border-forest-600 aria-[current]:bg-forest-600 aria-[current]:text-cream-50"
             >
               {c.label}
               <span class="text-xs text-bark-500 group-aria-[current]:text-cream-100">{c.count}</span>
@@ -121,6 +122,12 @@ const chips = [{ slug: '', label: 'הכל', href: '/recipes', count: total }].co
       }),
     );
     search.addEventListener('input', () => apply());
+    list.parentElement?.querySelector('[data-filter-reset]')?.addEventListener('click', () => {
+      search.value = '';
+      category = pageCategory;
+      apply();
+      search.focus();
+    });
     apply(false);
   });
 </script>

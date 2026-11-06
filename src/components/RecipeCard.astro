@@ -1,6 +1,6 @@
 ---
-/** Recipe tile as on the original: square photo, darkened bottom, category tag and bold title over the photo. */
-import { Image } from 'astro:assets';
+/** Recipe tile: the original's square photo tile with the first category as the chip. Keeps RecipeFilter's data-*. */
+import PhotoTile from './PhotoTile.astro';
 import { categoryLabel, recipeUrl, type Recipe } from '@/lib/recipes';
 import sticker from '@/assets/brand/sticker-happy-keto.png';
 
@@ -11,44 +11,18 @@ interface Props {
   headingLevel?: 2 | 3;
 }
 
-const { recipe, eager = false, headingLevel = 3 } = Astro.props;
+const { recipe, eager, headingLevel } = Astro.props;
 const { title, description, image, category, tags } = recipe.data;
-const Heading = `h${headingLevel}` as 'h2' | 'h3';
-const chip = category[0] ? categoryLabel(category[0]) : undefined;
-const href = recipeUrl(recipe);
 const attrs = { 'data-recipe-card': true, 'data-categories': category.join(' '), 'data-search': `${title} ${description} ${tags.join(' ')}` };
 ---
 
-<article
-  class="group relative grid aspect-square grid-cols-1 grid-rows-1 overflow-hidden bg-forest-800 [contain-intrinsic-size:auto_37rem] [content-visibility:auto]"
-  {...attrs}
->
-  {
-    image ? (
-      <Image
-        src={image}
-        alt=""
-        width={1208}
-        height={1208}
-        fit="cover"
-        widths={[360, 600, 900, 1208]}
-        sizes="(min-width: 1280px) 604px, (min-width: 640px) 46vw, 88vw"
-        class="[grid-area:1/1] size-full min-h-0 min-w-0 object-cover transition-transform duration-500 group-hover:scale-105"
-        loading={eager ? 'eager' : 'lazy'}
-      />
-    ) : (
-      <div class="grid place-items-center bg-mint-100 [grid-area:1/1]">
-        <Image src={sticker} alt="" width={160} class="w-32 opacity-80" />
-      </div>
-    )
-  }
-  <div aria-hidden="true" class="z-[1] [grid-area:1/1] bg-gradient-to-t from-black/60 via-black/20 to-black/10"></div>
-  <!-- Grid-stacked (not positioned) so the link's ::after covers the whole tile, photo included. -->
-  <div class="z-[2] flex flex-col items-start self-end px-6 pb-6 [grid-area:1/1] lg:pb-[27px]">
-    {chip && <span class="mb-3 bg-forest-600 px-3 py-1.5 text-sm leading-none text-lime-100">{chip}</span>}
-    <Heading class="font-sans text-[1.4rem] leading-tight font-bold text-cream-100 lg:text-[1.625rem]">
-      <a href={href} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">{title}</a>
-    </Heading>
-  </div>
-  <span aria-hidden="true" class="pointer-events-none absolute inset-0 z-[3] ring-mustard-400 ring-inset group-has-[a:focus-visible]:ring-4"></span>
-</article>
+<PhotoTile
+  title={title}
+  href={recipeUrl(recipe)}
+  image={image}
+  sticker={sticker}
+  chip={category[0] ? categoryLabel(category[0]) : undefined}
+  eager={eager}
+  headingLevel={headingLevel}
+  attrs={attrs}
+/>

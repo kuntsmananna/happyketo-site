@@ -1,7 +1,7 @@
 ---
 /**
  * The original site's floating "Keto Kickstart – three days free trial" badge.
- * Bottom-left on every page, as on the original.
+ * Bottom-left, as on the original; not on the challenge and thanks pages (it points there). Smaller on phones.
  */
 import { Image } from 'astro:assets';
 import ArrowLong from './ArrowLong.astro';
@@ -13,17 +13,49 @@ const lang = getLang(Astro.url);
 const s = t(lang).badge;
 ---
 
-<aside class="fixed bottom-4 left-4 z-30 print:hidden" data-kickstart aria-label={s.title}>
+<!-- Slides in after a moment; hides while scrolling down and returns on scroll up, so it never sits over what's being read. -->
+<aside
+  class="fixed bottom-3 left-3 z-30 transition-[translate,opacity] duration-500 ease-(--ease-out-soft) motion-safe:animate-badge-in data-[away]:pointer-events-none data-[away]:translate-y-[140%] data-[away]:opacity-0 sm:bottom-4 sm:left-4 print:hidden"
+  data-kickstart
+  aria-label={s.title}
+>
   <a
     href={`${localized('/challenge', lang)}#register`}
-    class="group relative block rounded-[1.25rem] rounded-tl-[2.5rem] bg-mustard-400 py-3 ps-5 pe-4 pt-5 text-forest-800 shadow-[0_10px_30px_-10px_rgb(64_45_18/0.5)] transition-transform hover:-translate-y-0.5 sm:py-4 sm:ps-6 sm:pt-6"
+    class="group relative block rounded-[1rem] rounded-tl-[2rem] bg-mustard-400 py-2.5 ps-4 pe-3 pt-4 text-forest-800 shadow-[0_10px_30px_-10px_rgb(64_45_18/0.5)] transition-[translate,box-shadow] duration-300 ease-(--ease-out-soft) hover:-translate-y-1 hover:shadow-[0_16px_36px_-12px_rgb(64_45_18/0.55)] sm:rounded-[1.25rem] sm:rounded-tl-[2.5rem] sm:py-4 sm:ps-6 sm:pe-4 sm:pt-6"
     dir={lang === 'he' ? 'rtl' : 'ltr'}
   >
-    <Image src={egg} alt="" width={72} densities={[1, 2]} class="absolute -top-9 -left-3 w-14 rotate-[-10deg] drop-shadow-md sm:-top-10 sm:w-16" />
-    <span class="block font-serif text-xl leading-tight italic sm:text-2xl" dir="ltr">{s.title}</span>
-    <span class="mt-0.5 flex items-center gap-2 text-sm">
+    <Image src={egg} alt="" width={72} densities={[1, 2]} class="absolute -top-8 -left-3 w-11 rotate-[-10deg] drop-shadow-md transition-transform duration-500 group-hover:rotate-[4deg] sm:-top-10 sm:w-16" />
+    <span class="block font-serif text-lg leading-tight italic sm:text-2xl" dir="ltr">{s.title}</span>
+    <span class="mt-0.5 flex items-center gap-2 text-[0.8125rem] sm:text-sm">
       {s.text}
       <ArrowLong width={28} />
     </span>
   </a>
 </aside>
+
+<script>
+  const badge = document.querySelector<HTMLElement>('[data-kickstart]');
+  if (badge) {
+    let lastY = scrollY;
+    let ticking = false;
+    addEventListener(
+      'scroll',
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = scrollY;
+          // Ignore small jitters; always show near the top of the page.
+          if (Math.abs(y - lastY) > 8) {
+            badge.toggleAttribute('data-away', y > lastY && y > 200);
+            lastY = y;
+          }
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+    // Keyboard users tabbing to the badge should always see it.
+    badge.addEventListener('focusin', () => badge.removeAttribute('data-away'));
+  }
+</script>

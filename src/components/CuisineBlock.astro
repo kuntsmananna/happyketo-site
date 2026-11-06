@@ -26,27 +26,28 @@ const c = homeFor(lang).cuisine;
       fit="cover"
       widths={[530, 917]}
       sizes="530px"
+      data-reveal="fade"
       class="hidden aspect-[530/809] w-[530px] object-cover lg:block"
     />
     <div class="flex flex-col">
       <div class="order-2 ps-[7.5%] pe-[3%] pt-5 lg:order-1 lg:px-0 lg:pt-0">
-        <p class="font-serif text-[1.9rem] leading-[1.2] italic lg:text-[1.875rem]">{c.eyebrow}</p>
-        <h2 id="cuisine-title" class="text-[1.75rem] leading-[1.2] lg:mt-0.5 lg:text-[2.3rem]">{c.title}</h2>
-        <div class="mt-3 text-[1.2rem] leading-[1.4] lg:text-xl">
+        <p data-reveal class="eyebrow">{c.eyebrow}</p>
+        <h2 data-reveal id="cuisine-title" class="h-section lg:mt-0.5">{c.title}</h2>
+        <div data-reveal class="text-body mt-3">
           {c.lines.map((l) => <p>{l}</p>)}
         </div>
-        <ul class="mt-6 space-y-7 text-[1.2rem] leading-[1.4] lg:mt-10 lg:text-xl">
+        <ul class="text-body mt-6 space-y-7 lg:mt-10">
           {
             c.list.map((i) => (
-              <li class="relative lg:ps-[31px]">
+              <li data-reveal class="relative lg:ps-[31px]">
                 <Star class="hidden lg:absolute lg:start-0 lg:top-[0.3em] lg:block" />
                 {i}
               </li>
             ))
           }
-          <li class="lg:ps-[31px]">{c.note}</li>
+          <li data-reveal class="lg:ps-[31px]">{c.note}</li>
         </ul>
-        <a href={localized('/contact', lang)} class="mt-6 inline-flex min-h-11 items-center gap-3 text-[1.2rem] text-forest-800 transition-colors hover:text-mustard-400 lg:ms-[31px] lg:mt-8 lg:text-base">
+        <a data-reveal href={localized('/contact', lang)} class="group mt-6 inline-flex min-h-11 items-center gap-3 text-[1.2rem] text-forest-800 transition-colors hover:text-mustard-400 lg:ms-[31px] lg:mt-8 lg:text-base">
           {c.cta}
           <ArrowLong />
         </a>
@@ -59,6 +60,7 @@ const c = homeFor(lang).cuisine;
         fit="cover"
         widths={[390, 640, 780]}
         sizes="(min-width: 1024px) 320px, 100vw"
+        data-reveal
         class="order-1 aspect-[320/369] w-full object-cover lg:order-2 lg:mt-[37px] lg:aspect-[320/404] lg:w-[320px] lg:self-end"
       />
     </div>

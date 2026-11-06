@@ -11,27 +11,28 @@ const ig = site.social[0];
 
 <footer class="surface-navy mt-auto px-3 pt-12 pb-32 text-center sm:pb-28 lg:px-0 lg:pt-12 lg:pb-9 print:hidden">
   <div
-    class="mx-auto grid max-w-[980px] gap-8 bg-cream-100 px-4 py-12 text-base leading-[1.4] text-bark-800 lg:grid-cols-3 lg:gap-0 lg:px-10 lg:pt-[47px] lg:pb-[60px]"
+    data-reveal
+    class="mx-auto grid max-w-[980px] gap-8 bg-cream-100 [&_:focus-visible]:outline-forest-700 px-4 py-12 text-base leading-[1.4] text-bark-800 lg:grid-cols-3 lg:gap-0 lg:px-10 lg:pt-[47px] lg:pb-[60px]"
     dir="ltr"
   >
     <div>
       <p class="font-serif italic">{s.call}</p>
-      <a href={site.contact.phoneHref} class="mt-1 inline-flex min-h-11 items-center hover:underline lg:mt-3">
+      <a href={site.contact.phoneHref} class="mt-1 inline-flex min-h-11 items-center underline-offset-4 transition-colors hover:text-forest-600 hover:underline lg:mt-3">
         <span dir="ltr">{site.contact.phone.replace('-', '.')}</span>&nbsp;{s.phoneSuffix}
       </a>
     </div>
     <div>
       <p class="font-serif italic">{s.email}</p>
-      <a href={`mailto:${site.contact.email}`} class="mt-1 inline-flex min-h-11 items-center hover:underline lg:mt-3">{site.contact.email}</a>
+      <a href={`mailto:${site.contact.email}`} class="mt-1 inline-flex min-h-11 items-center underline-offset-4 transition-colors hover:text-forest-600 hover:underline lg:mt-3">{site.contact.email}</a>
     </div>
     <div>
       <p class="font-serif italic">{s.follow}</p>
-      <a href={ig.href} class="mt-1 inline-flex min-h-11 items-center hover:underline lg:mt-3" target="_blank" rel="noopener">{ig.handle}</a>
+      <a href={ig.href} class="mt-1 inline-flex min-h-11 items-center underline-offset-4 transition-colors hover:text-forest-600 hover:underline lg:mt-3" target="_blank" rel="noopener">{ig.handle}</a>
     </div>
   </div>
 
   <div class="mx-auto mt-8 max-w-[280px] space-y-2 text-[1.07rem] leading-[1.4] text-cream-100 lg:mt-[34px] lg:max-w-[256px] lg:text-base">
-    <p><a href={localized('/privacy', lang)} class="underline hover:text-lime-100">{s.privacy} 🤫</a></p>
-    <p>{s.disclaimer} ❤️</p>
+    <p><a href={localized('/privacy', lang)} class="underline transition-colors hover:text-mustard-300">{s.privacy} <span aria-hidden="true">🤫</span></a></p>
+    <p>{s.disclaimer} <span aria-hidden="true">❤️</span></p>
   </div>
 </footer>

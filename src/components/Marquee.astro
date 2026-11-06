@@ -2,7 +2,8 @@
 /**
  * The original's mustard band: "Happy Keto • Happy Keto …" / "Keto Blog • Happy Blog …" (logo font + italic serif),
  * optionally with small white sparkles, as on the original (132px tall on desktop; the Pantry band is 126px).
- * Static and centered, as on the original (it runs off both edges on narrow screens). Decorative (aria-hidden).
+ * The text scrolls slowly sideways (Anna's choice; the original was static) and pauses on hover; with reduced motion it
+ * stays static and centered, as on the original. Decorative (aria-hidden).
  */
 import Star from './Star.astro';
 
@@ -17,6 +18,8 @@ interface Props {
 const { word, tone = 'mustard', sparkles: withSparkles = false } = Astro.props;
 // The original's text: "Happy Keto • Happy Keto • Happy Keto • Happy Keto" / "Keto X • Happy X • Keto X".
 const run = word === 'Keto' ? Array.from({ length: 4 }, () => ['Happy', 'Keto']) : [['Keto', word], ['Happy', word], ['Keto', word]];
+// The ticker shows the run 6 times (two identical halves of 3), each followed by a bullet.
+const ticker = Array.from({ length: 6 }, () => run).flat();
 // Sparkle positions (x %, top or bottom) measured on the original band.
 const sparkles = [
   { x: 25, top: true, s: 16 },
@@ -46,14 +49,26 @@ const sparkles = [
       />
     ))
   }
-  <p class="absolute left-1/2 -translate-x-1/2 text-[1.75rem] leading-none whitespace-nowrap lg:text-[2.3rem]">
+  <!-- Reduced motion: static and centered, as on the original. -->
+  <p class="absolute left-1/2 hidden -translate-x-1/2 text-[1.75rem] leading-none whitespace-nowrap motion-reduce:block lg:text-[2.3rem]">
     {
       run.map(([a, b], i) => (
         <>
           {i > 0 && <span class="mx-2.5">•</span>}
-          <span class="font-logo font-bold">{a}</span> <span class="font-serif italic">{b}</span>
+          <span class="font-logo font-bold">{a}</span>&nbsp;<span class="font-serif italic">{b}</span>
         </>
       ))
     }
   </p>
+  <!-- Ticker: two identical halves (each wider than any screen) moving left by one half per cycle, seamlessly. -->
+  <div class="flex w-max animate-marquee text-[1.75rem] leading-none whitespace-nowrap hover:[animation-play-state:paused] motion-reduce:hidden lg:text-[2.3rem]">
+    {
+      ticker.map(([a, b]) => (
+        <span class="flex shrink-0">
+          <span class="font-logo font-bold">{a}</span>&nbsp;<span class="font-serif italic">{b}</span>
+          <span class="mx-2.5">•</span>
+        </span>
+      ))
+    }
+  </div>
 </div>
