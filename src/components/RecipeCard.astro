@@ -20,7 +20,7 @@ const attrs = { 'data-recipe-card': true, 'data-categories': category.join(' '),
 ---
 
 <article
-  class="group relative aspect-square overflow-hidden bg-forest-800 [contain-intrinsic-size:auto_37rem] [content-visibility:auto]"
+  class="group relative grid aspect-square grid-cols-1 grid-rows-1 overflow-hidden bg-forest-800 [contain-intrinsic-size:auto_37rem] [content-visibility:auto]"
   {...attrs}
 >
   {
@@ -33,21 +33,22 @@ const attrs = { 'data-recipe-card': true, 'data-categories': category.join(' '),
         fit="cover"
         widths={[360, 600, 900, 1208]}
         sizes="(min-width: 1280px) 604px, (min-width: 640px) 46vw, 88vw"
-        class="absolute inset-0 size-full object-cover transition-transform duration-500 group-hover:scale-105"
+        class="[grid-area:1/1] size-full min-h-0 min-w-0 object-cover transition-transform duration-500 group-hover:scale-105"
         loading={eager ? 'eager' : 'lazy'}
       />
     ) : (
-      <div class="absolute inset-0 grid place-items-center bg-mint-100">
+      <div class="grid place-items-center bg-mint-100 [grid-area:1/1]">
         <Image src={sticker} alt="" width={160} class="w-32 opacity-80" />
       </div>
     )
   }
-  <div aria-hidden="true" class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/10"></div>
-  <div class="absolute inset-x-0 bottom-0 flex flex-col items-start px-6 pb-6 lg:pb-[27px]">
+  <div aria-hidden="true" class="z-[1] [grid-area:1/1] bg-gradient-to-t from-black/60 via-black/20 to-black/10"></div>
+  <!-- Grid-stacked (not positioned) so the link's ::after covers the whole tile, photo included. -->
+  <div class="z-[2] flex flex-col items-start self-end px-6 pb-6 [grid-area:1/1] lg:pb-[27px]">
     {chip && <span class="mb-3 bg-forest-600 px-3 py-1.5 text-sm leading-none text-lime-100">{chip}</span>}
     <Heading class="font-sans text-[1.4rem] leading-tight font-bold text-cream-100 lg:text-[1.625rem]">
       <a href={href} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">{title}</a>
     </Heading>
   </div>
-  <span aria-hidden="true" class="pointer-events-none absolute inset-0 ring-mustard-400 ring-inset group-has-[a:focus-visible]:ring-4"></span>
+  <span aria-hidden="true" class="pointer-events-none absolute inset-0 z-[3] ring-mustard-400 ring-inset group-has-[a:focus-visible]:ring-4"></span>
 </article>

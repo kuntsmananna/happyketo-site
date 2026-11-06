@@ -32,13 +32,13 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - Files/pages prefixed with `_` are ignored by Astro routing.
 
 ## Components
-- `BaseLayout` renders `Header`, `Footer` and the dismissible `KickstartBadge` (`hideBadge` prop turns it off, e.g. on the challenge page); pages only pass `title`/`description`.
+- `BaseLayout` renders `Header`, `Footer` and the `KickstartBadge` (shown on every page like the original; `hideBadge` prop turns it off); pages only pass `title`/`description`.
 - Layout rule: pages copy the original Wix layout (measured on desktop 1280px and the original mobile site); keep improvements for later and only deviate for a stated reason (licensing, accessibility, broken links), with a comment.
 - `PageHero` variants: `marquee` (mustard `Marquee` band only + visually hidden h1; recipes/blog/categories), `navy`, `plain`. `Marquee` is static and centered like the original (`sparkles` on About).
 - Header: centered wordmark, flag language switch, "Menu" pill opening a `<dialog>` side panel. Original shapes: `Star.astro` (✦ bullets, also via `list-star`) and `ArrowLong.astro` (long arrow).
 - Posts (`/recipes/[slug]`, `/blog/[slug]`): one 740px column; `Prose` = original post typography; `RecipeBox` renders plain bulleted/numbered lists.
-- `Web3Form` wraps every form (newsletter, contact, challenge): pass `subject`, put fields in the slot, use `type="submit"`. It has a honeypot and works without JS (redirects to `/thanks` or `/en/thanks`).
-- `RecipeCard`/`PostCard`: the original's square photo tiles (title + tag over the photo), two columns. `RecipeFilter` (an addition: vanilla JS, category chips are real links, Hebrew-aware search, state in `?category=&q=`); cards must be inside the element whose id is the filter's `target`.
+- `Web3Form` wraps every form (newsletter, challenge; the contact page is text-only like the original, Anna's choice): pass `subject`, put fields in the slot, use `type="submit"`. It has a honeypot and works without JS (redirects to `/thanks` or `/en/thanks`).
+- `RecipeCard`/`PostCard`: the original's square photo tiles (title + tag over the photo), two columns. `RecipeFilter` (an addition Anna chose to keep: vanilla JS, category chips are real links, Hebrew-aware search, state in `?category=&q=`); cards must be inside the element whose id is the filter's `target`.
 - Use `src/lib/recipes.ts` for queries (`getRecipes`, `getPosts`, `recipeUrl`, `countByCategory`) instead of calling `getCollection` directly.
 - Brand stickers (`src/assets/brand/`) are decorative: always `alt=""`.
 
