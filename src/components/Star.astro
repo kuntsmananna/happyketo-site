@@ -1,0 +1,12 @@
+---
+/** The original site's four-point star bullet (its own SVG path). */
+interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 15, class: className } = Astro.props;
+---
+
+<svg width={size} height={size} viewBox="0 0 323.295 323.296" fill="currentColor" aria-hidden="true" class:list={['shrink-0', className]}>
+  <path d="M161.647 0l57.151 104.497 104.497 57.15-104.497 57.152-57.151 104.497-57.15-104.497L0 161.647l104.497-57.15L161.647 0z" />
+</svg>

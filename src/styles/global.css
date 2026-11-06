@@ -203,9 +203,11 @@
   & > li {
     @apply relative ps-7;
   }
+  /* The original's four-point star (same path as components/Star.astro), 15px. */
   & > li::before {
-    content: "✦";
-    @apply absolute start-0 top-0 text-current opacity-80;
+    content: "";
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 323.295 323.296'%3E%3Cpath d='M161.647 0l57.151 104.497 104.497 57.15-104.497 57.152-57.151 104.497-57.15-104.497L0 161.647l104.497-57.15L161.647 0z'/%3E%3C/svg%3E") center / contain no-repeat;
+    @apply absolute start-0 top-[0.35em] size-[15px] bg-current;
   }
 }
 
@@ -214,14 +216,14 @@
   @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 py-2.5 font-medium transition-colors duration-200 select-none disabled:cursor-not-allowed disabled:opacity-60;
 }
 
-/* Mustard call-to-action (the original's main button). */
+/* Mustard call-to-action (the original's main button; turns green on hover, as on the original). */
 @utility btn-primary {
-  @apply btn bg-mustard-400 text-forest-900 hover:bg-mustard-300 active:bg-mustard-500;
+  @apply btn bg-mustard-400 text-forest-900 hover:bg-forest-600 hover:text-cream-100 active:bg-forest-700;
 }
 
-/* Green pill with lime text (the original's secondary button, e.g. "אודות Happy Keto"). */
+/* Green pill with lime text (the original's secondary button, e.g. "אודות Happy Keto"; turns mustard on hover). */
 @utility btn-secondary {
-  @apply btn bg-forest-600 text-lime-100 hover:bg-forest-700 active:bg-forest-800;
+  @apply btn bg-forest-600 text-lime-100 hover:bg-mustard-400 hover:text-forest-600 active:bg-mustard-500;
 }
 
 /* Quiet outline button for tertiary actions on light backgrounds. */

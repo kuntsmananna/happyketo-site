@@ -5,7 +5,8 @@
  * Phones (original mobile layout): night photo full width on top, then the text.
  */
 import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
+import ArrowLong from './ArrowLong.astro';
+import Star from './Star.astro';
 import { homeFor } from '@/data/home';
 import { getLang, localized } from '@/i18n';
 import day from '@/assets/home/cuisine-rooftop-day.jpg';
@@ -38,16 +39,16 @@ const c = homeFor(lang).cuisine;
           {
             c.list.map((i) => (
               <li class="relative lg:ps-[31px]">
-                <span class="hidden lg:absolute lg:start-0 lg:top-0 lg:inline" aria-hidden="true">✦</span>
+                <Star class="hidden lg:absolute lg:start-0 lg:top-[0.3em] lg:block" />
                 {i}
               </li>
             ))
           }
           <li class="lg:ps-[31px]">{c.note}</li>
         </ul>
-        <a href={`${localized('/contact', lang)}?topic=events`} class="mt-6 inline-flex min-h-11 items-center gap-3 text-[1.2rem] text-forest-800 hover:underline lg:ms-[31px] lg:mt-8 lg:text-base">
+        <a href={`${localized('/contact', lang)}?topic=events`} class="mt-6 inline-flex min-h-11 items-center gap-3 text-[1.2rem] text-forest-800 transition-colors hover:text-mustard-400 lg:ms-[31px] lg:mt-8 lg:text-base">
           {c.cta}
-          <Icon name="arrowLong" size={26} />
+          <ArrowLong />
         </a>
       </div>
       <Image

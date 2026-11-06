@@ -4,7 +4,7 @@
  * italic eyebrow, cream title and text, cream long-arrow link; Good2Know sticker at the section's lower corner.
  */
 import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
+import ArrowLong from './ArrowLong.astro';
 import { homeFor } from '@/data/home';
 import { getLang } from '@/i18n';
 import allulose from '@/assets/home/favorites-allulose.jpg';
@@ -40,10 +40,10 @@ const images = { favorites: allulose, blog: tomatoes, recipes: eggs } as const;
           <a
             href={c.href}
             hreflang={lang === 'en' && !c.href.startsWith('/en') ? 'he' : undefined}
-            class="mt-2 inline-flex min-h-11 items-center gap-3 self-start text-[1.2rem] hover:underline after:absolute after:inset-0 lg:mt-3 lg:text-base"
+            class="mt-2 inline-flex min-h-11 items-center gap-3 self-start text-[1.2rem] transition-colors group-hover:text-mustard-400 after:absolute after:inset-0 lg:mt-3 lg:text-base"
           >
             {c.cta}
-            <Icon name="arrowLong" size={26} />
+            <ArrowLong />
           </a>
         </article>
       ))

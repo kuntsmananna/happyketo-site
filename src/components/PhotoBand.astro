@@ -23,10 +23,10 @@ const c = homeFor(lang).band;
   <div aria-hidden="true" class="absolute inset-0 -z-10 bg-navy-900/55"></div>
   <p
     class:list={[
-      'mx-auto max-w-[304px] text-center text-[2.1rem] leading-[1.2] whitespace-pre-line text-cream-100 lg:max-w-[490px] lg:text-[2.625rem]',
+      'mx-auto px-4 text-center text-[1.9rem] leading-[1.2] text-cream-100 lg:text-[2.625rem]',
       lang === 'en' ? 'font-serif italic' : 'font-display',
     ]}
   >
-    {c.title}
+    {c.title.split('\n').map((line) => <span class="block lg:whitespace-nowrap">{line}</span>)}
   </p>
 </section>

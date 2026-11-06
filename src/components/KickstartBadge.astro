@@ -4,7 +4,7 @@
  * Bottom-left on every page, as on the original.
  */
 import { Image } from 'astro:assets';
-import Icon from './Icon.astro';
+import ArrowLong from './ArrowLong.astro';
 import { getLang, localized } from '@/i18n';
 import { t } from '@/i18n/ui';
 import egg from '@/assets/brand/sticker-happy-keto.png';
@@ -23,7 +23,7 @@ const s = t(lang).badge;
     <span class="block font-serif text-xl leading-tight italic sm:text-2xl" dir="ltr">{s.title}</span>
     <span class="mt-0.5 flex items-center gap-2 text-sm">
       {s.text}
-      <Icon name="arrowLong" size={22} class="transition-transform group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
+      <ArrowLong width={28} />
     </span>
   </a>
 </aside>
