@@ -88,3 +88,4 @@ The page then shows a purple `ReviewNote` (with a link to the Wix original) and 
 
 ## Reviews
 Three review subagents live in `.claude/agents/` (`code-reviewer`, `security-reviewer`, `ux-reviewer`); they are discovered when a session starts in the repo root. Treat their findings as claims and verify before acting.
+`/simplify-repo` (`.claude/skills/simplify-repo/`) is a whole-repo `/simplify`: it sweeps every source file in batches against this file's standards and commits behaviour-preserving cleanups batch by batch. Exclusions, standards greps and verify steps for this repo are in its `project.md` — keep them in step when a convention here changes.
