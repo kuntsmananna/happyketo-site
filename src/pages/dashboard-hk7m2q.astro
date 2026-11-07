@@ -1,0 +1,236 @@
+---
+/**
+ * Site dashboard for Anna (Hebrew): speed, SEO, GEO, content numbers, content health, tips, technology and a link to
+ * Vercel Analytics. Hidden page: not linked from the site, noindex, not in the sitemap; the address is in the admin
+ * panel ("📊 דשבורד") and in docs/editing-guide.md. Numbers are computed at build time (src/lib/dashboard.ts);
+ * speed comes from the weekly Lighthouse job (.github/workflows/weekly-metrics.yml).
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BarsRanked from '@/components/dashboard/BarsRanked.astro';
+import CheckList from '@/components/dashboard/CheckList.astro';
+import SpeedMultiples from '@/components/dashboard/SpeedMultiples.astro';
+import StatusBadge from '@/components/dashboard/StatusBadge.astro';
+import YearColumns from '@/components/dashboard/YearColumns.astro';
+import { getDashboard } from '@/lib/dashboard';
+
+const d = await getDashboard();
+const n = (v: number) => v.toLocaleString('he-IL');
+const date = (v: string | Date) => new Date(v).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' });
+const builtAt = new Date();
+const issues = [...d.health, ...d.seo, ...d.geo].filter((c) => c.status !== 'good').length;
+const VERCEL_ANALYTICS = 'https://vercel.com/gemsbites/happyketo-site/analytics';
+const VERCEL_SPEED = 'https://vercel.com/gemsbites/happyketo-site/speed-insights';
+
+const tiles = [
+  { label: 'מתכונים', value: d.kpis.recipes },
+  { label: 'פוסטים בבלוג', value: d.kpis.posts },
+  { label: 'מילים באתר', value: d.kpis.words },
+  { label: 'תמונות', value: d.kpis.photos },
+  { label: 'סרטונים', value: d.kpis.videos },
+  { label: 'עמודים', value: d.kpis.pages },
+  { label: 'מוצרים במזווה', value: d.kpis.favorites },
+  { label: 'שאלות ותשובות', value: d.kpis.faq },
+];
+const sec = (v: number) => `${(v / 1000).toLocaleString('he-IL', { maximumFractionDigits: 1 })} שנ׳`;
+const card = 'rounded-3xl bg-white p-5 shadow-[var(--shadow-card)] sm:p-7';
+const h2 = 'h-card text-forest-700';
+---
+
+<BaseLayout title="דשבורד האתר" noindex hideBadge>
+  <div class="mx-auto w-full max-w-6xl px-4 pt-10 pb-20 sm:px-6 lg:pt-14">
+    <header class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow text-forest-600"><span dir="ltr">Dashboard</span></p>
+        <h1 class="h-section">דשבורד האתר</h1>
+        <p class="mt-1 text-base text-bark-600">
+          עודכן {date(builtAt)}
+          {d.speed.latest && <> · מדידת מהירות אחרונה {date(d.speed.latest.date)}</>}
+        </p>
+      </div>
+      <nav class="flex flex-wrap gap-2 text-base" aria-label="קישורים מהירים">
+        <a href="https://app.pagescms.org" target="_blank" rel="noopener" class="btn-outline btn-sm">פאנל הניהול</a>
+        <a href="/review" class="btn-outline btn-sm">שינויים לבדיקה</a>
+        <a href={VERCEL_ANALYTICS} target="_blank" rel="noopener" class="btn-secondary btn-sm">גולשים ב-Vercel</a>
+      </nav>
+    </header>
+
+    <!-- Overview: one hero figure + KPI tiles -->
+    <section class="mt-8 grid gap-4 lg:grid-cols-[18rem_1fr]" aria-label="סקירה">
+      <div class:list={[card, 'flex flex-col justify-between']}>
+        <p class="text-base text-bark-700">ציון מהירות ממוצע (נייד)</p>
+        <p class="my-2 text-7xl leading-none font-semibold text-forest-700 [font-family:system-ui]">{d.speed.avgPerformance ?? '–'}</p>
+        <p class="text-sm text-bark-600">מתוך 100 · מעל 90 זה מצוין · נמדד ב-{d.speed.latest?.pages.length ?? 0} עמודים</p>
+        <p class="mt-3 text-base text-bark-800">
+          {issues ? `${issues} נקודות לשיפור בבדיקות למטה` : 'כל הבדיקות תקינות 🎉'}
+        </p>
+      </div>
+      <ul class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {
+          tiles.map((t) => (
+            <li class:list={[card, '!p-5']}>
+              <p class="text-base text-bark-700">{t.label}</p>
+              <p class="mt-1 text-3xl font-semibold text-bark-900 [font-family:system-ui]">{n(t.value)}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- Tips -->
+    {
+      d.tips.length > 0 && (
+        <section class:list={[card, 'mt-6 border-2 border-mustard-300']} aria-labelledby="tips-title">
+          <h2 id="tips-title" class={h2}>מה כדאי לעשות עכשיו</h2>
+          <ol class="mt-4 list-decimal space-y-2 ps-6 text-base text-bark-800 marker:font-bold marker:text-mustard-700">
+            {d.tips.map((t) => (
+              <li>{t.href ? <a href={t.href} class="text-forest-700 underline underline-offset-4">{t.text}</a> : t.text}</li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    <!-- Speed -->
+    <section class:list={[card, 'mt-6']} aria-labelledby="speed-title">
+      <h2 id="speed-title" class={h2}>מהירות האתר</h2>
+      <p class="mt-1 text-base text-bark-700">
+        ציון 0–100 של Lighthouse (המנוע של Google PageSpeed), בטלפון עם רשת סלולרית מדומה. נמדד אוטומטית כל יום שני; הגרפים
+        מתמלאים מדי שבוע.
+      </p>
+      <div class="mt-5"><SpeedMultiples series={d.speed.history} /></div>
+
+      {
+        d.speed.vitals.length > 0 && (
+          <div class="mt-7">
+            <h3 class="font-bold text-bark-900">Core Web Vitals – מה שגוגל בודק</h3>
+            <p class="mt-1 text-base text-bark-700">
+              <b>LCP</b> – תוך כמה זמן מופיע התוכן הראשי (טוב: עד 2.5 שנ׳). <b>CLS</b> – כמה העמוד "קופץ" בזמן טעינה (טוב: עד 0.1).
+              <b>TBT</b> – כמה זמן הדפדפן "תקוע" ולא מגיב (טוב: עד 200 מ״ש).
+            </p>
+            <div class="mt-3 overflow-x-auto" tabindex="0" role="region" aria-label="טבלת Core Web Vitals">
+              <table class="w-full min-w-[36rem] text-base">
+                <thead>
+                  <tr class="border-b border-cream-200 text-bark-500">
+                    <th class="py-2 text-start font-normal">עמוד</th>
+                    <th class="py-2 text-start font-normal">LCP</th>
+                    <th class="py-2 text-start font-normal">CLS</th>
+                    <th class="py-2 text-start font-normal">TBT</th>
+                    <th class="py-2 text-start font-normal">משקל העמוד</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.speed.vitals.map((v, i) => (
+                    <tr class="border-b border-cream-100">
+                      <td class="py-2 font-bold text-bark-900">{v.label}</td>
+                      <td class="py-2"><span class="inline-flex items-center gap-2"><span class="tabular-nums" dir="ltr">{sec(v.lcp.value)}</span><StatusBadge status={v.lcp.status} /></span></td>
+                      <td class="py-2"><span class="inline-flex items-center gap-2"><span class="tabular-nums">{v.cls.value}</span><StatusBadge status={v.cls.status} /></span></td>
+                      <td class="py-2"><span class="inline-flex items-center gap-2"><span class="tabular-nums">{n(v.tbt.value)} מ״ש</span><StatusBadge status={v.tbt.status} /></span></td>
+                      <td class="py-2 tabular-nums">{n(d.speed.latest!.pages[i].weightKb)} KB</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p class="mt-3 text-sm text-bark-600">
+              נבדק: {d.speed.latest?.url} · {d.speed.latest?.tool} · {d.speed.runs} מדידות עד היום. אחרי שיהיו גולשים אמיתיים, Vercel מציג גם מהירות
+              כפי שהגולשים חווים אותה: <a href={VERCEL_SPEED} target="_blank" rel="noopener" class="underline">Speed Insights</a>.
+            </p>
+          </div>
+        )
+      }
+    </section>
+
+    <!-- SEO + GEO -->
+    <div class="mt-6 grid gap-6 lg:grid-cols-2">
+      <section class={card} aria-labelledby="seo-title">
+        <h2 id="seo-title" class={h2}>SEO – גוגל</h2>
+        <p class="mb-4 mt-1 text-base text-bark-700">איך האתר בנוי להופיע בתוצאות החיפוש.</p>
+        <CheckList checks={d.seo} />
+      </section>
+      <section class={card} aria-labelledby="geo-title">
+        <h2 id="geo-title" class={h2}>GEO – חיפוש עם AI</h2>
+        <p class="mb-4 mt-1 text-base text-bark-700">כמה קל ל-ChatGPT, Claude, Perplexity ותשובות ה-AI של גוגל להבין את האתר ולצטט אותו.</p>
+        <CheckList checks={d.geo} />
+      </section>
+    </div>
+
+    <!-- Content -->
+    <div class="mt-6 grid gap-6 lg:grid-cols-2">
+      <section class={card} aria-labelledby="cat-title">
+        <h2 id="cat-title" class={h2}>מתכונים לפי קטגוריה</h2>
+        <p class="mb-4 mt-1 text-base text-bark-700">מתכון יכול להיות ביותר מקטגוריה אחת.</p>
+        <BarsRanked items={d.byCategory} unit="מתכונים" caption="מספר המתכונים בכל קטגוריה" />
+      </section>
+      <section class={card} aria-labelledby="year-title">
+        <h2 id="year-title" class={h2}>פרסומים לפי שנה</h2>
+        <p class="mb-4 mt-1 text-base text-bark-700">כמה מתכונים ופוסטים פורסמו בכל שנה.</p>
+        <YearColumns data={d.byYear} />
+        <p class="mt-4 text-base text-bark-700">
+          ממוצע {n(d.kpis.avgRecipeWords)} מילים למתכון · {n(d.kpis.photosInContent)} תמונות בתוך המתכונים והפוסטים · עדכון אחרון {date(d.lastUpdate)}
+        </p>
+      </section>
+    </div>
+
+    <!-- Content health -->
+    <section class:list={[card, 'mt-6']} aria-labelledby="health-title">
+      <h2 id="health-title" class={h2}>בריאות התוכן</h2>
+      <p class="mb-4 mt-1 text-base text-bark-700">מה חסר במתכונים ובפוסטים – כל פריט פותח את העמוד שלו.</p>
+      <CheckList checks={d.health} />
+    </section>
+
+    <!-- Visitors + technology -->
+    <div class="mt-6 grid gap-6 lg:grid-cols-[1fr_1.4fr]">
+      <section class={card} aria-labelledby="visitors-title">
+        <h2 id="visitors-title" class={h2}>גולשים</h2>
+        <p class="mt-2 text-base text-bark-800">
+          מספר הגולשים, העמודים הנצפים, המדינות והמכשירים מוצגים ב-Vercel Analytics – בלי עוגיות ובלי באנר הסכמה.
+        </p>
+        <ul class="mt-3 list-disc space-y-1 ps-5 text-base text-bark-700">
+          <li>הנתונים מתחילים להצטבר אחרי העברת הדומיין (היום האתר החדש עוד לא מקבל גולשים).</li>
+          <li>אם מופיע כפתור Enable – ללחוץ עליו פעם אחת.</li>
+          <li>אפשר לבחור תקופה (7/30 ימים) ולייצא לקובץ CSV.</li>
+        </ul>
+        <a href={VERCEL_ANALYTICS} target="_blank" rel="noopener" class="btn-secondary btn-sm mt-5">לנתוני הגולשים ב-Vercel</a>
+      </section>
+      <section class={card} aria-labelledby="tech-title">
+        <h2 id="tech-title" class={h2}>הטכנולוגיה מאחורי האתר</h2>
+        <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+          {
+            d.tech.map((t) => (
+              <li class="rounded-2xl bg-cream-50 px-4 py-3">
+                <p class="font-bold text-bark-900" dir="auto">
+                  {t.name} {t.version && <span class="text-sm font-normal text-bark-500" dir="ltr">{t.version}</span>}
+                </p>
+                <p class="mt-0.5 text-base text-bark-700">{t.role}</p>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <!-- One shared tooltip for every chart mark with data-tip (hover and keyboard focus); text set with textContent. -->
+  <div id="dash-tip" role="tooltip" class="pointer-events-none fixed z-50 hidden rounded-lg bg-bark-900 px-3 py-1.5 text-sm font-bold text-white shadow-lg"></div>
+</BaseLayout>
+
+<script>
+  const tip = document.getElementById('dash-tip')!;
+  const show = (el: HTMLElement, x: number, y: number) => {
+    tip.textContent = el.dataset.tip ?? '';
+    tip.classList.remove('hidden');
+    const r = tip.getBoundingClientRect();
+    tip.style.left = `${Math.min(Math.max(8, x - r.width / 2), innerWidth - r.width - 8)}px`;
+    tip.style.top = `${Math.max(8, y - r.height - 12)}px`;
+  };
+  const hide = () => tip.classList.add('hidden');
+  document.querySelectorAll<HTMLElement>('[data-tip]').forEach((el) => {
+    el.addEventListener('pointermove', (e) => show(el, e.clientX, e.clientY));
+    el.addEventListener('pointerleave', hide);
+    el.addEventListener('focus', () => {
+      const r = el.getBoundingClientRect();
+      show(el, r.left + r.width / 2, r.top);
+    });
+    el.addEventListener('blur', hide);
+  });
+</script>

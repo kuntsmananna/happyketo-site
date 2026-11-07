@@ -27,6 +27,17 @@ media:
     rename: safe
 
 content:
+  # ---------------------------------------------------------------- dashboard link (Pages CMS has no custom pages)
+  - name: dashboard
+    label: 📊 דשבורד האתר
+    description: "מהירות, SEO, GEO, נתוני תוכן וטיפים. להעתיק את הכתובת לדפדפן ולשמור כסימנייה."
+    type: file
+    path: docs/dashboard-link.json
+    format: json
+    fields:
+      - { name: url, label: כתובת הדשבורד (להעתיק לדפדפן), type: string, readonly: true }
+      - { name: urlAfterDomainSwitch, label: הכתובת אחרי העברת הדומיין, type: string, readonly: true }
+
   # ---------------------------------------------------------------- recipes
   - name: recipes
     label: מתכונים

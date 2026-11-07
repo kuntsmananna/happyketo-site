@@ -1,0 +1,37 @@
+---
+/** A list of checks: status badge, label, detail, and (when something can be improved) the affected items as links. */
+import StatusBadge from './StatusBadge.astro';
+import type { Check } from '@/lib/dashboard';
+interface Props {
+  checks: Check[];
+}
+const { checks } = Astro.props;
+---
+
+<ul class="divide-y divide-cream-200">
+  {
+    checks.map((c) => (
+      <li class="flex flex-col gap-1.5 py-3.5 first:pt-0 last:pb-0">
+        <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <StatusBadge status={c.status} />
+          <span class="font-bold text-bark-900">{c.label}</span>
+        </div>
+        <p class="text-base text-bark-700">{c.detail}</p>
+        {c.items && c.items.length > 0 && (
+          <details class="group text-base">
+            <summary class="inline-flex min-h-9 cursor-pointer list-none items-center gap-1 text-forest-700 underline underline-offset-4 [&::-webkit-details-marker]:hidden">
+              {`הצגת ${c.items.length} הפריטים`}
+            </summary>
+            <ul class="mt-1 columns-1 gap-6 ps-4 sm:columns-2">
+              {c.items.map((i) => (
+                <li class="break-inside-avoid py-0.5">
+                  <a href={i.href} class="text-forest-700 hover:underline">{i.title}</a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+      </li>
+    ))
+  }
+</ul>

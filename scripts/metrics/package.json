@@ -1,0 +1,10 @@
+{
+  "name": "happyketo-metrics",
+  "private": true,
+  "type": "module",
+  "description": "Weekly Lighthouse measurement for the dashboard (installed only by .github/workflows/weekly-metrics.yml, not by the site build).",
+  "dependencies": {
+    "chrome-launcher": "1.2.3",
+    "lighthouse": "12.8.2"
+  }
+}

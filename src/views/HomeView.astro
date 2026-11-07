@@ -9,8 +9,14 @@ import CuisineBlock from '@/components/CuisineBlock.astro';
 import ServiceTrio from '@/components/ServiceTrio.astro';
 import NewsletterForm from '@/components/NewsletterForm.astro';
 import FaqAccordion from '@/components/FaqAccordion.astro';
+import JsonLd from '@/components/JsonLd.astro';
+import { getLang } from '@/i18n';
+import { siteJsonLd } from '@/lib/schema';
+
+const lang = getLang(Astro.url);
 ---
 
+<JsonLd data={siteJsonLd(lang)} />
 <Hero />
 <ChallengeBlock />
 <LatestRecipes />

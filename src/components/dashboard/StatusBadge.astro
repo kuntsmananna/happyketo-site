@@ -1,0 +1,17 @@
+---
+/** Status icon + word (never colour alone): good / needs work / serious. */
+import type { Status } from '@/lib/dashboard';
+interface Props {
+  status: Status;
+}
+const { status } = Astro.props;
+const s = {
+  good: { icon: '✓', label: 'תקין', cls: 'bg-forest-50 text-forest-700 ring-forest-300' },
+  warning: { icon: '!', label: 'לשיפור', cls: 'bg-mustard-50 text-mustard-800 ring-mustard-300' },
+  serious: { icon: '✕', label: 'דחוף', cls: 'bg-red-50 text-red-800 ring-red-300' },
+}[status];
+---
+
+<span class:list={['inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-0.5 text-sm font-bold ring-1', s.cls]}>
+  <span aria-hidden="true">{s.icon}</span>{s.label}
+</span>

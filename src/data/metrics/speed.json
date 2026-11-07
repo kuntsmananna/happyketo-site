@@ -1,0 +1,64 @@
+{
+  "runs": [
+    {
+      "date": "2026-11-07",
+      "url": "https://happyketo-site.vercel.app",
+      "tool": "Lighthouse 12.8.2",
+      "strategy": "mobile",
+      "pages": [
+        {
+          "path": "/",
+          "label": "עמוד הבית",
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 1995,
+          "fcp": 1545,
+          "tbt": 0,
+          "cls": 0,
+          "weightKb": 594
+        },
+        {
+          "path": "/recipes",
+          "label": "מתכונים",
+          "performance": 98,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 2293,
+          "fcp": 1191,
+          "tbt": 1,
+          "cls": 0.003,
+          "weightKb": 434
+        },
+        {
+          "path": "/recipes/חטיף-טוויקס-קטוגני",
+          "label": "עמוד מתכון",
+          "performance": 99,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 1997,
+          "fcp": 1397,
+          "tbt": 0,
+          "cls": 0.001,
+          "weightKb": 266
+        },
+        {
+          "path": "/challenge",
+          "label": "אתגר קיטו",
+          "performance": 100,
+          "accessibility": 100,
+          "bestPractices": 100,
+          "seo": 100,
+          "lcp": 1394,
+          "fcp": 974,
+          "tbt": 35,
+          "cls": 0.001,
+          "weightKb": 267
+        }
+      ]
+    }
+  ]
+}

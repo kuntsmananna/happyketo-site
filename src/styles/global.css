@@ -84,6 +84,13 @@
   --color-coral-600: #bf5a42; /* orig */
   --color-coral-800: #803c2c; /* orig */
 
+  /* Dashboard charts: categorical slots validated (dataviz validate_palette, light, on white) – use in this order. */
+  --color-chart-1: #2f8a5b;
+  --color-chart-2: #e3961a;
+  --color-chart-3: #3d65ba;
+  --color-chart-4: #e8603f;
+  --color-chart-grid: #e6e2d2;
+
   /* Review marks: content Claude changed that Anna hasn't approved yet (temporary, before launch). */
   --color-review-50: #f5f0ff;
   --color-review-200: #d9c6ff;

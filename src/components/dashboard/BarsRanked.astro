@@ -1,0 +1,37 @@
+---
+/**
+ * Ranked horizontal bars, one hue (magnitude). Bars grow from the reading-side baseline, ≤ 20px thick, 4px rounded
+ * data end, value at the tip; each row is a hover/focus target with a tooltip (data-tip). Table view below.
+ */
+interface Props {
+  items: { label: string; value: number }[];
+  unit: string;
+  caption: string;
+}
+const { items, unit, caption } = Astro.props;
+const max = Math.max(...items.map((i) => i.value), 1);
+---
+
+<figure>
+  <ul class="space-y-2" aria-label={caption}>
+    {
+      items.map((i) => (
+        <li class="grid grid-cols-[7.5rem_1fr] items-center gap-3 rounded-md hover:bg-cream-50 focus-visible:bg-cream-50" tabindex="0" data-tip={`${i.label}: ${i.value} ${unit}`}>
+          <span class="truncate text-base text-bark-800">{i.label}</span>
+          <span class="flex items-center gap-2">
+            <span class="block h-5 rounded-e-[4px] bg-chart-1" style={`width:${(i.value / max) * 85}%`} />
+            <span class="text-sm font-bold text-bark-800 tabular-nums">{i.value}</span>
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+  <details class="mt-3 text-sm">
+    <summary class="inline-flex min-h-9 cursor-pointer items-center text-forest-700 underline underline-offset-4">הצגה כטבלה</summary>
+    <table class="mt-2 w-full text-start">
+      <caption class="sr-only">{caption}</caption>
+      <thead><tr class="border-b border-cream-200 text-bark-500"><th class="py-1 text-start font-normal">קטגוריה</th><th class="py-1 text-start font-normal">{unit}</th></tr></thead>
+      <tbody>{items.map((i) => <tr class="border-b border-cream-100"><td class="py-1">{i.label}</td><td class="py-1 tabular-nums">{i.value}</td></tr>)}</tbody>
+    </table>
+  </details>
+</figure>

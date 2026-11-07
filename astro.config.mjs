@@ -49,7 +49,7 @@ export default defineConfig({
     webAnalytics: { enabled: true },
   }),
 
-  integrations: [sitemap({ filter: (page) => !/\/(thanks|404|review)\/?$/.test(page) })],
+  integrations: [sitemap({ filter: (page) => !/\/(thanks|404|review|dashboard-[\w-]+)\/?$/.test(page) })],
 
   // Free look-alikes of the original Wix brand fonts, self-hosted from npm (no network at build time).
   // Each family gets Hebrew + Latin faces split by unicode-range (a face downloads only when used),
