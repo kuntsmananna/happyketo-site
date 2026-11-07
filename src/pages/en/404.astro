@@ -1,0 +1,9 @@
+---
+// Served for missing /en/* addresses (routing rule in scripts/vercel-postbuild.mjs).
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import NotFoundView from '@/views/NotFoundView.astro';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <NotFoundView />
+</BaseLayout>

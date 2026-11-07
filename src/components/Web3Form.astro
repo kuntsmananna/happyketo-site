@@ -28,6 +28,7 @@ const { subject, successMessage = s.success, class: className, ...rest } = Astro
   data-success={successMessage}
   data-sending={s.sending}
   data-error={s.error}
+  data-invalid={JSON.stringify(s.invalid)}
   {...rest}
 >
   <input type="hidden" name="access_key" value={forms.accessKey} />
@@ -48,6 +49,56 @@ const { subject, successMessage = s.success, class: className, ...rest } = Astro
 
   document.querySelectorAll<HTMLFormElement>('form[data-web3form]').forEach((form) => {
     const status = form.querySelector<HTMLElement>('[data-form-status]')!;
+
+    // Inline field errors: with JS the form takes over validation (noValidate) and shows a message under each
+    // invalid field, linked with aria-describedby; without JS the browser's own validation still applies.
+    const msgs = JSON.parse(form.dataset.invalid || '{}') as Record<string, string>;
+    form.noValidate = true;
+    const fields = () => [...form.querySelectorAll<HTMLInputElement>('input:not([type=hidden]):not([name=botcheck]), select, textarea')];
+    const messageFor = (f: HTMLInputElement) => {
+      const v = f.validity;
+      if (f.type === 'radio') return msgs.choice;
+      if (f.type === 'checkbox') return msgs.consent;
+      if (v.valueMissing) return msgs.required;
+      if (f.type === 'email') return msgs.email;
+      if (f.type === 'tel') return msgs.phone;
+      return f.validationMessage;
+    };
+    const anchorOf = (f: HTMLInputElement) => (f.type === 'radio' ? f.closest('fieldset') : f.type === 'checkbox' ? f.closest('label') : f) as HTMLElement;
+    const showError = (f: HTMLInputElement, on: boolean) => {
+      const group = f.type === 'radio' ? [...form.querySelectorAll<HTMLInputElement>(`input[type=radio][name="${CSS.escape(f.name)}"]`)] : [f];
+      const id = `${(f.id || f.name).replace(/\W+/g, '-')}-error`;
+      let el = form.querySelector<HTMLElement>(`[data-error-for="${CSS.escape(id)}"]`);
+      if (!on) {
+        el?.remove();
+        group.forEach((g) => { g.removeAttribute('aria-invalid'); g.removeAttribute('aria-describedby'); });
+        return;
+      }
+      if (!el) {
+        el = document.createElement('p');
+        el.id = id;
+        el.dataset.errorFor = id;
+        el.className = 'mt-1.5 text-sm font-medium text-red-700';
+        anchorOf(f).insertAdjacentElement('afterend', el);
+      }
+      el.textContent = messageFor(f);
+      group.forEach((g) => { g.setAttribute('aria-invalid', 'true'); g.setAttribute('aria-describedby', id); });
+    };
+    let tried = false;
+    const validate = (focusFirst = false) => {
+      tried = true;
+      let first: HTMLInputElement | undefined;
+      for (const f of fields()) {
+        const ok = f.checkValidity();
+        showError(f, !ok);
+        if (!ok && !first) first = f;
+      }
+      if (first && focusFirst) first.focus();
+      return !first;
+    };
+    // After the first attempt, errors update as the person fixes each field.
+    form.addEventListener('input', (e) => { if (tried) { const f = e.target as HTMLInputElement; showError(f, !f.checkValidity()); } });
+    form.addEventListener('change', (e) => { if (tried) { const f = e.target as HTMLInputElement; showError(f, !f.checkValidity()); } });
     const show = (kind: keyof typeof STATUS, text: string) => {
       status.className = `mt-4 rounded-xl px-4 py-3 text-base font-medium ${STATUS[kind]}`;
       status.textContent = text;
@@ -57,7 +108,7 @@ const { subject, successMessage = s.success, class: className, ...rest } = Astro
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      if (!form.reportValidity()) return;
+      if (!validate(true)) return;
       const button = form.querySelector<HTMLButtonElement>('[type="submit"]');
       const label = button?.innerHTML;
       if (button) {

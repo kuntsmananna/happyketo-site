@@ -1,42 +1,8 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Icon from '@/components/Icon.astro';
-import { recipeCategories } from '@/data/categories';
-import sticker from '@/assets/brand/sticker-happy-keto.png';
+import NotFoundView from '@/views/NotFoundView.astro';
 ---
 
 <BaseLayout title="העמוד לא נמצא · Page not found" noindex>
-  <section class="container-page py-16 text-center sm:py-24">
-    <Image src={sticker} alt="" width={180} class="mx-auto w-32 rotate-[-8deg] drop-shadow-lg sm:w-40" loading="eager" />
-    <p class="eyebrow mt-8"><span dir="ltr">404</span></p>
-    <h1 class="h-display mt-2">אופס, העמוד הזה לא נמצא</h1>
-    <p class="mx-auto mt-4 max-w-md text-lg text-bark-700">
-      אולי הוא עבר דירה כשהאתר התחדש. אבל יש פה הרבה דברים טעימים אחרים:
-    </p>
-    <div class="mt-8 flex flex-wrap justify-center gap-3">
-      <a href="/recipes" class="btn-primary">
-        לכל המתכונים
-        <Icon name="arrow" size={18} />
-      </a>
-      <a href="/" class="btn-secondary">לעמוד הבית</a>
-    </div>
-    <p class="mt-8 text-bark-600" lang="en" dir="ltr">
-      Looking for the English site? <a href="/en" class="font-medium text-forest-600 underline">Go to the English home page</a>
-    </p>
-    <ul class="mx-auto mt-10 flex max-w-2xl flex-wrap justify-center gap-2">
-      {
-        recipeCategories.map((c) => (
-          <li>
-            <a
-              href={`/recipes/category/${c.slug}`}
-              class="inline-flex min-h-11 items-center rounded-full border border-bark-300 bg-white px-4 text-sm text-bark-800 transition-colors hover:border-forest-600"
-            >
-              {c.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+  <NotFoundView />
 </BaseLayout>

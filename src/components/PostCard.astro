@@ -7,11 +7,12 @@ import sticker from '@/assets/brand/sticker-good-to-know.png';
 interface Props {
   post: Post;
   eager?: boolean;
+  priority?: boolean;
   headingLevel?: 2 | 3;
 }
 
-const { post, eager, headingLevel } = Astro.props;
+const { post, eager, priority, headingLevel } = Astro.props;
 const { title, image, tags } = post.data;
 ---
 
-<PhotoTile title={title} href={postUrl(post)} image={image} sticker={sticker} chip={tags[0] ?? 'בלוג דל פחמימות'} eager={eager} headingLevel={headingLevel} />
+<PhotoTile title={title} href={postUrl(post)} image={image} sticker={sticker} chip={tags[0] ?? 'בלוג דל פחמימות'} eager={eager} priority={priority} headingLevel={headingLevel} />

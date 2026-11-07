@@ -29,6 +29,8 @@ export const ui = {
       success: 'תודה! הפרטים התקבלו ואחזור אליכם בהקדם ❤️',
       error: 'אופס, משהו השתבש. אפשר לנסות שוב או לכתוב לי ישירות במייל או בוואטסאפ.',
       fromName: 'Happy Keto – אתר',
+      // Inline field errors (shown under the field after a submit attempt)
+      invalid: { required: 'זה שדה חובה', email: 'כתובת האימייל לא נראית תקינה (למשל name@gmail.com)', phone: 'מספר הטלפון לא נראה תקין', choice: 'יש לבחור אחת מהאפשרויות', consent: 'יש לאשר כדי להמשיך' },
     },
   },
   en: {
@@ -58,6 +60,7 @@ export const ui = {
       success: 'Thank you! Your details were received and I’ll get back to you soon ❤️',
       error: 'Oops, something went wrong. Please try again, or email / WhatsApp me directly.',
       fromName: 'Happy Keto – website',
+      invalid: { required: 'This field is required', email: 'That email address doesn’t look right (e.g. name@gmail.com)', phone: 'That phone number doesn’t look right', choice: 'Please choose one of the options', consent: 'Please confirm to continue' },
     },
   },
 } as const;

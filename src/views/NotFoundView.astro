@@ -1,0 +1,67 @@
+---
+/** "Page not found" in both languages (Hebrew at /404.html, English at /en/404 for missing /en/* addresses). */
+import { Image } from 'astro:assets';
+import Icon from '@/components/Icon.astro';
+import { recipeCategories } from '@/data/categories';
+import { getLang } from '@/i18n';
+import sticker from '@/assets/brand/sticker-happy-keto.png';
+
+const lang = getLang(Astro.url);
+const c = {
+  he: {
+    title: 'אופס, העמוד הזה לא נמצא',
+    text: 'אולי הוא עבר דירה כשהאתר התחדש. אבל יש פה הרבה דברים טעימים אחרים:',
+    primary: { label: 'לכל המתכונים', href: '/recipes' },
+    secondary: { label: 'לעמוד הבית', href: '/' },
+  },
+  en: {
+    title: 'Oops, this page wasn’t found',
+    text: 'It may have moved when the site was renewed. There’s plenty of good stuff here, though:',
+    primary: { label: 'Keto challenge', href: '/en/challenge' },
+    secondary: { label: 'Home page', href: '/en' },
+  },
+}[lang];
+---
+
+<section class="container-page py-16 text-center sm:py-24">
+  <Image src={sticker} alt="" width={180} class="mx-auto w-32 rotate-[-8deg] drop-shadow-lg sm:w-40" loading="eager" />
+  <p class="eyebrow mt-8"><span dir="ltr">404</span></p>
+  <h1 class="h-display mt-2">{c.title}</h1>
+  <p class="text-body mx-auto mt-4 max-w-md text-bark-700">{c.text}</p>
+  <div class="mt-8 flex flex-wrap justify-center gap-3">
+    <a href={c.primary.href} class="btn-primary">
+      {c.primary.label}
+      <Icon name="arrow" size={18} class="ltr:-scale-x-100" />
+    </a>
+    <a href={c.secondary.href} class="btn-secondary">{c.secondary.label}</a>
+  </div>
+  {
+    lang === 'he' ? (
+      <p class="mt-8 text-bark-600" lang="en" dir="ltr">
+        Looking for the English site? <a href="/en" class="font-medium text-forest-600 underline">Go to the English home page</a>
+      </p>
+    ) : (
+      <p class="mt-8 text-bark-600">
+        Recipes and the blog are in Hebrew:{' '}
+        <a href="/recipes" hreflang="he" class="font-medium text-forest-600 underline">recipes</a> ·{' '}
+        <a href="/blog" hreflang="he" class="font-medium text-forest-600 underline">blog</a>
+      </p>
+    )
+  }
+  {
+    lang === 'he' && (
+      <ul class="mx-auto mt-10 flex max-w-2xl flex-wrap justify-center gap-2">
+        {recipeCategories.map((cat) => (
+          <li>
+            <a
+              href={`/recipes/category/${cat.slug}`}
+              class="inline-flex min-h-11 items-center rounded-full border border-bark-300 bg-white px-4 text-sm text-bark-800 transition-colors hover:border-forest-600 active:scale-95"
+            >
+              {cat.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</section>

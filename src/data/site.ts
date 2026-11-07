@@ -17,6 +17,8 @@ export const site = {
     location: contactContent.location,
   },
   social: [{ label: 'Instagram', handle: contactContent.instagramHandle, href: contactContent.instagramUrl }],
+  /** Google Search Console ownership (HTML-tag method, the same token the Wix site used) – keep it so verification survives the move. */
+  googleSiteVerification: 'FiG60y_2awlNHNWauFG0RQBsbZ19NvhXdALHu-nPQzQ',
   healthDisclaimer: 'אתר זה הוא למידע בלבד ואין לראות בו ייעוץ רפואי.',
 } as const;
 

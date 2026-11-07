@@ -144,6 +144,10 @@ if (fsIndex < 0) {
   process.exit(1);
 }
 const insertAt = fsIndex;
-config.routes = [...headerRoutes, ...routes.slice(0, insertAt), ...redirectRoutes, ...routes.slice(insertAt)];
+// Missing /en/* addresses get the English 404 page (the adapter's catch-all serves the Hebrew one).
+const after = routes.slice(insertAt);
+const catchAll = after.findIndex((r) => r.src === '^/.*$' && r.status === 404);
+if (catchAll >= 0) after.splice(catchAll, 0, { src: '^/en(?:/.*)?$', dest: '/en/404/index.html', status: 404 });
+config.routes = [...headerRoutes, ...routes.slice(0, insertAt), ...redirectRoutes, ...after];
 writeFileSync(CONFIG, JSON.stringify(config, null, 2));
 console.log(`vercel-postbuild: added ${headerRoutes.length} header routes (CSP with ${scriptHashes.size} script hashes) and ${redirectRoutes.length} redirects`);

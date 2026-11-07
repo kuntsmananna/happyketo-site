@@ -151,7 +151,7 @@ const f = copy.form;
         </div>
         <div>
           <label for="ch-phone" class="field-label">{f.phone}</label>
-          <input id="ch-phone" name={f.fields.phone} type="tel" required maxlength="30" autocomplete="tel" dir="ltr" class="input-field w-full rtl:text-end" />
+          <input id="ch-phone" name={f.fields.phone} type="tel" required maxlength="30" pattern="[\d\s\+\-\(\)]{9,}" autocomplete="tel" dir="ltr" class="input-field w-full rtl:text-end" />
         </div>
       </div>
       <div>

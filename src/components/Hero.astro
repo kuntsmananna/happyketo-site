@@ -13,8 +13,8 @@ const lang = getLang(Astro.url);
 const c = homeFor(lang).hero;
 
 // Phones show a tall arch (261×343 on the original), desktop a half-screen (640×572): one crop for each.
-const arch = await Promise.all([320, 480, 640].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 1.314), fit: 'cover', position: 'bottom', format: 'webp' })));
-const half = await Promise.all([640, 900, 1086].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 0.894), fit: 'cover', position: 'top', format: 'webp' })));
+const arch = await Promise.all([320, 480, 640].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 1.314), fit: 'cover', position: 'bottom', format: 'webp', quality: 72 })));
+const half = await Promise.all([640, 900, 1086].map((w) => getImage({ src: heroImg, width: w, height: Math.round(w * 0.894), fit: 'cover', position: 'top', format: 'webp', quality: 72 })));
 const srcset = (imgs: typeof arch) => imgs.map((i) => `${i.src} ${i.attributes.width}w`).join(', ');
 ---
 

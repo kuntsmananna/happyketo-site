@@ -39,7 +39,8 @@ export default defineConfig({
   site: 'https://www.happyketoforme.com',
   output: 'static',
   trailingSlash: 'never',
-  build: { format: 'directory' },
+  // Stylesheets are inlined (~16 KB, ~4 KB gzipped): no render-blocking CSS request before the first paint.
+  build: { format: 'directory', inlineStylesheets: 'always' },
 
   adapter: vercel({
     // Images are optimized at build time (sharp → WebP, responsive widths) and served as static
@@ -48,7 +49,7 @@ export default defineConfig({
     webAnalytics: { enabled: true },
   }),
 
-  integrations: [sitemap({ filter: (page) => !/\/thanks\/?$/.test(page) })],
+  integrations: [sitemap({ filter: (page) => !/\/(thanks|404)\/?$/.test(page) })],
 
   // Free look-alikes of the original Wix brand fonts, self-hosted from npm (no network at build time).
   // Each family gets Hebrew + Latin faces split by unicode-range (a face downloads only when used),

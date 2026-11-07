@@ -33,6 +33,8 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - Forms post to Web3Forms using `forms` from `src/data/site.ts` (public access key; `PUBLIC_WEB3FORMS_KEY` overrides it).
 - Security headers incl. a Content-Security-Policy are added by `scripts/vercel-postbuild.mjs`; `script-src` lists the SHA-256 of every inline script found in the build, so new inline scripts are picked up automatically, but external script hosts must be added there. `check:dist` fails on `<script>`, `on…=` handlers, `javascript:` or non-YouTube iframes in `src/content`.
 - Files/pages prefixed with `_` are ignored by Astro routing.
+- Stylesheets are inlined into every page (`build.inlineStylesheets: 'always'`) – no render-blocking CSS request.
+- Domain: registered at Wix, DNS at Wix; switch-day steps in `docs/domain-switch.md`. Keep the `google-site-verification` meta (Search Console ownership carried over from Wix).
 
 ## Components
 - `BaseLayout` renders `Header`, `Footer` and the `KickstartBadge` (slides in, hides while scrolling down, smaller on phones; `hideBadge` on the challenge and thanks pages); pages only pass `title`/`description`.
@@ -40,9 +42,9 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - `PageHero` (recipes/blog/categories): mustard `Marquee` band + visible Hebrew h1 and intro (Anna's choice). `Marquee` scrolls slowly (pauses on hover; static and centered under reduced motion), `sparkles` on About.
 - Header: centered wordmark, flag language switch, a "מתכונים" shortcut (Anna's choice) and the "Menu" pill opening a `<dialog>` side panel (slides in; English items that lead to Hebrew pages are marked "(Hebrew)"). Original shapes: `Star.astro` (✦ bullets, also via `list-star`) and `ArrowLong.astro` (long arrow).
 - Posts (`/recipes/[slug]`, `/blog/[slug]`): one 740px column; `Prose` = original post typography (its list/heading rules skip `.recipe-box`). Recipe pages: "למתכון ↓" jump pill under the h1; `RecipeBox` = time/servings chips, print button, ingredients and steps that tick off (native checkboxes, remembered per recipe in localStorage), print view showing only the title and the recipe.
-- `Web3Form` wraps every form (newsletter, challenge; the contact page is text-only like the original, Anna's choice): pass `subject`, put fields in the slot, use `type="submit"`. It has a honeypot and works without JS (redirects to `/thanks` or `/en/thanks`).
+- `Web3Form` wraps every form (newsletter, challenge; with JS it validates itself and shows a message under each invalid field (`aria-invalid`/`aria-describedby`, texts in `t(lang).form.invalid`); the contact page is text-only like the original, Anna's choice): pass `subject`, put fields in the slot, use `type="submit"`. It has a honeypot and works without JS (redirects to `/thanks` or `/en/thanks`).
 - Homepage: the original's sections in order, plus `LatestRecipes` after the challenge block (Anna's choice): the 4 newest recipes with photos, `compact` tiles, one row on desktop, swipeable on phones.
-- `RecipeCard`/`PostCard`: thin wrappers around `PhotoTile` (the original's square photo tile, title + tag over the photo, whole tile clickable), two columns. `RecipeFilter` (an addition Anna chose to keep: vanilla JS, category chips are real links, Hebrew-aware search, state in `?category=&q=`); cards must be inside the element whose id is the filter's `target`.
+- `RecipeCard`/`PostCard`: thin wrappers around `PhotoTile` (pass `priority` to the first tile of a list only: it gets `fetchpriority=high` and no reveal; other tiles lazy-load, compact ones at low priority) (the original's square photo tile, title + tag over the photo, whole tile clickable), two columns. `RecipeFilter` (an addition Anna chose to keep: vanilla JS, category chips are real links, Hebrew-aware search, state in `?category=&q=`); cards must be inside the element whose id is the filter's `target`.
 - Use `src/lib/recipes.ts` for queries (`getRecipes`, `getPosts`, `recipeUrl`, `countByCategory`) instead of calling `getCollection` directly.
 - Brand stickers (`src/assets/brand/`) are decorative: always `alt=""`.
 
@@ -54,6 +56,7 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 
 ## Pages
 - `/recipes/[slug]`: renders the Markdown via `SplitContent`, which puts `RecipeBox` where the scraper left `<!-- recipe -->` (keep that marker when editing a recipe). Recipe/BlogPosting JSON-LD builders are in `src/lib/schema.ts`.
+- 404: `NotFoundView` in both languages; `/404.html` (Hebrew) and `/en/404` (served for missing `/en/*` by a route added in `scripts/vercel-postbuild.mjs`).
 - `/recipes/category/[category]` only exists for categories with recipes. FAQPage JSON-LD is emitted on the homepage only (`<FaqAccordion schema={false} />` elsewhere).
 - Pantry products: `src/data/content/favorites.json` (`image` = `/src/assets/favorites/<file>`, the path the admin panel stores) ; links keep Anna's iHerb `rcode`.
 - Form field names are in the page language (except `name`/`email`, which Web3Forms uses) so the emails read naturally.
