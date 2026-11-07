@@ -83,7 +83,7 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 
 ## Content changes need Anna's review
 When you change the wording, structure or images of a recipe/post, add to its frontmatter
-`review: { note: "<Hebrew: what changed and why>", parts: [image|ingredients|instructions|text|seo], approved: false }`. Use `seo` for drafted Google descriptions / photo `imageAlt` (put the new texts in the note as lines starting with "תיאור לגוגל:" / "תיאור התמונה:"); seo-only reviews don't tag tiles and are listed as a table on `/review`.
+`review: { note?: "<Hebrew: what changed and why>", parts: [image|ingredients|instructions|text|description|imageAlt|bodyAlts], approved: false }`. `description` / `imageAlt` / `bodyAlts` (Google description, main-photo alt, alts of photos in the body) are invisible parts: no tile tag, the review box and the `/review` table show their current text – don't copy that text into the note. Helpers: `pendingReview`, `visibleReview`, `entryUrl`, `bodyImageAlts`, `reviewPartLabel` in `src/lib/recipes.ts`; keep the labels in sync with `.pages.yml`.
 The page then shows a purple `ReviewNote` (with a link to the Wix original) and purple marks on the listed parts, tiles get a "לבדיקה" tag, and `/review` lists everything pending. Anna ticks "אישרתי" in the admin panel to clear it. Purple tokens: `review-*` in global.css.
 
 ## Reviews

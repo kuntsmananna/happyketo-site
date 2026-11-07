@@ -41,5 +41,23 @@ export function formatMinutes(min: number) {
 
 /** Review marks (Claude's changes waiting for Anna): the pending review of an entry, if any. */
 export const pendingReview = (e: Recipe | Post) => (e.data.review && !e.data.review.approved ? e.data.review : undefined);
-/** A pending review that changed something visible on the page (not only the Google/photo descriptions): tag the tile. */
-export const visibleReview = (e: Recipe | Post) => !!pendingReview(e)?.parts.some((p) => p !== 'seo');
+/** Review parts that change nothing visible on the page (Google description and photo alt texts). */
+export const INVISIBLE_PARTS = ['description', 'imageAlt', 'bodyAlts'] as const;
+type Part = NonNullable<Recipe['data']['review']>['parts'][number];
+export const isVisiblePart = (p: Part) => !(INVISIBLE_PARTS as readonly string[]).includes(p);
+/** A pending review that changed something visible on the page: purple marks + the tile tag. */
+export const visibleReview = (e: Recipe | Post) => !!pendingReview(e)?.parts.some(isVisiblePart);
+/** Page URL of a recipe or post. */
+export const entryUrl = (e: Recipe | Post) => (e.collection === 'recipes' ? recipeUrl(e as Recipe) : postUrl(e as Post));
+/** Alt texts of the photos inside the post text (Markdown images), in order. */
+export const bodyImageAlts = (e: Recipe | Post) => [...(e.body ?? '').matchAll(/!\[([^\]]*)\]\(([^)]+)\)/g)].map((m) => m[1].trim());
+/** Hebrew labels of review parts (keep in sync with the "parts" options in .pages.yml). */
+export const reviewPartLabel: Record<Part, string> = {
+  image: 'תמונה',
+  ingredients: 'מצרכים',
+  instructions: 'אופן ההכנה',
+  text: 'טקסט',
+  description: 'תיאור לגוגל',
+  imageAlt: 'תיאור התמונה הראשית',
+  bodyAlts: 'תיאורי התמונות בטקסט',
+};

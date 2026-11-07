@@ -16,12 +16,14 @@ const base = ({ image }: SchemaContext) => ({
   draft: z.boolean().default(false),
   /**
    * Changes Claude made that Anna should review (shown in purple on the page, listed at /review).
-   * `parts` says what to highlight; ticking `approved` in the admin panel removes the marks.
+   * `parts` says what changed: visible parts (image, ingredients, instructions, text) are marked purple on the page;
+   * description / imageAlt / bodyAlts (Google description, main-photo alt, alts of photos in the text) are not visible
+   * on the page, so the review box and /review show their current text. Ticking `approved` removes the marks.
    */
   review: z
     .object({
-      note: z.string(),
-      parts: z.array(z.enum(['image', 'ingredients', 'instructions', 'text', 'seo'])).default([]),
+      note: z.string().default(''),
+      parts: z.array(z.enum(['image', 'ingredients', 'instructions', 'text', 'description', 'imageAlt', 'bodyAlts'])).default([]),
       approved: z.boolean().default(false),
     })
     .optional(),

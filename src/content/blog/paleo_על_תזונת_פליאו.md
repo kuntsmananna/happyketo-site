@@ -9,9 +9,8 @@ wixUrl: "https://www.happyketoforme.com/post/paleo_%D7%A2%D7%9C_%D7%AA%D7%96%D7%
 tags:
   - "המדריך לתזונה דלת פחמימות"
 review:
-  note: "תיאור התמונה: אישה עומדת בפתח מערה מוארת באור שמש"
   parts:
-    - seo
+    - imageAlt
   approved: false
 ---
 

@@ -11,9 +11,9 @@ tags:
   - "המדריך לתזונה דלת פחמימות"
   - "מדריך לקיטו"
 review:
-  note: "תיאור התמונה: תקריב של אישה מניחה כדור לבן בפה"
   parts:
-    - seo
+    - imageAlt
+    - bodyAlts
   approved: false
 ---
 
@@ -23,4 +23,4 @@ review:
 
 [לצפייה](https://drive.google.com/file/d/18kbjtS2RO5I8bJKizGWILXcFF-GDKew7/view?usp=sharing)
 
-![The Magic Pill](../../assets/posts/cfc025_0fceacff528241ff8c423104e5bc8fa1.jpeg)
+![כרזת הסרט התיעודי The Magic Pill: קפסולה נפתחת ומתוכה ירקות, דגים ופירות](../../assets/posts/cfc025_0fceacff528241ff8c423104e5bc8fa1.jpeg)

@@ -15,9 +15,8 @@ tags:
 ingredients: []
 instructions: []
 review:
-  note: "תיאור התמונה: כוס זכוכית קטנה של קפה עם שכבת קצף בהירה, באור שמש על משטח לבן"
   parts:
-    - seo
+    - imageAlt
   approved: false
 ---
 

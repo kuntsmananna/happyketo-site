@@ -155,7 +155,7 @@ content:
         description: "אם Claude שינה משהו בפריט, ההסבר כאן והחלקים מסומנים בסגול באתר. אחרי שבדקת – לסמן אישרתי ולשמור."
         type: object
         fields:
-          - { name: note, label: מה השתנה, type: text, readonly: true }
+          - { name: note, label: הסבר, type: text, readonly: true }
           - name: parts
             label: חלקים מסומנים
             type: select
@@ -167,7 +167,9 @@ content:
                 - { value: ingredients, label: מצרכים }
                 - { value: instructions, label: אופן ההכנה }
                 - { value: text, label: טקסט }
-                - { value: seo, label: תיאורים לגוגל ולתמונה }
+                - { value: description, label: תיאור לגוגל }
+                - { value: imageAlt, label: תיאור התמונה הראשית }
+                - { value: bodyAlts, label: תיאורי התמונות בטקסט }
           - { name: approved, label: אישרתי, type: boolean }
       - name: body
         label: טקסט המתכון
@@ -230,7 +232,7 @@ content:
         description: "אם Claude שינה משהו בפריט, ההסבר כאן והחלקים מסומנים בסגול באתר. אחרי שבדקת – לסמן אישרתי ולשמור."
         type: object
         fields:
-          - { name: note, label: מה השתנה, type: text, readonly: true }
+          - { name: note, label: הסבר, type: text, readonly: true }
           - name: parts
             label: חלקים מסומנים
             type: select
@@ -242,7 +244,9 @@ content:
                 - { value: ingredients, label: מצרכים }
                 - { value: instructions, label: אופן ההכנה }
                 - { value: text, label: טקסט }
-                - { value: seo, label: תיאורים לגוגל ולתמונה }
+                - { value: description, label: תיאור לגוגל }
+                - { value: imageAlt, label: תיאור התמונה הראשית }
+                - { value: bodyAlts, label: תיאורי התמונות בטקסט }
           - { name: approved, label: אישרתי, type: boolean }
       - name: body
         label: טקסט הפוסט

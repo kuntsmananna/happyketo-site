@@ -1,25 +1,30 @@
 ---
 /**
  * Everything Claude changed in recipes/posts that Anna hasn't approved yet (temporary review aid before launch):
- * first the changes visible on the page (purple marks), then the drafted Google descriptions and photo descriptions
- * as one table. Not linked from the menu, not in the sitemap, noindex.
+ * first the changes visible on the page (purple marks), then the Google descriptions and photo descriptions
+ * (not visible on the page) as one table showing their current text. Not linked from the menu, not in the sitemap.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getPosts, getRecipes, pendingReview, postUrl, recipeUrl, type Post, type Recipe } from '@/lib/recipes';
+import { bodyImageAlts, entryUrl, getPosts, getRecipes, isVisiblePart, pendingReview, reviewPartLabel, visibleReview } from '@/lib/recipes';
 
-const partLabel: Record<string, string> = { image: 'תמונה', ingredients: 'מצרכים', instructions: 'אופן ההכנה', text: 'טקסט', seo: 'תיאורים לגוגל' };
-const toItem = (e: Recipe | Post) => ({
-  kind: e.collection === 'recipes' ? 'מתכון' : 'בלוג',
-  title: e.data.title,
-  href: e.collection === 'recipes' ? recipeUrl(e as Recipe) : postUrl(e as Post),
-  review: pendingReview(e)!,
-  wix: e.data.wixUrl,
-  description: e.data.description,
-  imageAlt: e.data.imageAlt,
-});
-const all = [...(await getRecipes()), ...(await getPosts())].filter((e) => pendingReview(e)).map(toItem);
-const pageChanges = all.filter((i) => i.review.parts.some((p) => p !== 'seo'));
-const seoDrafts = all.filter((i) => i.review.parts.includes('seo'));
+const [recipes, posts] = await Promise.all([getRecipes(), getPosts()]);
+const all = [...recipes, ...posts]
+  .map((e) => ({ e, review: pendingReview(e) }))
+  .filter((x): x is typeof x & { review: NonNullable<typeof x.review> } => !!x.review)
+  .map(({ e, review }) => ({
+    kind: e.collection === 'recipes' ? 'מתכון' : 'בלוג',
+    title: e.data.title,
+    href: entryUrl(e),
+    wix: e.data.wixUrl,
+    review,
+    visible: visibleReview(e),
+    description: review.parts.includes('description') ? e.data.description : undefined,
+    imageAlt: review.parts.includes('imageAlt') ? e.data.imageAlt : undefined,
+    bodyAlts: review.parts.includes('bodyAlts') ? bodyImageAlts(e) : [],
+  }));
+const pageChanges = all.filter((i) => i.visible);
+const descriptionDrafts = all.filter((i) => i.description || i.imageAlt || i.bodyAlts.length);
+const unchanged = 'ללא שינוי';
 ---
 
 <BaseLayout title="שינויים לבדיקה" noindex>
@@ -34,16 +39,16 @@ const seoDrafts = all.filter((i) => i.review.parts.includes('seo'));
     {
       pageChanges.length > 0 && (
         <>
-          <h2 class="h-card mt-12 text-forest-700">שינויים בעמודים ({pageChanges.length})</h2>
+          <h2 class="h-section mt-12 text-forest-700">שינויים בעמודים ({pageChanges.length})</h2>
           <p class="mt-1 text-base text-bark-700">בכל עמוד החלקים שהשתנו מסומנים בסגול, עם קישור לפוסט המקורי ב-Wix.</p>
           <ol class="mt-5 space-y-4">
             {pageChanges.map((i) => (
               <li class="rounded-2xl border-2 border-review-200 bg-white px-5 py-4">
                 <p class="text-sm text-bark-500">
-                  {i.kind} · {i.review.parts.filter((p) => p !== 'seo').map((p) => partLabel[p]).join(', ')}
+                  {i.kind} · {i.review.parts.filter(isVisiblePart).map((p) => reviewPartLabel[p]).join(', ')}
                 </p>
                 <a href={i.href} class="mt-1 block text-xl font-bold text-forest-700 underline-offset-4 hover:underline">{i.title}</a>
-                <p class="mt-2 whitespace-pre-line text-base text-review-700">{i.review.note.split('\n').filter((l) => !l.startsWith('תיאור')).join('\n')}</p>
+                {i.review.note && <p class="mt-2 whitespace-pre-line text-base text-review-700">{i.review.note}</p>}
                 {i.wix && <a href={i.wix} target="_blank" rel="noopener" class="mt-2 inline-block text-sm text-bark-700 underline">הפוסט המקורי ב-Wix</a>}
               </li>
             ))}
@@ -53,34 +58,34 @@ const seoDrafts = all.filter((i) => i.review.parts.includes('seo'));
     }
 
     {
-      seoDrafts.length > 0 && (
+      descriptionDrafts.length > 0 && (
         <>
-          <h2 class="h-card mt-14 text-forest-700">תיאורים לגוגל ולתמונות ({seoDrafts.length})</h2>
+          <h2 class="h-section mt-14 text-forest-700">תיאורים לגוגל ולתמונות ({descriptionDrafts.length})</h2>
           <p class="mt-1 text-base text-bark-700">
-            "תיאור לגוגל" מופיע מתחת לכותרת בתוצאות החיפוש. "תיאור התמונה" מוקרא לגולשים עיוורים ועוזר בחיפוש תמונות. שניהם לא נראים בעמוד עצמו.
-            הטקסטים נכתבו לפי המצרכים והטקסט של כל מתכון ולפי מה שרואים בתמונה.
+            "{reviewPartLabel.description}" מופיע מתחת לכותרת בתוצאות החיפוש. תיאורי התמונות מוקראים לגולשים עיוורים ועוזרים בחיפוש תמונות.
+            הם לא נראים בעמוד עצמו. הטקסט בטבלה הוא הטקסט הנוכחי – אם תערכי אותו בפאנל, תראי כאן את הנוסח שלך.
           </p>
           <div class="mt-5 overflow-x-auto rounded-2xl bg-white" tabindex="0" role="region" aria-label="טבלת התיאורים לבדיקה">
-            <table class="w-full min-w-[40rem] text-base">
+            <table class="w-full min-w-[48rem] text-base">
               <thead>
                 <tr class="border-b border-cream-200 text-bark-500">
                   <th class="px-4 py-3 text-start font-normal">פריט</th>
-                  <th class="px-4 py-3 text-start font-normal">תיאור לגוגל</th>
-                  <th class="px-4 py-3 text-start font-normal">תיאור התמונה</th>
+                  <th class="px-4 py-3 text-start font-normal">{reviewPartLabel.description}</th>
+                  <th class="px-4 py-3 text-start font-normal">{reviewPartLabel.imageAlt}</th>
+                  <th class="px-4 py-3 text-start font-normal">{reviewPartLabel.bodyAlts}</th>
                 </tr>
               </thead>
               <tbody>
-                {seoDrafts.map((i) => {
-                  const newDesc = i.review.note.includes('תיאור לגוגל');
-                  const newAlt = i.review.note.includes('תיאור התמונה');
-                  return (
-                    <tr class="border-b border-cream-100 align-top">
-                      <td class="px-4 py-3"><a href={i.href} class="font-bold text-forest-700 hover:underline">{i.title}</a></td>
-                      <td class:list={['px-4 py-3', newDesc ? 'text-review-700' : 'text-bark-500']}>{newDesc ? i.description : 'ללא שינוי'}</td>
-                      <td class:list={['px-4 py-3', newAlt ? 'text-review-700' : 'text-bark-500']}>{newAlt ? i.imageAlt : 'ללא שינוי'}</td>
-                    </tr>
-                  );
-                })}
+                {descriptionDrafts.map((i) => (
+                  <tr class="border-b border-cream-100 align-top">
+                    <td class="px-4 py-3"><a href={i.href} class="font-bold text-forest-700 hover:underline">{i.title}</a></td>
+                    <td class:list={['px-4 py-3', i.description ? 'text-review-700' : 'text-bark-500']}>{i.description ?? unchanged}</td>
+                    <td class:list={['px-4 py-3', i.imageAlt ? 'text-review-700' : 'text-bark-500']}>{i.imageAlt ?? unchanged}</td>
+                    <td class:list={['px-4 py-3', i.bodyAlts.length ? 'text-review-700' : 'text-bark-500']}>
+                      {i.bodyAlts.length ? <ul class="list-disc ps-4">{i.bodyAlts.map((a) => <li>{a}</li>)}</ul> : unchanged}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

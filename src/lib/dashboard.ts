@@ -9,7 +9,7 @@ import { recipeCategories } from '@/data/categories';
 import { faqFor } from '@/data/faq';
 import { favorites } from '@/data/favorites';
 import { site } from '@/data/site';
-import { getPosts, getRecipes, pendingReview, postUrl, recipeUrl, type Post, type Recipe } from './recipes';
+import { bodyImageAlts, entryUrl, getPosts, getRecipes, pendingReview, visibleReview, type Post, type Recipe } from './recipes';
 import speedJson from '@/data/metrics/speed.json';
 import pkg from '../../package.json';
 
@@ -40,7 +40,7 @@ const entryWords = (e: Recipe | Post) => {
   return parts.reduce((n, p) => n + countWords(p), 0);
 };
 
-const item = (e: Recipe | Post): Item => ({ title: e.data.title, href: e.collection === 'recipes' ? recipeUrl(e as Recipe) : postUrl(e as Post) });
+const item = (e: Recipe | Post): Item => ({ title: e.data.title, href: entryUrl(e) });
 const check = (ok: boolean, label: string, good: string, bad: string, items?: Item[], severity: Status = 'warning'): Check => ({
   status: ok ? 'good' : severity,
   label,
@@ -90,15 +90,20 @@ export async function getDashboard() {
 
   // ---------- content health
   const noImage = all.filter((e) => !e.data.image);
-  const weakAlt = all.filter((e) => e.data.image && (!e.data.imageAlt || e.data.imageAlt.trim() === e.data.title.trim()));
+  // A photo description is weak when it is empty or just repeats the title – main photo and photos inside the text.
+  const weakAltText = (alt: string | undefined, e: Recipe | Post) => !alt || alt.trim() === e.data.title.trim();
+  const weakAlt = all.filter((e) => (e.data.image && weakAltText(e.data.imageAlt, e)) || bodyImageAlts(e).some((a) => weakAltText(a, e)));
+  const weakAltCount = all.reduce((n, e) => n + (e.data.image && weakAltText(e.data.imageAlt, e) ? 1 : 0) + bodyImageAlts(e).filter((a) => weakAltText(a, e)).length, 0);
   const noDescription = all.filter((e) => !e.data.description || e.data.description.trim() === e.data.title.trim());
   const noRecipeBox = recipes.filter((r) => !r.data.ingredients.length || !r.data.instructions.length);
   const noTimes = recipes.filter((r) => !r.data.prepTime && !r.data.cookTime);
   const drafts = all.filter((e) => e.data.draft);
-  const reviews = all.filter((e) => pendingReview(e));
+  const pageReviews = all.filter((e) => visibleReview(e));
+  const descriptionReviews = all.filter((e) => pendingReview(e) && !visibleReview(e));
 
   const health: Check[] = [
-    check(!reviews.length, 'שינויים של Claude לבדיקה', 'אין שינויים שמחכים לבדיקה', `${reviews.length} פריטים מחכים לאישור שלך (מסומנים בסגול)`, reviews.map(item)),
+    check(!pageReviews.length, 'שינויים של Claude לבדיקה', 'אין שינויים בעמודים שמחכים לבדיקה', `${pageReviews.length} פריטים עם שינויים בעמוד שמחכים לאישור שלך (מסומנים בסגול)`, pageReviews.map(item)),
+    check(!descriptionReviews.length, 'תיאורים של Claude לבדיקה', 'אין תיאורים שמחכים לבדיקה', `${descriptionReviews.length} פריטים שרק התיאור לגוגל או תיאורי התמונות שלהם נכתבו מחדש – לא נראה בעמוד, מופיע בטבלה בעמוד הבדיקה`, descriptionReviews.map(item)),
     check(!noImage.length, 'תמונה ראשית', 'לכל המתכונים והפוסטים יש תמונה', `${noImage.length} בלי תמונה – תמונה משפרת הקלקות בגוגל וברשתות`, noImage.map(item)),
     check(!noRecipeBox.length, 'מצרכים ושלבים', 'לכל המתכונים יש מצרכים ושלבים', `${noRecipeBox.length} מתכונים בלי רשימת מצרכים או שלבים (כך גם היה ב-Wix)`, noRecipeBox.map(item)),
     check(noTimes.length <= recipes.length / 2, 'זמני הכנה', `ל-${recipes.length - noTimes.length} מתכונים יש זמן הכנה`, `רק ל-${recipes.length - noTimes.length} מתכונים מתוך ${recipes.length} יש זמן הכנה – גוגל מציג אותו בתוצאות`, noTimes.map(item)),
@@ -110,7 +115,7 @@ export async function getDashboard() {
   const longDesc = all.filter((e) => e.data.description && e.data.description.length > 160);
   const seo: Check[] = [
     check(!noDescription.length, 'תיאור לגוגל', 'לכל העמודים יש תיאור', `${noDescription.length} פריטים בלי תיאור (או שהתיאור זהה לכותרת) – גוגל ממציא תיאור משלו`, noDescription.map(item)),
-    check(!weakAlt.length, 'תיאור תמונות (alt)', 'לכל התמונות יש תיאור', `${weakAlt.length} תמונות שהתיאור שלהן הוא רק שם המתכון – תיאור של מה רואים בתמונה עוזר לחיפוש תמונות ולגולשים עיוורים`, weakAlt.map(item)),
+    check(!weakAlt.length, 'תיאור תמונות (alt)', 'לכל התמונות (הראשיות ובתוך הטקסט) יש תיאור', `${weakAltCount} תמונות ב-${weakAlt.length} פריטים שהתיאור שלהן ריק או רק שם המתכון – תיאור של מה רואים בתמונה עוזר לחיפוש תמונות ולגולשים עיוורים`, weakAlt.map(item)),
     check(!longTitles.length, 'אורך כותרות', 'כל הכותרות נכנסות בתוצאות גוגל', `${longTitles.length} כותרות ארוכות מ-60 תווים ייחתכו בגוגל`, longTitles.map(item)),
     check(!longDesc.length, 'אורך תיאורים', 'כל התיאורים באורך שגוגל מציג', `${longDesc.length} תיאורים ארוכים מ-160 תווים ייחתכו`, longDesc.map(item)),
     { status: 'good', label: 'מפת אתר ו-robots.txt', detail: `${pages} עמודים במפת האתר; כל העמודים פתוחים לסריקה` },
@@ -154,10 +159,11 @@ export async function getDashboard() {
 
   // ---------- tips: the actionable items, most valuable first
   const tips: { text: string; href?: string }[] = [];
-  if (reviews.length) tips.push({ text: `לאשר את ${reviews.length} השינויים של Claude שמסומנים בסגול`, href: '/review' });
+  if (pageReviews.length) tips.push({ text: `לבדוק ולאשר את ${pageReviews.length} השינויים של Claude בעמודים (מסומנים בסגול)`, href: '/review' });
+  if (descriptionReviews.length) tips.push({ text: `לעבור על הטבלה של ${descriptionReviews.length} התיאורים החדשים לגוגל ולתמונות ולאשר`, href: '/review' });
   if (noImage.length) tips.push({ text: `להוסיף תמונה ל-${noImage.length} מתכונים/פוסטים בלי תמונה`, href: item(noImage[0]).href });
   if (noDescription.length) tips.push({ text: `לכתוב תיאור קצר (משפט-שניים) ל-${noDescription.length} פריטים – זה מה שמופיע מתחת לכותרת בגוגל` });
-  if (weakAlt.length) tips.push({ text: `לשפר את תיאור התמונה ב-${weakAlt.length} פריטים: לתאר מה רואים ("עוגת שוקולד פרוסה על צלחת לבנה")` });
+  if (weakAlt.length) tips.push({ text: `לשפר את תיאור ${weakAltCount} תמונות: לתאר מה רואים ("עוגת שוקולד פרוסה על צלחת לבנה")` });
   if (noTimes.length > recipes.length / 2) tips.push({ text: 'להוסיף זמן הכנה וכמות למתכונים פופולריים – גוגל מציג אותם בתוצאות מתכונים' });
   if (Date.now() - lastUpdate.getTime() > 1000 * 60 * 60 * 24 * 30) tips.push({ text: 'לפרסם מתכון חדש – אתר שמתעדכן מקבל יותר תנועה מגוגל ומכלי AI' });
   if (avgPerformance != null && avgPerformance < 90) tips.push({ text: 'ציון המהירות ירד מתחת ל-90 – כדאי לבקש מ-Claude לבדוק' });

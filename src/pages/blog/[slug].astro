@@ -42,7 +42,7 @@ const related = all
   <!-- One 740px column, as on the original: title, photo, the post, tags, share, related. -->
   <article class:list={['mx-auto w-[89%] pt-10 lg:w-[740px] lg:pt-[100px]', review?.parts.includes('image') && 'review-images']}>
     <h1 data-reveal class="h-section">{title}</h1>
-    {review && <ReviewNote note={review.note} wixUrl={post.data.wixUrl} />}
+    {review && <ReviewNote entry={post} />}
     {
       image && (
         <Image
