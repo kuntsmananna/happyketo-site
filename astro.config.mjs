@@ -3,6 +3,8 @@ import { defineConfig, fontProviders } from 'astro/config';
 import vercel from '@astrojs/vercel';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { satteri } from '@astrojs/markdown-satteri';
+import headingLevels from './src/lib/heading-levels.mjs';
 
 const RANGES = {
   latin: ['U+0000-00FF', 'U+0131', 'U+0152-0153', 'U+02BB-02BC', 'U+02C6', 'U+02DA', 'U+02DC', 'U+0304', 'U+0308',
@@ -48,6 +50,9 @@ export default defineConfig({
     imageService: false,
     webAnalytics: { enabled: true },
   }),
+
+  // Post headings start at h2 under the page title (some Wix posts used only ###).
+  markdown: { processor: satteri({ mdastPlugins: [headingLevels] }) },
 
   integrations: [sitemap({ filter: (page) => !/\/(thanks|404|review|admin\/[\w-]+)\/?$/.test(page) })],
 
