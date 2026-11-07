@@ -56,7 +56,7 @@ for (const [from, to] of [
   [enc('/en/iherb-מומלצים'), '/en/favorites'], [enc('/en/מדיניותפרטיות'), '/en/privacy'], ['/en/challenge-page/' + enc('קיטו4שבועות'), '/en/challenge'],
   ['/en/keto-blog', '/blog'], ['/en/pastry-recipes', '/recipes/category/pastry'], ['/en/recipes', '/recipes'],
   ['/en/post/' + enc('פנקייק-קטוגני'), '/recipes/פנקייק-קטוגני'], ['/en/about', '/en/about'],
-  [enc('/recipes/tags/צמחוני'), '/recipes?q=צמחוני'],
+  [enc('/recipes/tags/צמחוני'), '/recipes?q=צמחוני'], ['/dashboard-hk7m2q', '/admin/dashboard'],
 ]) cases.push([from, to]);
 
 let bad = 0;
@@ -64,6 +64,12 @@ for (const [from, expected] of cases) {
   const r = follow(from);
   const ok = r.status === 200 && decodeURIComponent(r.final) === expected;
   if (!ok) { bad++; console.log('FAIL', decodeURIComponent(from), '→', decodeURIComponent(r.final), r.status, r.hops); }
+}
+// Admin entry: /admin (and /admin/) → the Pages CMS panel.
+for (const p of ['/admin', '/admin/']) {
+  let r = resolve(p);
+  if (r.status === 308) r = resolve(r.headers.location); // trailing-slash normalisation first
+  if (r.status !== 302 || !r.headers.location?.startsWith('https://app.pagescms.org/')) { bad++; console.log('FAIL', p, r.status, r.headers.location); }
 }
 const sec = resolve('/').headers;
 console.log(`${cases.length - bad}/${cases.length} redirect cases OK`);

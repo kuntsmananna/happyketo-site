@@ -76,7 +76,9 @@ redirectRoutes.push(
   { src: '^/recipes/page/\\d+/?$', headers: { Location: '/recipes' }, status: 301 },
   { src: '^/challenge-page(?:/.*)?$', headers: { Location: '/challenge' }, status: 301 },
   { src: '^/profile(?:/.*)?$', headers: { Location: '/about' }, status: 301 },
-  { src: '^/blog-feed\\.xml$', headers: { Location: '/blog' }, status: 301 },
+  { src: '^/blog-feed\\.xml$', headers: { Location: '/blog' }, status: 301 },  // Anna's admin entry: one easy address on her own domain. 302 so the target can change later.
+  { src: '^/admin/?$', headers: { Location: 'https://app.pagescms.org/kuntsmananna/happyketo-site/main' }, status: 302 },
+  { src: '^/dashboard-hk7m2q/?$', headers: { Location: '/admin/dashboard' }, status: 301 }, // the dashboard's first address
 );
 
 // ---------- headers

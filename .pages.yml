@@ -30,7 +30,7 @@ content:
   # ---------------------------------------------------------------- dashboard link (Pages CMS has no custom pages)
   - name: dashboard
     label: 📊 דשבורד האתר
-    description: "מהירות, SEO, GEO, נתוני תוכן וטיפים. להעתיק את הכתובת לדפדפן ולשמור כסימנייה."
+    description: "מהירות, SEO, GEO, נתוני תוכן וטיפים. הכתובת: /admin/dashboard (מהדשבורד יש כפתור חזרה לפאנל)."
     type: file
     path: docs/dashboard-link.json
     format: json

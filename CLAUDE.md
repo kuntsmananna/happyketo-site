@@ -75,7 +75,7 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - Accessibility statement: `/accessibility` + `/en/accessibility`, text in `src/data/content/accessibility.*.json`, footer link. Update "how it was tested" after big changes.
 
 ## Dashboard
-- Hidden page `src/pages/dashboard-hk7m2q.astro` (noindex, not in the sitemap, linked only from the admin panel entry `docs/dashboard-link.json` and the guide). Hebrew.
+- `/admin` = Anna's single entry point: a 302 (in `scripts/vercel-postbuild.mjs`) to the Pages CMS panel for this repo. The dashboard is `src/pages/admin/dashboard.astro` (noindex, not in the sitemap, not linked from the public site; linked from the panel entry `docs/dashboard-link.json`, the guide, and back to `/admin`). Hebrew. Nothing private on it. `/dashboard-hk7m2q` (old address) 301s there.
 - Numbers/checks: `src/lib/dashboard.ts` (build time: content KPIs, content health, SEO, GEO, tips, tech). Charts in `src/components/dashboard/` follow the dataviz rules: one hue for magnitude (`chart-1`), the validated categorical order `chart-1..4` (don't add hues), status = icon + word, tooltip via `data-tip`, table view under every chart.
 - Speed history: `src/data/metrics/speed.json`, appended by `.github/workflows/weekly-metrics.yml` (Mondays; runs `scripts/metrics/measure-speed.mjs` = Lighthouse mobile, median of 3, measures www.happyketoforme.com once it is on Vercel). The workflow commits the JSON, which triggers a deploy.
 - Visitors: Vercel Web Analytics has no query API on this plan – the dashboard links to it instead.

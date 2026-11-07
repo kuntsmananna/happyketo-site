@@ -1,8 +1,9 @@
 ---
 /**
  * Site dashboard for Anna (Hebrew): speed, SEO, GEO, content numbers, content health, tips, technology and a link to
- * Vercel Analytics. Hidden page: not linked from the site, noindex, not in the sitemap; the address is in the admin
- * panel ("📊 דשבורד") and in docs/editing-guide.md. Numbers are computed at build time (src/lib/dashboard.ts);
+ * Vercel Analytics. Lives at /admin/dashboard (/admin itself redirects to the Pages CMS panel, see
+ * scripts/vercel-postbuild.mjs): not linked from the public site, noindex, not in the sitemap; the panel entry
+ * "📊 דשבורד" and docs/editing-guide.md point here. Numbers are computed at build time (src/lib/dashboard.ts);
  * speed comes from the weekly Lighthouse job (.github/workflows/weekly-metrics.yml).
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
@@ -48,7 +49,7 @@ const h2 = 'h-card text-forest-700';
         </p>
       </div>
       <nav class="flex flex-wrap gap-2 text-base" aria-label="קישורים מהירים">
-        <a href="https://app.pagescms.org" target="_blank" rel="noopener" class="btn-outline btn-sm">פאנל הניהול</a>
+        <a href="/admin" class="btn-outline btn-sm">לעריכת האתר</a>
         <a href="/review" class="btn-outline btn-sm">שינויים לבדיקה</a>
         <a href={VERCEL_ANALYTICS} target="_blank" rel="noopener" class="btn-secondary btn-sm">גולשים ב-Vercel</a>
       </nav>

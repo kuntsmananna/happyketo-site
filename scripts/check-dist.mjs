@@ -31,6 +31,7 @@ for (const file of pages) {
   const html = readFileSync(file, 'utf8');
   for (const [, href] of html.matchAll(/href="(\/[^"]*)"/g)) {
     if (href.startsWith('/_astro/') || href.startsWith('/_vercel/') || href.startsWith('/videos/')) continue;
+    if (href === '/admin') continue; // redirect to the Pages CMS panel (vercel-postbuild.mjs; tested by test:redirects)
     links++;
     if (!resolves(href)) problems.push(`${rel}: broken link ${decodeURIComponent(href)}`);
   }
