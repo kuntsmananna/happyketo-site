@@ -1,0 +1,102 @@
+{
+  "hero": {
+    "wordmark": "EASY HAPPY KETO",
+    "title": "Mediterranean Keto Diet",
+    "titleSerif": true,
+    "text": "Start Your Keto Journey Without the Guesswork - Simple, Tasty, and Sustainable",
+    "cta": "Three days free trial",
+    "imageAlt": "Hands placing strawberries on a keto crêpe"
+  },
+  "challenge": {
+    "eyebrow": "Going Keto",
+    "title": "4 Weeks. No Counting. Total Freedom.",
+    "paragraphs": [
+      "Life doesn’t slow down, and your nutrition shouldn’t hold you back. Whether you’re navigating boardrooms, classrooms, or family vacations, our 4-Week Challenge is designed to fit into the cracks of your busy schedule.",
+      "We’ve swapped the \"diet\" headaches for simple, actionable instructions that slide right into your daily routine. No obsessing over labels, no hunger pangs—just incredible food and more energy than you’ll know what to do with."
+    ],
+    "perks": [
+      "Built for the Modern Superhero",
+      "No Calorie Counting",
+      "No Boring Meals"
+    ],
+    "cta": "Start My Transformation"
+  },
+  "band": {
+    "title": "I’m not dieting,\nI am choosing to be healthy.",
+    "imageAlt": "Lettuce tacos filled with chicken and avocado"
+  },
+  "about": {
+    "heading": "Why HAPPY KETO? Because Life Happens.",
+    "paragraphs": [
+      "HAPPY KETO wasn’t born in a sterile lab; it was born in the middle of a busy kitchen, somewhere between a career deadline and a mountain of laundry.",
+      "I believe you shouldn’t have to wait for retirement or for the kids to grow up to finally feel like the best version of yourself. Your health shouldn’t be \"on hold\" until the dishes are done. I’ve created this 4-week blueprint to prove that you can achieve elite energy and metabolic health while managing the chaos of everyday life.",
+      "It’s about simple habits, delicious food, and finding the perfect balance between your personal development and the reality of a sink full of dishes."
+    ],
+    "cta": "About Happy Keto",
+    "name": "Anna Kuntsman Rosenberg",
+    "salmonAlt": "Coconut Thai salmon curry",
+    "annaAlt": "Anna Kuntsman Rosenberg"
+  },
+  "cuisine": {
+    "eyebrow": "Keto Cuisine",
+    "title": "The most beautiful rooftop meal in Jaffa",
+    "lines": [
+      "❤️ A delicious meal from a small kitchen and great love",
+      "Natural and local food, no sugar, no flour and no grains."
+    ],
+    "list": [
+      "Events for companies and organizations",
+      "Family celebrations and birthdays",
+      "Bachelorette parties",
+      "The menu will be personally tailored to the nature of the event."
+    ],
+    "note": "(For groups over 10 people)",
+    "cta": "For details, contact us",
+    "dayAlt": "A tasting dinner on a Jaffa rooftop in daylight",
+    "nightAlt": "A long candle-lit table on the rooftop at night"
+  },
+  "services": [
+    {
+      "key": "favorites",
+      "eyebrow": "Happy Favorites",
+      "title": "The Ketogenic Pantry",
+      "text": "I tried it, I loved it, I highly recommend it!",
+      "cta": "I wonder what’s in there",
+      "href": "/en/favorites",
+      "alt": "A bag of allulose sweetener"
+    },
+    {
+      "key": "blog",
+      "eyebrow": "Keto Blog",
+      "title": "Information on low-carb diets",
+      "text": "Everything you need to know for a successful transition to a natural ketogenic diet. (In Hebrew)",
+      "cta": "Continue reading",
+      "href": "/blog",
+      "alt": "Hands holding cherry tomatoes"
+    },
+    {
+      "key": "recipes",
+      "eyebrow": "Tasty Keto",
+      "title": "Low-carb recipes that make the body and soul happy",
+      "text": "If you are worried that you will not have anything to eat, remove worry from your heart! (In Hebrew)",
+      "cta": "Let’s make something delicious",
+      "href": "/recipes",
+      "alt": "Fried eggs on toast with greens"
+    }
+  ],
+  "latest": {
+    "eyebrow": "Latest Recipes",
+    "title": "New from the kitchen",
+    "note": "The recipes are in Hebrew.",
+    "cta": "All recipes"
+  },
+  "newsletter": {
+    "title": "Stay in touch!",
+    "text": "For news and updates, leave your email – I promise not to spam you ;)",
+    "email": "Email",
+    "cta": "Join",
+    "success": "So glad you joined! 🎉 See you in your inbox.",
+    "subject": "Newsletter sign-up (EN) – Happy Keto"
+  },
+  "faqTitle": "Q&A"
+}

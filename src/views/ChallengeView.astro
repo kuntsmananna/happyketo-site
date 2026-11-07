@@ -7,6 +7,7 @@
  */
 import { Image } from 'astro:assets';
 import Web3Form from '@/components/Web3Form.astro';
+import { challengeContent } from '@/data/content';
 import { site } from '@/data/site';
 import { getLang } from '@/i18n';
 import planFull from '@/assets/home/challenge-eggs-kale.jpg';
@@ -14,41 +15,10 @@ import planFree from '@/assets/home/challenge-lettuce-tacos.jpg';
 
 const lang = getLang(Astro.url);
 
-const copy = {
+// Page text: src/data/content/challenge.{he,en}.json (editable in the admin panel). The form labels and field names
+// stay here: they are tied to the emails Anna receives.
+const ui = {
   he: {
-    title: 'אתגר קיטו',
-    intro: 'כל מה שרצית לדעת על קיטו במקום אחד.\nקל, פשוט, נגיש (גם כלכלית).\nבקצב והזמן שלך בלי בלבולי מוח מיותרים.',
-    plans: [
-      { id: 'free', name: 'Keto Kickstart תוכנית חינמית ל־3 ימים', price: 'חינם', value: 'Keto Kickstart – תוכנית חינמית ל־3 ימים', image: planFree, alt: 'טאקו בעלי חסה' },
-      { id: 'full', name: 'Going Keto - 4 שבועות', price: '250.00 ₪', value: 'Going Keto – 4 שבועות (₪250)', image: planFull, alt: 'ביצי עין עם קייל ופקאנים' },
-    ],
-    join: 'להצטרפות',
-    programJoin: 'להצטרפות', // the original said 'הצטרף' (masculine); the page otherwise addresses everyone
-    programTitle: 'Going Keto - 4 שבועות',
-    programLead: 'תוכנית למעבר לתזונה קטוגנית שמתאימה לא.נשים (מאוד) עסוקות',
-    method: [
-      'שיטה הדרגתית, טעימה ואפשרית להתמדה',
-      'לסופרוומן שמג׳נגלת בין עבודה, משפחה, חוגים, נסיעות, חופשות, מסעדות, סופי שבוע, אירוחים… או בקיצור - החיים.',
-      'בלי קיצוניות. בלי להפוך את החיים. פשוט דרך שנכנסת לשגרה שלך.',
-    ],
-    expectTitle: 'למה לצפות במהלך ובסוף התוכנית:',
-    expect: [
-      'שחרור מהתמכרויות (סוכר, מזון מעובד ופחמימות) ושחרור מנטלי מתלות רגשית באוכל.',
-      'צמצום בהיקפים ותחושת קלילות בגוף.',
-      'תחושת ערנות, חדות מחשבה, מצב רוח יציב וסבלנות.',
-      'שיפור באיכות השינה.',
-      'שיפור במדדי הבריאות והקלה בתסמינים כמו: מיגרנות, אלרגיות, בעיות עור, כאבי בטן ובעיות עיכול, תופעות קדם וסתיות ועוד.',
-      'ועור פנים חלק יותר (באמת).',
-    ],
-    howTitle: 'איך התוכנית עובדת?',
-    how: 'הנחיות יומיות ברורות ופשוטות ליישום, שמתאימות לאורח חיים עמוס וללו״ז אמיתי.',
-    overviewTitle: 'Overview',
-    overview: [
-      { icon: '✏️', title: 'הקדמה והסבר', steps: '3 שלבים' },
-      { icon: '🥗', title: 'מעבר הדרגתי לתזונה טבעית דלת פחמימות', steps: '6 שלבים' },
-    ],
-    registerTitle: 'מצטרפים לאתגר',
-    registerText: 'השאירו פרטים ואחזור אליכם לתיאום ולהסבר על התשלום. אפשר להתחיל ב-3 ימי ניסיון חינם ולהחליט אחר כך.',
     questions: 'שאלות?',
     or: 'או',
     whatsapp: 'וואטסאפ',
@@ -71,42 +41,6 @@ const copy = {
     },
   },
   en: {
-    title: 'Keto challenge',
-    // The original English page kept this intro in Hebrew; translated here.
-    intro: 'Everything you wanted to know about keto, in one place.\nEasy, simple, accessible (also on your budget).\nAt your own pace and time, without the confusion.',
-    plans: [
-      { id: 'free', name: 'Keto Kickstart Free 3-Day Plan', price: 'Free', value: 'Keto Kickstart – free 3-day plan', image: planFree, alt: 'Lettuce tacos' },
-      { id: 'full', name: 'Going Keto - 4 weeks', price: '₪250.00', value: 'Going Keto – 4 weeks (₪250)', image: planFull, alt: 'Fried eggs with kale and pecans' },
-    ],
-    join: 'Join',
-    programJoin: 'Join',
-    programTitle: 'Going Keto - 4 weeks',
-    programLead: 'A ketogenic diet transition plan that suits (very) busy women',
-    method: [
-      // fixed: "possible method for persistence"
-      'A gradual, delicious method that is actually possible to stick with',
-      'For the superwoman who juggles work, family, classes, travel, vacations, restaurants, weekends, hosting... Or in short - life.',
-      'Without extremes. Without turning your life upside down. Simply a way that fits into your routine.',
-    ],
-    expectTitle: 'What to expect during and at the end of the program:',
-    expect: [
-      'Freedom from addictions (sugar, processed food and carbohydrates) and mental liberation from emotional dependence on food.',
-      'Fewer inches and a feeling of lightness in the body.',
-      'Feeling alert, a sharp mind, stable mood and patience.',
-      'Improved sleep quality.',
-      // fixed: "pre- and post-menopausal symptoms" – the Hebrew means premenstrual symptoms
-      'Improvement in health indicators and relief from symptoms such as: migraines, allergies, skin problems, stomach pain and digestive problems, premenstrual symptoms and more.',
-      'And smoother facial skin (really).',
-    ],
-    howTitle: 'How does the program work?',
-    how: 'Clear and simple daily instructions to implement, that fit a busy lifestyle and a real schedule.',
-    overviewTitle: 'Overview',
-    overview: [
-      { icon: '✏️', title: 'Introduction and explanation', steps: '3 steps' },
-      { icon: '🥗', title: 'Gradual transition to a natural low-carb diet', steps: '6 steps' },
-    ],
-    registerTitle: 'Join the challenge',
-    registerText: 'Leave your details and I’ll get back to you to set things up and explain the payment. You can start with the free 3-day plan and decide later.',
     questions: 'Questions?',
     or: 'or',
     whatsapp: 'WhatsApp',
@@ -129,6 +63,14 @@ const copy = {
     },
   },
 }[lang];
+const text = challengeContent(lang);
+const images = { free: planFree, full: planFull } as const;
+const copy = {
+  ...text,
+  ...ui,
+  // The form option keeps the plan's name and price (sent in the sign-up email).
+  plans: text.plans.map((p) => ({ ...p, value: `${p.name} (${p.price})`, image: images[p.id] })),
+};
 const f = copy.form;
 ---
 

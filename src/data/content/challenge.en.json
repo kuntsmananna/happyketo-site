@@ -1,0 +1,40 @@
+{
+  "title": "Keto challenge",
+  "intro": "Everything you wanted to know about keto, in one place.\nEasy, simple, accessible (also on your budget).\nAt your own pace and time, without the confusion.",
+  "plans": [
+    {
+      "id": "free",
+      "name": "Keto Kickstart Free 3-Day Plan",
+      "price": "Free",
+      "alt": "Lettuce tacos"
+    },
+    {
+      "id": "full",
+      "name": "Going Keto - 4 weeks",
+      "price": "₪250.00",
+      "alt": "Fried eggs with kale and pecans"
+    }
+  ],
+  "join": "Join",
+  "programTitle": "Going Keto - 4 weeks",
+  "programLead": "A ketogenic diet transition plan that suits (very) busy women",
+  "method": [
+    "A gradual, delicious method that is actually possible to stick with",
+    "For the superwoman who juggles work, family, classes, travel, vacations, restaurants, weekends, hosting... Or in short - life.",
+    "Without extremes. Without turning your life upside down. Simply a way that fits into your routine."
+  ],
+  "expectTitle": "What to expect during and at the end of the program:",
+  "expect": [
+    "Freedom from addictions (sugar, processed food and carbohydrates) and mental liberation from emotional dependence on food.",
+    "Fewer inches and a feeling of lightness in the body.",
+    "Feeling alert, a sharp mind, stable mood and patience.",
+    "Improved sleep quality.",
+    "Improvement in health indicators and relief from symptoms such as: migraines, allergies, skin problems, stomach pain and digestive problems, premenstrual symptoms and more.",
+    "And smoother facial skin (really)."
+  ],
+  "howTitle": "How does the program work?",
+  "how": "Clear and simple daily instructions to implement, that fit a busy lifestyle and a real schedule.",
+  "programJoin": "Join",
+  "registerTitle": "Join the challenge",
+  "registerText": "Leave your details and I’ll get back to you to set things up and explain the payment. You can start with the free 3-day plan and decide later."
+}

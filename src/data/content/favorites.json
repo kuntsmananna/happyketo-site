@@ -1,0 +1,131 @@
+[
+  {
+    "name": "Organic Grass-Fed Original Ghee",
+    "image": "/src/assets/favorites/organic-grass-fed-original-ghee.webp",
+    "ingredients": "Grass-fed organic butter (made from non-homogenized whole milk from grassfed cows).",
+    "note": "Contains: Milk",
+    "href": "https://il.iherb.com/pr/pure-indian-foods-100-organic-grass-fed-original-ghee-15-oz-425-g/65370?rcode=CGJ130"
+  },
+  {
+    "name": "Traditional Duck Fat",
+    "image": "/src/assets/favorites/traditional-duck-fat.webp",
+    "ingredients": "Rendered duck fat.",
+    "href": "https://il.iherb.com/pr/epic-bar-traditional-duck-fat-11-oz-312-g/86445?rcode=CGJ130"
+  },
+  {
+    "name": "Celtic Sea Salt",
+    "image": "/src/assets/favorites/celtic-sea-salt.webp",
+    "ingredients": "Sea salt mined from an ancient seabed in Utah.",
+    "note": "Contains no anti-caking or bleaching agents, or any other additives.",
+    "href": "https://www.iherb.com/pr/redmond-trading-company-real-salt-ancient-fine-sea-salt-26-oz-737-g/111678?rcode=CGJ130"
+  },
+  {
+    "name": "Allulose Sweetener",
+    "image": "/src/assets/favorites/allulose-sweetener.webp",
+    "ingredients": "Allulose.",
+    "href": "https://il.iherb.com/pr/health-garden-all-natural-allulose-sweetener-14-oz-397-g/106072?rcode=CGJ130"
+  },
+  {
+    "name": "Trace Minerals® Keto Electrolyte Drops",
+    "image": "/src/assets/favorites/trace-minerals-keto-electrolyte-drops.webp",
+    "ingredients": "Ionic trace minerals complex, purified water, Utah Sea Minerals™, potassium chloride, non-gmo citric acid.",
+    "note": "Keto Electrolyte Drops is a potent electrolyte formula that is ideal for anyone on the Keto Diet. It provides full spectrum electrolytes your body may be lacking to help avoid electrolyte imbalance, dehydration, leg or other muscle cramps, which are part of what is termed as the \"keto flu\".",
+    "href": "https://il.iherb.com/pr/trace-minerals-keto-electrolyte-drops-4-fl-oz-118-ml/86299?rcode=CGJ130"
+  },
+  {
+    "name": "Almond Flour Crackers",
+    "image": "/src/assets/favorites/almond-flour-crackers.webp",
+    "ingredients": "Almond flour, water, cheddar cheese (pasteurized milk, cheese culture, salt, enzymes), butter (cream, natural flavoring), coconut flour, flax meal, parmesan cheese (pasteurized cow's milk, cheese culture, salt, enzymes), egg white, sea salt, aluminum-free baking powder, xanthan gum, annatto (color), garlic, paprika extract, rosemary extract, onion.",
+    "href": "https://il.iherb.com/pr/fat-snax-almond-flour-crackers-cheddar-4-25-oz-120-5-g/110970?rcode=CGJ130"
+  },
+  {
+    "name": "Nutritional Yeast Flakes",
+    "image": "/src/assets/favorites/nutritional-yeast-flakes.webp",
+    "ingredients": "Imported yeast.",
+    "href": "https://il.iherb.com/pr/kal-imported-nutritional-yeast-flakes-unsweetened-7-8-oz-220-g/70122?rcode=CGJ130"
+  },
+  {
+    "name": "Pork Rind Crumbs",
+    "image": "/src/assets/favorites/pork-rind-crumbs.webp",
+    "ingredients": "Pork rinds, (cooked in pork fat), seasoning (salt, spices, paprika, mustard, onion powder, garlic powder, oleoresin of paprika).",
+    "href": "https://il.iherb.com/pr/pork-king-good-pork-rind-crumbs-original-12-oz-340-g/103732?rcode=CGJ130"
+  },
+  {
+    "name": "Keto Granola, Chocolate Sea Salt",
+    "image": "/src/assets/favorites/keto-granola-chocolate-sea-salt.webp",
+    "ingredients": "Sunflower seeds, wondrose sugar replacer (erythritol, non-gmo soluble corn fiber, inulin, monk fruit, natural flavors), almonds, coconut chips, pepitas, walnuts, cocoa powder, coconut oil, water, salt, natural flavors.",
+    "href": "https://il.iherb.com/pr/keto-and-co-keto-granola-chocolate-sea-salt-10-oz-285-g/106915?rcode=CGJ130"
+  },
+  {
+    "name": "Organic Maple Flavored Syrup",
+    "image": "/src/assets/favorites/organic-maple-flavored-syrup.webp",
+    "ingredients": "Organic allulose, organic maple flavor, organic caramel color.",
+    "href": "https://il.iherb.com/pr/rxsugar-organic-maple-flavored-syrup-16-fl-oz-473-ml/104181?rcode=CGJ130"
+  },
+  {
+    "name": "Organic Chocolate Syrup",
+    "image": "/src/assets/favorites/organic-chocolate-syrup.webp",
+    "ingredients": "Organic allulose, organic cocoa powder.",
+    "href": "https://il.iherb.com/pr/rxsugar-organic-chocolate-syrup-16-fl-oz-473-ml/106688?rcode=CGJ130"
+  },
+  {
+    "name": "Wagyu Beef Steak Strip",
+    "image": "/src/assets/favorites/wagyu-beef-steak-strip.webp",
+    "ingredients": "Beef, honey, sea salt, black pepper, garlic powder",
+    "href": "https://il.iherb.com/pr/epic-bar-wagyu-beef-steak-strip-0-08-oz-23-g/103154?rcode=CGJ130"
+  },
+  {
+    "name": "Organic Unsweetened Toasted Coconut Flakes",
+    "image": "/src/assets/favorites/organic-unsweetened-toasted-coconut-flakes.webp",
+    "ingredients": "Organic coconut (sliced, dehydrated & toasted).",
+    "href": "https://il.iherb.com/pr/edward-sons-let-s-do-organic-100-organic-unsweetened-toasted-coconut-flakes-7-oz-200-g/61275?rcode=CGJ130"
+  },
+  {
+    "name": "Double Acting Baking Powder",
+    "image": "/src/assets/favorites/double-acting-baking-powder.webp",
+    "ingredients": "Sodium acid pyrophosphate, sodium bicarbonate, cornstarch, and monocalcium phosphate.",
+    "href": "https://il.iherb.com/pr/bob-s-red-mill-double-acting-baking-powder-gluten-free-14-oz-397-g/89507?rcode=CGJ130"
+  },
+  {
+    "name": "Raw Almond Butter",
+    "image": "/src/assets/favorites/raw-almond-butter.webp",
+    "ingredients": "Raw organic almonds.",
+    "href": "https://il.iherb.com/pr/artisana-organics-raw-almond-butter-14-oz-397-g/64977?rcode=CGJ130"
+  },
+  {
+    "name": "Super-Fine Almond Flour",
+    "image": "/src/assets/favorites/super-fine-almond-flour.webp",
+    "ingredients": "Whole almonds.",
+    "href": "https://il.iherb.com/pr/bob-s-red-mill-natural-almond-flour-super-fine-16-oz-453-g/103994?rcode=CGJ130"
+  },
+  {
+    "name": "Egg White Protein, Unflavored",
+    "image": "/src/assets/favorites/egg-white-protein-unflavored.webp",
+    "ingredients": "Egg white powder*, sunflower lecithin (*from chickens not treated with hormones or antibiotics, non-GMO).",
+    "href": "https://il.iherb.com/pr/julian-bakery-paleo-thin-egg-white-protein-unflavored-2-lbs-907-g/77542?rcode=CGJ130"
+  },
+  {
+    "name": "Chocolate Salted Caramel",
+    "image": "/src/assets/favorites/chocolate-salted-caramel.webp",
+    "ingredients": "Unsweetened chocolate, erythritol†, chicory root fiber, milk (rBST free), cocoa butter, natural flavors, milk fat (rBST free), sunflower lecithin, salt, stevia extract.",
+    "href": "https://il.iherb.com/pr/lily-s-sweets-baking-chips-chocolate-salted-caramel-9-oz-255-g/109823?rcode=CGJ130"
+  },
+  {
+    "name": "Liquid Sweetener, English Toffee",
+    "image": "/src/assets/favorites/liquid-sweetener-english-toffee.webp",
+    "ingredients": "Vegetable glycerin, natural english toffee flavor (in an alcohol base) certified organic stevia leaf extract.",
+    "href": "https://il.iherb.com/pr/now-foods-better-stevia-zero-calorie-liquid-sweetener-english-toffee-2-fl-oz-59-ml/50803?rcode=CGJ130"
+  },
+  {
+    "name": "Organic Monk Fruit, Liquid Sweetener",
+    "image": "/src/assets/favorites/organic-monk-fruit-liquid-sweetener.webp",
+    "ingredients": "Organic glycerin, de-ionized water, organic monk fruit (luo han guo) extract.",
+    "href": "https://il.iherb.com/pr/now-foods-organic-monk-fruit-liquid-sweetener-2-fl-oz-59-ml/115817?rcode=CGJ130"
+  },
+  {
+    "name": "Liquid Sweetener, Hazelnut",
+    "image": "/src/assets/favorites/liquid-sweetener-hazelnut.webp",
+    "ingredients": "Vegetable glycerin, natural hazelnut flavor (tree nut) (in an alcohol base), certified organic stevia leaf extract.",
+    "href": "https://il.iherb.com/pr/now-foods-better-stevia-zero-calorie-liquid-sweetener-hazelnut-2-fl-oz-59-ml/15121?rcode=CGJ130"
+  }
+]

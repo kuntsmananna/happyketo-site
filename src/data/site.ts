@@ -1,3 +1,5 @@
+import { contactContent } from './content';
+
 export const site = {
   name: 'Happy Keto',
   title: 'Happy Keto | תזונה קטוגנית טבעית, פשוטה וטעימה',
@@ -6,14 +8,15 @@ export const site = {
   url: 'https://www.happyketoforme.com',
   locale: 'he_IL',
   author: 'אנה קונצמן רוזנברג',
+  // Phone, email and Instagram come from src/data/content/contact.json (editable in the admin panel).
   contact: {
-    phone: '054-6517951',
-    phoneHref: 'tel:+972546517951',
-    whatsappHref: 'https://wa.me/972546517951',
-    email: 'kuntsman.anna@gmail.com',
-    location: 'יפו, תל אביב',
+    phone: contactContent.phone,
+    phoneHref: `tel:+972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`,
+    whatsappHref: `https://wa.me/972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`,
+    email: contactContent.email,
+    location: contactContent.location,
   },
-  social: [{ label: 'Instagram', handle: '@happyketoforme', href: 'https://www.instagram.com/happyketoforme/' }],
+  social: [{ label: 'Instagram', handle: contactContent.instagramHandle, href: contactContent.instagramUrl }],
   healthDisclaimer: 'אתר זה הוא למידע בלבד ואין לראות בו ייעוץ רפואי.',
 } as const;
 

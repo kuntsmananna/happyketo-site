@@ -12,8 +12,13 @@ import { favorites } from '@/data/favorites';
 import { getLang } from '@/i18n';
 
 const lang = getLang(Astro.url);
-const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/favorites/*.webp', { eager: true });
-const imageFor = (slug: string) => images[`/src/assets/favorites/${slug}.webp`]?.default;
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/favorites/*.{webp,jpg,jpeg,png,avif}', { eager: true });
+// `image` is the path the admin panel stores (/src/assets/favorites/<file>); a missing file fails the build.
+const imageFor = (path: string) => {
+  const img = images[path]?.default;
+  if (!img) throw new Error(`Pantry photo not found: ${path} (src/data/content/favorites.json)`);
+  return img;
+};
 const title = lang === 'he' ? 'המזווה הקטוגני – מוצרים מומלצים' : 'The Ketogenic Pantry – recommended products';
 // Desktop: three columns filled left to right; phones: one list in the original order (via `order`).
 const columns = [0, 1, 2].map((c) => favorites.map((item, i) => ({ item, i })).filter(({ i }) => i % 3 === c));
@@ -29,7 +34,7 @@ const columns = [0, 1, 2].map((c) => favorites.map((item, i) => ({ item, i })).f
       columns.map((col) => (
         <ul class="contents lg:flex lg:flex-col lg:gap-5">
           {col.map(({ item, i }) => {
-            const img = imageFor(item.slug);
+            const img = imageFor(item.image);
             return (
               <li data-reveal class="group flex flex-col" style={`order:${i}`}>
                 <div class="relative aspect-[413/349] overflow-hidden bg-white">

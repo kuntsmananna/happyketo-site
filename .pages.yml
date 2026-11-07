@@ -1,0 +1,421 @@
+# Pages CMS admin panel (https://app.pagescms.org) – Anna's editor for recipes, blog posts and site text.
+# Every save is a commit to GitHub; Vercel rebuilds and publishes in ~1–2 minutes. The build validates content
+# (src/content.config.ts, src/data/content.ts, check:dist), so a broken edit never replaces the live site.
+# Notes for maintainers:
+# - settings.content.merge keeps frontmatter keys that have no field here (wixUrl, updatedDate) when saving.
+# - Inside lists of objects every key must be declared (unknown keys are dropped on save) – use readonly.
+# - Post bodies use a plain `text` field on purpose: the rich-text editor drops <video>, <iframe> and the
+#   <!-- recipe --> marker.
+# - Renaming entries is off: file names are the post URLs (and the old Wix redirects point at them).
+
+settings:
+  content:
+    merge: true
+
+media:
+  - name: posts
+    label: תמונות מתכונים ופוסטים
+    input: src/assets/posts
+    output: ../../assets/posts
+    categories: [image]
+    rename: random
+  - name: favorites
+    label: תמונות מוצרים (המזווה)
+    input: src/assets/favorites
+    output: /src/assets/favorites
+    categories: [image]
+    rename: safe
+
+content:
+  # ---------------------------------------------------------------- recipes
+  - name: recipes
+    label: מתכונים
+    description: "שם הקובץ הוא כתובת המתכון באתר (למשל keto-pancakes.md – אותיות באנגלית, מספרים ומקפים). את הכתובת אי אפשר לשנות אחר כך."
+    type: collection
+    path: src/content/recipes
+    format: yaml-frontmatter
+    filename:
+      template: "recipe-{year}-{month}-{day}.md"
+      field: create
+    operations:
+      rename: false
+    view:
+      primary: title
+      fields: [title, category, publishDate, draft]
+      search: [title, tags]
+      sort: [publishDate, title]
+      default:
+        sort: publishDate
+        order: desc
+    fields:
+      - name: title
+        label: שם המתכון
+        type: string
+        required: true
+      - name: description
+        label: תיאור קצר
+        description: משפט או שניים – מופיע בגוגל ובשיתוף ברשתות.
+        type: text
+      - name: image
+        label: תמונה ראשית
+        description: תמונה מרובעת או לרוחב, לפחות 1200 פיקסלים.
+        type: image
+        options:
+          media: posts
+      - name: imageAlt
+        label: תיאור התמונה (לעיוורים ולגוגל)
+        type: string
+      - name: category
+        label: קטגוריות
+        type: select
+        required: true
+        options:
+          multiple: true
+          values:
+            - { value: paleo, label: פליאו }
+            - { value: pastry, label: מאפים }
+            - { value: meat, label: בשר }
+            - { value: fish, label: דגים }
+            - { value: soups, label: מרקים }
+            - { value: eggs, label: ביצים }
+            - { value: vegetables, label: ירקות }
+            - { value: desserts, label: קינוחים }
+            - { value: spreads, label: ממרחים ורטבים }
+            - { value: drinks, label: משקאות }
+      - name: tags
+        label: תיוגים
+        description: מילים לחיפוש באתר, למשל "שוקולד", "ללא ביצים".
+        type: string
+        list: true
+      - name: prepTime
+        label: זמן הכנה (דקות)
+        type: number
+        options:
+          min: 1
+      - name: cookTime
+        label: זמן בישול/אפייה (דקות)
+        type: number
+        options:
+          min: 1
+      - name: servings
+        label: כמות
+        description: למשל "8 חתיכות" או "4 מנות".
+        type: string
+      - name: ingredients
+        label: מצרכים
+        description: קבוצה אחת מספיקה. כותרת לקבוצה רק אם יש כמה (למשל "לבצק", "לציפוי").
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: כותרת הקבוצה (לא חובה)
+            type: string
+          - name: items
+            label: מצרכים – שורה לכל מצרך
+            type: string
+            list: true
+            required: true
+      - name: instructions
+        label: אופן ההכנה
+        type: object
+        list: true
+        fields:
+          - name: title
+            label: כותרת הקבוצה (לא חובה)
+            type: string
+          - name: steps
+            label: שלבים – שלב בכל שורה
+            type: text
+            list: true
+            required: true
+      - name: publishDate
+        label: תאריך פרסום
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+      - name: draft
+        label: טיוטה (לא מופיע באתר)
+        type: boolean
+        default: false
+      - name: body
+        label: טקסט המתכון
+        description: "שורה ריקה = פסקה חדשה. ## בתחילת שורה = כותרת. השורה <!-- recipe --> מסמנת איפה יופיעו המצרכים ואופן ההכנה – להשאיר אותה. אין למחוק שורות שמתחילות ב-< (סרטונים)."
+        type: text
+
+  # ---------------------------------------------------------------- blog
+  - name: blog
+    label: בלוג
+    description: "שם הקובץ הוא כתובת הפוסט באתר (אותיות באנגלית, מספרים ומקפים). את הכתובת אי אפשר לשנות אחר כך."
+    type: collection
+    path: src/content/blog
+    format: yaml-frontmatter
+    filename:
+      template: "post-{year}-{month}-{day}.md"
+      field: create
+    operations:
+      rename: false
+    view:
+      primary: title
+      fields: [title, publishDate, draft]
+      search: [title, tags]
+      sort: [publishDate, title]
+      default:
+        sort: publishDate
+        order: desc
+    fields:
+      - name: title
+        label: כותרת
+        type: string
+        required: true
+      - name: description
+        label: תיאור קצר
+        type: text
+      - name: image
+        label: תמונה ראשית
+        type: image
+        options:
+          media: posts
+      - name: imageAlt
+        label: תיאור התמונה
+        type: string
+      - name: tags
+        label: תיוגים
+        type: string
+        list: true
+      - name: publishDate
+        label: תאריך פרסום
+        type: date
+        required: true
+        options:
+          time: true
+          format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+      - name: draft
+        label: טיוטה (לא מופיע באתר)
+        type: boolean
+        default: false
+      - name: body
+        label: טקסט הפוסט
+        description: "שורה ריקה = פסקה חדשה. ## בתחילת שורה = כותרת. **מילה** = מודגש. אין למחוק שורות שמתחילות ב-< (סרטונים)."
+        type: text
+
+  # ---------------------------------------------------------------- site pages
+  - name: pages
+    label: טקסטים באתר
+    type: group
+    items:
+      - name: home-he
+        label: עמוד הבית (עברית)
+        type: file
+        path: src/data/content/home.he.json
+        format: json
+        fields: &homeFields
+          - name: hero
+            label: פתיח
+            type: object
+            fields:
+              - { name: wordmark, label: לוגו, type: string, readonly: true }
+              - { name: title, label: כותרת, type: string, required: true }
+              - { name: titleSerif, label: כותרת באות נטויה, type: boolean }
+              - { name: text, label: טקסט, type: text, required: true }
+              - { name: cta, label: כפתור, type: string, required: true }
+              - { name: imageAlt, label: תיאור התמונה, type: string, required: true }
+          - name: challenge
+            label: אתגר 4 שבועות
+            type: object
+            fields:
+              - { name: eyebrow, label: כותרת עליונה (אנגלית), type: string, required: true }
+              - { name: title, label: כותרת, type: string, required: true }
+              - { name: paragraphs, label: פסקאות, type: text, list: true, required: true }
+              - { name: perks, label: יתרונות (✔), type: string, list: true, required: true }
+              - { name: cta, label: כפתור, type: string, required: true }
+          - name: band
+            label: רצועת תמונה
+            type: object
+            fields:
+              - { name: title, label: "כותרת (ירידת שורה = שורה חדשה)", type: text, required: true }
+              - { name: imageAlt, label: תיאור התמונה, type: string, required: true }
+          - name: about
+            label: אודות (בעמוד הבית)
+            type: object
+            fields:
+              - { name: heading, label: כותרת (לא חובה), type: string }
+              - { name: paragraphs, label: שורות, type: text, list: true, required: true }
+              - { name: cta, label: כפתור, type: string, required: true }
+              - { name: name, label: כיתוב מתחת לתמונה, type: string, required: true }
+              - { name: salmonAlt, label: תיאור תמונת הסלמון, type: string, required: true }
+              - { name: annaAlt, label: תיאור התמונה של אנה, type: string, required: true }
+          - name: cuisine
+            label: Keto Cuisine
+            type: object
+            fields:
+              - { name: eyebrow, label: כותרת עליונה (אנגלית), type: string, required: true }
+              - { name: title, label: כותרת, type: string, required: true }
+              - { name: lines, label: שורות פתיחה, type: text, list: true, required: true }
+              - { name: list, label: רשימה (✦), type: string, list: true, required: true }
+              - { name: note, label: הערה, type: string, required: true }
+              - { name: cta, label: קישור, type: string, required: true }
+              - { name: dayAlt, label: תיאור תמונת היום, type: string, required: true }
+              - { name: nightAlt, label: תיאור תמונת הערב, type: string, required: true }
+          - name: services
+            label: שלוש הקוביות (מתכונים, בלוג, מזווה)
+            type: object
+            list: true
+            fields:
+              - { name: key, label: מזהה, type: string, readonly: true }
+              - { name: eyebrow, label: כותרת עליונה (אנגלית), type: string, required: true }
+              - { name: title, label: כותרת, type: string, required: true }
+              - { name: text, label: טקסט, type: text, required: true }
+              - { name: cta, label: קישור, type: string, required: true }
+              - { name: href, label: כתובת, type: string, readonly: true }
+              - { name: alt, label: תיאור התמונה, type: string, required: true }
+          - name: latest
+            label: מתכונים חדשים
+            type: object
+            fields:
+              - { name: eyebrow, label: כותרת עליונה (אנגלית), type: string, required: true }
+              - { name: title, label: כותרת, type: string, required: true }
+              - { name: note, label: הערה (לא חובה), type: string }
+              - { name: cta, label: כפתור, type: string, required: true }
+          - name: newsletter
+            label: ניוזלטר
+            type: object
+            fields:
+              - { name: title, label: כותרת, type: string, required: true }
+              - { name: text, label: טקסט, type: text, required: true }
+              - { name: email, label: שדה אימייל, type: string, required: true }
+              - { name: cta, label: כפתור, type: string, required: true }
+              - { name: success, label: הודעת הצלחה, type: string, required: true }
+              - { name: subject, label: נושא המייל שמגיע אלייך, type: string, required: true }
+          - { name: faqTitle, label: כותרת השאלות והתשובות, type: string, required: true }
+      - name: home-en
+        label: Homepage (English)
+        type: file
+        path: src/data/content/home.en.json
+        format: json
+        fields: *homeFields
+
+      - name: faq-he
+        label: שאלות ותשובות (עברית)
+        type: file
+        path: src/data/content/faq.he.json
+        format: json
+        list: true
+        fields: &faqFields
+          - { name: q, label: שאלה, type: string, required: true }
+          - { name: a, label: תשובה – פסקה בכל שורה, type: text, list: true, required: true }
+      - name: faq-en
+        label: FAQ (English)
+        type: file
+        path: src/data/content/faq.en.json
+        format: json
+        list: true
+        fields: *faqFields
+
+      - name: about-he
+        label: אודות (עברית)
+        type: file
+        path: src/data/content/about.he.json
+        format: json
+        fields: &aboutFields
+          - { name: name, label: שם (כותרת העמוד), type: string, required: true }
+          - { name: jobTitle, label: תפקיד (לגוגל), type: string, required: true }
+          - name: introGroups
+            label: פתיחה – קבוצות שורות (לפני התמונות)
+            type: object
+            list: true
+            fields:
+              - { name: lines, label: שורות, type: text, list: true, required: true }
+          - name: storyGroups
+            label: הסיפור – קבוצות שורות (אחרי התמונות)
+            type: object
+            list: true
+            fields:
+              - { name: lines, label: שורות, type: text, list: true, required: true }
+          - { name: disclosureTitle, label: כותרת גילוי נאות, type: string, required: true }
+          - { name: disclosure, label: גילוי נאות, type: text, list: true, required: true }
+          - { name: welcome, label: ברוכים הבאים, type: string, required: true }
+          - { name: medical, label: הבהרה רפואית, type: text, list: true, required: true }
+          - { name: sign, label: חתימה, type: string, required: true }
+          - { name: plateAlt, label: תיאור תמונת הצלחת, type: string, required: true }
+          - { name: steakAlt, label: תיאור תמונת הסטייק, type: string, required: true }
+          - { name: selfieAlt, label: תיאור הסלפי, type: string, required: true }
+      - name: about-en
+        label: About (English)
+        type: file
+        path: src/data/content/about.en.json
+        format: json
+        fields: *aboutFields
+
+      - name: challenge-he
+        label: אתגר קיטו (עברית)
+        type: file
+        path: src/data/content/challenge.he.json
+        format: json
+        fields: &challengeFields
+          - { name: title, label: כותרת, type: string, required: true }
+          - { name: intro, label: פתיח (ירידת שורה = שורה חדשה), type: text, required: true }
+          - name: plans
+            label: המסלולים (חינמי, מלא)
+            type: object
+            list: true
+            fields:
+              - { name: id, label: מזהה, type: string, readonly: true }
+              - { name: name, label: שם המסלול, type: string, required: true }
+              - { name: price, label: מחיר, type: string, required: true }
+              - { name: alt, label: תיאור התמונה, type: string, required: true }
+          - { name: join, label: כפתור בכרטיס, type: string, required: true }
+          - { name: programTitle, label: כותרת התוכנית, type: string, required: true }
+          - { name: programLead, label: משפט פתיחה, type: text, required: true }
+          - { name: method, label: השיטה, type: text, list: true, required: true }
+          - { name: expectTitle, label: כותרת "למה לצפות", type: string, required: true }
+          - { name: expect, label: למה לצפות, type: text, list: true, required: true }
+          - { name: howTitle, label: כותרת "איך זה עובד", type: string, required: true }
+          - { name: how, label: איך זה עובד, type: text, required: true }
+          - { name: programJoin, label: כפתור בסוף התוכנית, type: string, required: true }
+          - { name: registerTitle, label: כותרת ההרשמה, type: string, required: true }
+          - { name: registerText, label: טקסט ההרשמה, type: text, required: true }
+      - name: challenge-en
+        label: Keto challenge (English)
+        type: file
+        path: src/data/content/challenge.en.json
+        format: json
+        fields: *challengeFields
+
+      - name: favorites
+        label: המזווה – מוצרים מומלצים
+        type: file
+        path: src/data/content/favorites.json
+        format: json
+        list: true
+        fields:
+          - { name: name, label: שם המוצר, type: string, required: true }
+          - name: image
+            label: תמונה
+            type: image
+            required: true
+            options:
+              media: favorites
+          - { name: ingredients, label: רכיבים (באנגלית), type: text, required: true }
+          - { name: note, label: הערה (למשל Contains Milk), type: string }
+          - name: href
+            label: קישור ל-iHerb
+            description: "להשאיר את rcode=CGJ130 בסוף הקישור (קוד ההפניה שלך)."
+            type: string
+            required: true
+            pattern:
+              regex: "^https://"
+              message: "קישור מלא שמתחיל ב-https://"
+
+      - name: contact
+        label: פרטי קשר
+        type: file
+        path: src/data/content/contact.json
+        format: json
+        fields:
+          - { name: phone, label: טלפון (כמו 054-6517951), type: string, required: true }
+          - { name: email, label: אימייל, type: string, required: true }
+          - { name: location, label: מיקום, type: string, required: true }
+          - { name: instagramHandle, label: שם באינסטגרם (עם @), type: string, required: true }
+          - { name: instagramUrl, label: קישור לאינסטגרם, type: string, required: true }

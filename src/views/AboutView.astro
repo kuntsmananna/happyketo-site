@@ -7,6 +7,7 @@
 import { Image } from 'astro:assets';
 import JsonLd from '@/components/JsonLd.astro';
 import Marquee from '@/components/Marquee.astro';
+import { aboutContent } from '@/data/content';
 import { site } from '@/data/site';
 import { getLang, localized } from '@/i18n';
 import anna from '@/assets/home/anna.jpg';
@@ -17,91 +18,8 @@ import stickerLowCarb from '@/assets/brand/sticker-low-carb.png';
 
 const lang = getLang(Astro.url);
 
-const copy = {
-  he: {
-    name: 'אנה קונצמן רוזנברג',
-    intro: [
-      'אתחיל מהסוף: אני הייטקיסטית עם 2 ילדות קטנות, לו״ז משוגע ואובססיה לסדר ונקיון שיודעת איך בכל הדבר המשוגע הזה שנקרא החיים להכניס ולשלב אוכל טעים ומזין ב-no time. איך?! אשמח לחלוק וללמד אתכם.',
-      'אני אנה, ואני חיה ״בקצב גבוה״, לא נחה לדקה אבל בעיקר עקשנית.',
-      'העקשנות לא לוותר על דברים או לבחור משהו על חשבון משהו אחר. פשוט לא מוכנה להשלים עם המשפט הזה. אני מאמינה שאפשר להספיק הכל וכן להנות מכל העולמות!',
-    ],
-    story: [
-      'אני גרה ביפו, נשואה לניצן ושתי יצורות מקסימות בשם שירה ורוני הפכו אותי לאמא.',
-      'למדתי עיצוב ובמשך עשור הייתי מנהלת קריאטיב ב-wix, הקמתי וניהלתי צוותי עיצוב בארץ ובחו״ל ועבדתי עם לקוחות בינלאומיים.',
-      'היה לי סופר מעניין, כיף, מפתח ומעיף! אתם יכולים לדמיין את הג׳ינגול והקצב של זוג קרייריסטים עם ילדים קטנים, רשימת מטלות שלא נגמרת ורק 24 שעות ביום (איך יש רק 24 שעות?!?! ולמי יש זמן לישון בכלל?!). החלטתי שאני לא מוכנה לוותר על הבריאות שלי ואני חייבת לפצח איך בכל הצ׳יגעון הזה אני מצליחה להכניס ספורט ולאכול בריא.',
-      'התחלתי לחקור וללמוד תזונה, בעיקר מפורומים, פודקאסטים, מאמרים והרצאות באינטרנט, התעמקתי יותר ויותר.',
-      'התנסתי בצמחונות, טבעונות, פליאו וקיטו. כשעברתי לתזונה קטוגנית הרגשתי שיש שינוי, שאני מתחילה לרדת במשקל ומתחילה להרגיש טוב יותר. הבנתי שמצאתי את הדבר שלי.',
-      'למדתי לעומק איך מיישמים תזונה דלת פחמימות בצורה הנכונה והבריאה ובעיקר מה היתרונות הבריאותיים שלה (וזה וואו!)',
-      'תוך כדי שאני כבר בקיאה בחומר עשיתי בדיקות דם (בכל זאת גיל 40 והגיע הזמן לבדק בית) ולהפתעתי (הלם/ שוק/ אמא׳לה יותר מתאימים לתיאור) גיליתי שאני שניה לפני סוכרת ויש לי עמידות גבוהה לאינסולין, שהקורטיזול (הורמון הסטרס) בגובה של עזריאלי והשינוי שאני עושה הוא לא בגדר איזו התנסות או תחביב חדש אלא ממש חובה וזו הדרך חיים שלי מהיום והלאה.',
-      'התזונה הקטוגנית חסכה ממני מחלה קשה. ממש במקרה. באמצע החיים. איזה מזל.',
-      'תקראו לזה ״משבר גיל 40״. אני קוראת לזה ״התפתחות גיל 40״. עשיתי פניית פרסה.',
-      'עזבתי את העבודה והתחלתי להקדיש את כולי כולי לחקר התזונה הקטוגנית, היתרונות שלה והיישום שלה ביום יום (בעולם לא קטוגני בעליל). העברתי את כל המשפחה לתזונה דלת פחמימות (כולל 2 בנות, בנות 10-6), התחלתי לפתח מתכונים (תוך דגש על קלות ומהירות), להעביר הרצאות, ללוות אנשים בתהליך של שינוי ומעבר לתזונה קטוגנית או פליאו.',
-      'אני מאמינה גדולה בתזונה טבעית ודלת פחמימות, פגשתי בעשרות אנשים שבעזרת התזונה הורידו (מלא) במשקל והבריאו משלל מחלות. ומה שהכי מדהים אותי בכל הסיפור הזה: שזה ממש מתחת לאף שלנו ודי בקלות ניתן לשלב תזונה מיטיבה כחלק מסדר היום שלנו עם כל לו״ז, צפוף ולחוץ ככל שיהיה.',
-      'או כמו שאומרים: ״אם אני יכולה, כל אחד יכול!״ אשמח לשתף וללמד את העקרונות הפשוטים אותם גיבשתי ויישמתי.',
-      'אז למה לבחור אם אפשר גם וגם?!',
-    ],
-    disclosureTitle: 'גילוי נאות:',
-    disclosure: [
-      'אינני רופאה, לא תזונאית ולא מטפלת.',
-      'צברתי המון ידע ממקורות רבים, בדקתי, התנסתי ודייקתי.',
-      'אני נמצאת בתזונה דלת פחמימות מזה כעשור ומקפידה על תזונה קטוגנית כשלוש שנים.',
-      'ליוויתי בני משפחה, חברים ואנשים רבים אחרים ועזרתי להם לעבור לתזונה דלת פחמימות (קטוגנית או פליאו). ראיתי וחוויתי יחד איתם את השינויים המדהימים שהם עברו ואיך אורח החיים החדש היטיב ומיטיב איתם. ראיתי וחוויתי יחד איתם גם את האתגרים הפסיכולוגיים והפיסיים, האישיים והסביבתיים. מתוך נסיון זה פיתחתי ודייקתי את HAPPY KETO שהוא בית לתזונה קטוגנית, שמחה והנאה.',
-    ],
-    welcome: 'ברוכות וברוכים הבאים!',
-    medical: [
-      '* אתר זה הוא למידע בלבד ואין לראות בו ייעוץ רפואי.',
-      'מטרת התכנים המופיעים באתר היא לספק מידע בנושא תזונה קטוגנית טבעית. התכנים אינם חוות דעת רפואית מקצועית. התכנים המופיעים בתוכנית זו נועדו להרחבת הידע האישי של המשתמשים והמשתמשות ואין לראות בהם תחליף להתייעצות עם רופא מומחה.',
-    ],
-    sign: 'שלכם/ן, אנה קונצמן רוזנברג',
-    plateAlt: 'צלחת עם ביצי עין, קייל ופקאנים',
-    steakAlt: 'סטייק פרוס על קרש',
-    selfieAlt: 'אנה בסדנת בישול',
-    jobTitle: 'מייסדת Happy Keto',
-  },
-  en: {
-    name: 'Anna Kuntsman Rosenberg',
-    intro: [
-      'I’ll start at the end: I’m a high-tech person with 2 little girls, a crazy schedule, and an obsession with order and cleanliness who knows how to incorporate delicious and nutritious food into this crazy thing called life in no time. How?! I’d be happy to share and teach you.',
-      'I’m Anna, and I live "at a high pace," never resting for a minute, but mostly stubborn.',
-      'The stubbornness to not give up on things or choose something at the expense of something else. I just don’t want to accept that statement. I believe that it is possible to achieve everything and enjoy the best of both worlds!',
-    ],
-    story: [
-      'I live in Jaffa, married to Nitzan, and two lovely beauties named Shira and Roni made me a mother.',
-      'I studied design and for a decade I was a creative director at Wix, establishing and managing design teams in Israel and abroad and working with international clients.',
-      'I had a super interesting, fun, challenging and exciting time! You can imagine the hustle and bustle of a career couple with small children, a never-ending to-do list and only 24 hours in a day (how are there only 24 hours?!?! And who has time to sleep anyway?!). I decided that I was not willing to give up on my health and I had to figure out how in all this madness I manage to fit in exercise and healthy eating.',
-      'I began researching and learning about nutrition, mainly from forums, podcasts, articles, and lectures online, and I delved deeper and deeper.',
-      'I experimented with vegetarianism, veganism, paleo and keto. When I switched to a ketogenic diet I felt a change, I started losing weight and starting to feel better. I realized I had found my thing.',
-      'I learned in depth how to implement a low-carb diet in the correct and healthy way and, most importantly, what its health benefits are (and wow!)',
-      // fixed: mistranslations of "אמא׳לה" and "בגובה של עזריאלי"
-      'While I was already familiar with the material, I did blood tests (after all, I was 40 and it was time for a check-up) and to my surprise (shock / panic / oh my god would be more accurate) I discovered that I was pre-diabetic with high insulin resistance, that my cortisol (the stress hormone) was sky-high, and that the change I was making was not some experiment or new hobby, but a real must – my way of life from now on.',
-      'The ketogenic diet saved me from a serious illness. Quite by chance. In mid-life. How lucky.',
-      'Call it a "mid-40s crisis." I call it a "mid-40s evolution." I did a U-turn.',
-      'I quit my job and began dedicating myself entirely to researching the ketogenic diet, its benefits, and its application in everyday life (in a world that is not exactly ketogenic). I transitioned the entire family to a low-carb diet (including 2 daughters, ages 6-10), began developing recipes (with an emphasis on ease and speed), giving lectures, and guiding people through the process of changing and transitioning to a ketogenic or paleo diet.',
-      // fixed: "lost (completely) weight"
-      'I am a big believer in a natural, low-carb diet. I have met dozens of people who, with the help of the diet, have lost (a lot of) weight and recovered from a variety of diseases. And what amazes me most about this whole story: that it’s right under our noses and that we can quite easily incorporate good nutrition as part of our daily routine with any schedule, no matter how busy and stressful it may be.',
-      'Or as they say: "If I can do it, anyone can!" I would be happy to share and teach the simple principles that I have formulated and implemented.',
-      'So why choose if you can have both?!',
-    ],
-    disclosureTitle: 'Disclosure:',
-    disclosure: [
-      // fixed: the original English said "Annie is a doctor" – the Hebrew says the opposite
-      'I am not a doctor, a nutritionist or a therapist.',
-      'I gained a lot of knowledge from many sources, I tested, experimented, and was precise.',
-      'I have been on a low-carb diet for about a decade and have been following a ketogenic diet for about three years.',
-      'I have accompanied family members, friends and many other people and helped them transition to a low-carb diet (ketogenic or paleo). I have seen and experienced with them the incredible changes they have undergone and how the new lifestyle has benefited and is benefiting them. I have also seen and experienced with them the psychological and physical, personal and environmental challenges. From this experience I have developed and refined HAPPY KETO, a home for ketogenic nutrition, joy and pleasure.',
-    ],
-    welcome: 'Welcome!',
-    medical: [
-      '* This website is for informational purposes only and should not be considered medical advice.',
-      'The purpose of the content on the site is to provide information on the natural ketogenic diet. The content is not a professional medical opinion. The content appearing in this program is intended to expand the personal knowledge of users and should not be considered a substitute for consulting a specialist.',
-    ],
-    sign: 'Yours, Anna Kuntsman Rosenberg',
-    plateAlt: 'A plate with fried eggs, kale and pecans',
-    steakAlt: 'Sliced steak on a board',
-    selfieAlt: 'Anna at a cooking workshop',
-    jobTitle: 'Founder of Happy Keto',
-  },
-}[lang];
+// Text: src/data/content/about.{he,en}.json (editable in the admin panel).
+const copy = aboutContent(lang);
 
 const person = {
   '@context': 'https://schema.org',
@@ -114,9 +32,8 @@ const person = {
 };
 
 // The original's line groups (a blank line between groups): intro before the photos, story after them.
-const introGroups = [[copy.intro[0]], [copy.intro[1], copy.intro[2]]];
-const s = copy.story;
-const storyGroups = [s.slice(0, 3), s.slice(3, 7), [s[7]], [s[8], s[9]], [s[10], s[11]], [s[12]]];
+const introGroups = copy.introGroups.map((g) => g.lines);
+const storyGroups = copy.storyGroups.map((g) => g.lines);
 ---
 <JsonLd data={person} />
 

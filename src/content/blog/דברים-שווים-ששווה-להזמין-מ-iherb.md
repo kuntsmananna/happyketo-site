@@ -1,7 +1,7 @@
 ---
 title: "דברים שווים ששווה להזמין מ-iherb"
 description: "דברים שווים ששווה להזמין מ-iherb"
-image: "../../assets/posts/11062b_08be7e9482c0427aa6ea438de9dc0ec0.jpg"
+image: "../../assets/posts/unsplash-rosebox-BFdSCxmqvYc.jpg"
 imageAlt: "דברים שווים ששווה להזמין מ-iherb"
 publishDate: 2022-11-07T07:56:52.748Z
 updatedDate: 2023-09-26T04:16:50.954Z
