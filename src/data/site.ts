@@ -1,5 +1,8 @@
 import { contactContent } from './content';
 
+/** 054-6517951 → 972546517951 (international form for tel: and WhatsApp links). */
+const intlPhone = `972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`;
+
 export const site = {
   name: 'Happy Keto',
   title: 'Happy Keto | תזונה קטוגנית טבעית, פשוטה וטעימה',
@@ -11,8 +14,8 @@ export const site = {
   // Phone, email and Instagram come from src/data/content/contact.json (editable in the admin panel).
   contact: {
     phone: contactContent.phone,
-    phoneHref: `tel:+972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`,
-    whatsappHref: `https://wa.me/972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`,
+    phoneHref: `tel:+${intlPhone}`,
+    whatsappHref: `https://wa.me/${intlPhone}`,
     email: contactContent.email,
     location: contactContent.location,
   },

@@ -7,6 +7,7 @@ import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { recipeCategories } from '../src/data/categories.ts';
+import { localized } from '../src/i18n/index.ts';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const CONFIG = path.join(ROOT, '.vercel/output/config.json');
@@ -43,22 +44,16 @@ for (const w of ['בלוג-קטוגני', 'מדריך-לקיטו', 'המדריך
 for (const w of ['מתכונים', 'lunch-box']) add(`/recipes/categories/${w}`, '/recipes');
 
 // English (/en/…) versions of the old Wix pages: to the English page where one exists, else the Hebrew target.
-const EN_PAGES = new Set(['/', '/about', '/contact', '/challenge', '/favorites', '/privacy']);
 for (const [from, to] of [...redirects]) {
   if (from.startsWith('/post/') || from.startsWith('/recipes/categories/')) continue; // posts: wildcard below
-  add('/en' + from, EN_PAGES.has(to) ? (to === '/' ? '/en' : '/en' + to) : to);
+  add('/en' + from, localized(to, 'en'));
 }
-
-const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-/** Match both the raw (Hebrew) and the percent-encoded spelling, with or without a trailing slash. */
-const pathPattern = (p) => {
-  const encoded = p.split('/').map(encodeURIComponent).join('/');
-  const forms = [...new Set([p, encoded])].map(escapeRe);
-  return `^(?:${forms.join('|')})/?$`;
-};
 
 // HTTP header values must be ASCII: percent-encode the target path.
 const encodePath = (p) => p.split('/').map(encodeURIComponent).join('/');
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+/** Match both the raw (Hebrew) and the percent-encoded spelling, with or without a trailing slash. */
+const pathPattern = (p) => `^(?:${[...new Set([p, encodePath(p)])].map(escapeRe).join('|')})/?$`;
 const redirectRoutes = [...redirects].map(([from, to]) => ({
   src: pathPattern(from),
   headers: { Location: encodePath(to) },
@@ -76,13 +71,13 @@ redirectRoutes.push(
   { src: '^/recipes/page/\\d+/?$', headers: { Location: '/recipes' }, status: 301 },
   { src: '^/challenge-page(?:/.*)?$', headers: { Location: '/challenge' }, status: 301 },
   { src: '^/profile(?:/.*)?$', headers: { Location: '/about' }, status: 301 },
-  { src: '^/blog-feed\\.xml$', headers: { Location: '/blog' }, status: 301 },  // Anna's admin entry: one easy address on her own domain. 302 so the target can change later.
+  { src: '^/blog-feed\\.xml$', headers: { Location: '/blog' }, status: 301 },
+  // Anna's admin entry: one easy address on her own domain. 302 so the target can change later.
   { src: '^/admin/?$', headers: { Location: 'https://app.pagescms.org/kuntsmananna/happyketo-site/main' }, status: 302 },
   { src: '^/dashboard-hk7m2q/?$', headers: { Location: '/admin/dashboard' }, status: 301 }, // the dashboard's first address
 );
 
-// ---------- headers
-// ---------- Content-Security-Policy
+// ---------- headers: Content-Security-Policy, security and cache headers
 // Only same-origin scripts plus the exact inline scripts Astro emitted (by SHA-256), so injected markup in a post
 // can never run script. Styles allow 'unsafe-inline' (Astro inlines small stylesheets; components use style="").
 const STATIC = path.join(ROOT, '.vercel/output/static');
@@ -145,11 +140,10 @@ if (fsIndex < 0) {
   console.error('vercel-postbuild: no "filesystem" handle in config.json routes – the adapter output format changed.');
   process.exit(1);
 }
-const insertAt = fsIndex;
 // Missing /en/* addresses get the English 404 page (the adapter's catch-all serves the Hebrew one).
-const after = routes.slice(insertAt);
+const after = routes.slice(fsIndex);
 const catchAll = after.findIndex((r) => r.src === '^/.*$' && r.status === 404);
 if (catchAll >= 0) after.splice(catchAll, 0, { src: '^/en(?:/.*)?$', dest: '/en/404/index.html', status: 404 });
-config.routes = [...headerRoutes, ...routes.slice(0, insertAt), ...redirectRoutes, ...after];
+config.routes = [...headerRoutes, ...routes.slice(0, fsIndex), ...redirectRoutes, ...after];
 writeFileSync(CONFIG, JSON.stringify(config, null, 2));
 console.log(`vercel-postbuild: added ${headerRoutes.length} header routes (CSP with ${scriptHashes.size} script hashes) and ${redirectRoutes.length} redirects`);

@@ -1,7 +1,7 @@
 ---
 /** Recipe tile: the original's square photo tile with the first category as the chip. Keeps RecipeFilter's data-*. */
 import PhotoTile from './PhotoTile.astro';
-import { categoryLabel, recipeUrl, visibleReview, type Recipe } from '@/lib/recipes';
+import { categoryLabel, entryUrl, visibleReview, type Recipe } from '@/lib/recipes';
 import sticker from '@/assets/brand/sticker-happy-keto.png';
 
 interface Props {
@@ -20,7 +20,7 @@ const attrs = { 'data-recipe-card': true, 'data-categories': category.join(' '),
 
 <PhotoTile
   title={title}
-  href={recipeUrl(recipe)}
+  href={entryUrl(recipe)}
   image={image}
   sticker={sticker}
   chip={category[0] ? categoryLabel(category[0]) : undefined}
