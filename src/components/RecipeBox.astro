@@ -45,12 +45,12 @@ let step = 0;
 
       {ingredients.length > 0 && (
         <>
-          <h2 class="recipe-h2">מצרכים{marked('ingredients') && <span class="review-tag">✎ שונה – לבדיקה</span>}</h2>
+          <h2 class="recipe-h2">מצרכים{marked('ingredients') && <span class="review-tag reviewer-only">✎ שונה – לבדיקה</span>}</h2>
           <p class="mt-1 text-base text-bark-500 print:hidden">אפשר לסמן כל מצרך שכבר הכנתם.</p>
           {ingredients.map((group) => (
             <>
               {group.title && <h3 class="recipe-h3">{group.title}</h3>}
-              <ul class:list={['mt-3 divide-y divide-bark-300/40', marked('ingredients') && 'text-review-700']}>
+              <ul class:list={['mt-3 divide-y divide-bark-300/40', marked('ingredients') && 'reviewer:text-review-700']}>
                 {group.items.map((item) => (
                   <li>
                     <label class="recipe-check group/item flex cursor-pointer items-start gap-3.5 py-2.5">
@@ -73,11 +73,11 @@ let step = 0;
 
       {instructions.length > 0 && (
         <>
-          <h2 class="recipe-h2">אופן ההכנה{marked('instructions') && <span class="review-tag">✎ שונה – לבדיקה</span>}</h2>
+          <h2 class="recipe-h2">אופן ההכנה{marked('instructions') && <span class="review-tag reviewer-only">✎ שונה – לבדיקה</span>}</h2>
           {instructions.map((group) => (
             <>
               {group.title && <h3 class="recipe-h3">{group.title}</h3>}
-              <ol class:list={['mt-4 space-y-5', marked('instructions') && 'text-review-700']}>
+              <ol class:list={['mt-4 space-y-5', marked('instructions') && 'reviewer:text-review-700']}>
                 {group.steps.map((text) => (
                   <li>
                     <label class="recipe-check flex cursor-pointer items-start gap-4">

@@ -3,6 +3,7 @@
  * Purple box on a recipe/post that Claude changed and Anna hasn't approved yet: what changed, a link to the original
  * Wix post to compare, and how to approve. Visible parts are marked purple on the page; for the invisible ones
  * (Google description, photo alt texts) the box shows their current text. Temporary review aid before launch.
+ * Only shown in review mode (`reviewer-only`, see /review): visitors never see it.
  */
 import { invisibleReviewTexts, reviewSplit, type Post, type Recipe } from '@/lib/recipes';
 
@@ -14,7 +15,7 @@ const { review, visible } = reviewSplit(entry)!;
 const hint: Record<string, string> = { description: 'מתחת לכותרת בתוצאות החיפוש', imageAlt: 'לקוראי מסך ולחיפוש תמונות' };
 ---
 
-<aside class="mt-5 rounded-2xl border-2 border-review-500 bg-review-50 px-5 py-4 text-base leading-relaxed text-review-700 print:hidden" aria-label="שינוי לבדיקה">
+<aside class="reviewer-only mt-5 rounded-2xl border-2 border-review-500 bg-review-50 px-5 py-4 text-base leading-relaxed text-review-700 print:hidden" aria-label="שינוי לבדיקה">
   <p class="font-bold">✎ שינוי של Claude – לבדיקה</p>
   {review.note && <p class="mt-1 whitespace-pre-line">{review.note}</p>}
   {

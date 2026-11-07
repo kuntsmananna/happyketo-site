@@ -83,9 +83,21 @@ const altLocale = lang === 'he' ? 'en' : 'he';
     <Font cssVariable="--font-gelasio" />
 
     <slot name="head" />
-    <!-- Scroll reveal: hide [data-reveal] elements only once we know JS runs (see global.css → Motion). -->
+    <!--
+      Scroll reveal: hide [data-reveal] elements only once we know JS runs (see global.css → Motion).
+      Review mode: purple review marks only on devices where Anna turned it on (/review, or ?review=on / ?review=off).
+      Runs in <head> so neither flashes.
+    -->
     <script is:inline>
-      if ('IntersectionObserver' in window) document.documentElement.classList.add('reveal-ready');
+      (function () {
+        var html = document.documentElement;
+        if ('IntersectionObserver' in window) html.classList.add('reveal-ready');
+        try {
+          var q = new URLSearchParams(location.search).get('review');
+          if (q === 'on' || q === 'off') localStorage.setItem('hk-review', q);
+          if (localStorage.getItem('hk-review') === 'on') html.classList.add('reviewer');
+        } catch (e) {}
+      })();
     </script>
   </head>
   <body class="flex min-h-dvh flex-col">

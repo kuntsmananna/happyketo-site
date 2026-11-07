@@ -3,6 +3,8 @@
  * Everything Claude changed in recipes/posts that Anna hasn't approved yet (temporary review aid before launch):
  * first the changes visible on the page (purple marks), then the Google descriptions and photo descriptions
  * (not visible on the page) as one table showing their current text. Not linked from the menu, not in the sitemap.
+ * Opening it turns on review mode on this device (localStorage `hk-review`, read by BaseLayout's head script), so the
+ * purple marks appear on the site only for Anna; the switch here turns it off/on again.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { isInvisiblePart, reviewPartLabel, reviewPartSlugs } from '@/data/review';
@@ -28,6 +30,17 @@ const unchanged = 'ללא שינוי';
       מה ש-Claude שינה ועוד לא אישרת. אישור פריט: בפאנל הניהול פותחים אותו ← "שינוי לבדיקה" ← מסמנים "אישרתי" ושומרים.
       רוצה לאשר הרבה בבת אחת? אפשר פשוט לכתוב ל-Claude, למשל "מאשרת את כל התיאורים חוץ מ...".
     </p>
+    <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 rounded-2xl border-2 border-review-200 bg-review-50 px-5 py-4 text-base text-review-700">
+      <p class="flex-1 basis-64">
+        <span class="font-bold reviewer:hidden">הסימונים הסגולים כבויים במכשיר הזה.</span>
+        <span class="hidden font-bold reviewer:inline">✓ הסימונים הסגולים מוצגים באתר במכשיר הזה.</span>
+        {' '}גולשים אחרים לא רואים אותם. בטלפון או במחשב אחר – פותחים שם את העמוד הזה פעם אחת.
+      </p>
+      <button type="button" class="btn-outline btn-sm" data-review-toggle>
+        <span class="reviewer:hidden">להציג את הסימונים</span>
+        <span class="hidden reviewer:inline">להסתיר את הסימונים</span>
+      </button>
+    </div>
     {all.length === 0 && <p class="mt-10 rounded-2xl bg-mint-100 px-5 py-4 text-lg text-forest-700">אין שינויים שמחכים לבדיקה 🎉</p>}
 
     {
@@ -89,3 +102,18 @@ const unchanged = 'ללא שינוי';
     }
   </section>
 </BaseLayout>
+
+<script>
+  // Review mode is on by default once Anna has been here; the button switches it for this device only.
+  const html = document.documentElement;
+  const set = (on: boolean) => {
+    html.classList.toggle('reviewer', on);
+    try {
+      localStorage.setItem('hk-review', on ? 'on' : 'off');
+    } catch {}
+  };
+  try {
+    if (!localStorage.getItem('hk-review')) set(true);
+  } catch {}
+  document.querySelector('[data-review-toggle]')?.addEventListener('click', () => set(!html.classList.contains('reviewer')));
+</script>
