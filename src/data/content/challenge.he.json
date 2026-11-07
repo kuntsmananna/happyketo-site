@@ -4,19 +4,20 @@
   "plans": [
     {
       "id": "free",
-      "name": "Keto Kickstart תוכנית חינמית ל־3 ימים",
+      "title": "Keto Kickstart",
+      "subtitle": "תוכנית חינמית ל־3 ימים",
       "price": "חינם",
       "alt": "טאקו בעלי חסה"
     },
     {
       "id": "full",
-      "name": "Going Keto - 4 שבועות",
+      "title": "Going Keto",
+      "subtitle": "4 שבועות",
       "price": "250.00 ₪",
       "alt": "ביצי עין עם קייל ופקאנים"
     }
   ],
   "join": "להצטרפות",
-  "programTitle": "Going Keto - 4 שבועות",
   "programLead": "תוכנית למעבר לתזונה קטוגנית שמתאימה לא.נשים (מאוד) עסוקות",
   "method": [
     "שיטה הדרגתית, טעימה ואפשרית להתמדה",

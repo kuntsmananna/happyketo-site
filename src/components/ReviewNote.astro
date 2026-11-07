@@ -1,0 +1,25 @@
+---
+/**
+ * Purple box on a recipe/post that Claude changed and Anna hasn't approved yet: what changed, a link to the
+ * original Wix post to compare, and how to approve. Temporary review aid (before launch); Hebrew-only pages.
+ */
+interface Props {
+  note: string;
+  wixUrl?: string;
+}
+const { note, wixUrl } = Astro.props;
+---
+
+<aside class="mt-5 rounded-2xl border-2 border-review-500 bg-review-50 px-5 py-4 text-base leading-relaxed text-review-700 print:hidden" aria-label="שינוי לבדיקה">
+  <p class="font-bold">✎ שינוי של Claude – לבדיקה</p>
+  <p class="mt-1 whitespace-pre-line">{note}</p>
+  <p class="mt-2 text-sm">
+    {wixUrl && (
+      <>
+        <a href={wixUrl} target="_blank" rel="noopener" class="font-semibold underline">לפוסט המקורי ב-Wix להשוואה</a>
+        {' · '}
+      </>
+    )}
+    החלקים שהשתנו מסומנים בסגול. כשמאשרים: בפאנל הניהול ← "שינוי לבדיקה" ← לסמן "אישרתי". <a href="/review" class="underline">כל השינויים לבדיקה</a>
+  </p>
+</aside>

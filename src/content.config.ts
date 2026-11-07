@@ -14,6 +14,17 @@ const base = ({ image }: SchemaContext) => ({
   /** Original Wix URL — used for redirects and migration QA. */
   wixUrl: z.url().optional(),
   draft: z.boolean().default(false),
+  /**
+   * Changes Claude made that Anna should review (shown in purple on the page, listed at /review).
+   * `parts` says what to highlight; ticking `approved` in the admin panel removes the marks.
+   */
+  review: z
+    .object({
+      note: z.string(),
+      parts: z.array(z.enum(['image', 'ingredients', 'instructions', 'text'])).default([]),
+      approved: z.boolean().default(false),
+    })
+    .optional(),
 });
 
 const recipes = defineCollection({

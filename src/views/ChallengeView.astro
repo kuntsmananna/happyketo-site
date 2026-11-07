@@ -69,7 +69,7 @@ const copy = {
   ...text,
   ...ui,
   // The form option keeps the plan's name and price (sent in the sign-up email).
-  plans: text.plans.map((p) => ({ ...p, value: `${p.name} (${p.price})`, image: images[p.id] })),
+  plans: text.plans.map((p) => ({ ...p, value: `${p.title} – ${p.subtitle} (${p.price})`, image: images[p.id] })),
 };
 const f = copy.form;
 ---
@@ -93,8 +93,9 @@ const f = copy.form;
             class="hover-zoom aspect-[454/341] w-full object-cover"
           />
           <div class="flex flex-1 flex-col items-center px-[13%] pt-8 pb-6 text-center lg:px-8">
-            <h2 class="h-card font-sans text-bark-800">{p.name}</h2>
-            <p class="mt-7 text-[1.2rem] lg:text-base">{p.price}</p>
+            <h2 class="h-card font-sans text-bark-800"><bdi>{p.title}</bdi></h2>
+            <p class="mt-1 text-lg text-bark-700">{p.subtitle}</p>
+            <p class="mt-6 text-[1.2rem] whitespace-nowrap lg:text-base">{p.price}</p>
             <a href="#register" data-plan={p.id} class="btn-secondary btn-lg mt-5 w-full lg:[--btn-w:0]">
               {copy.join}
             </a>
@@ -108,7 +109,7 @@ const f = copy.form;
 <!-- The original program page's text (plain lines, blank line between groups) -->
 <section class="bg-cream-100 px-[6%] py-14 text-bark-800 lg:px-0 lg:py-20" aria-labelledby="program-title">
   <div data-reveal class="text-body mx-auto max-w-[648px]">
-    <h2 id="program-title" class="h-section">{copy.programTitle}</h2>
+    <h2 id="program-title" class="h-section"><bdi>{copy.plans[1].title}</bdi> – {copy.plans[1].subtitle}</h2>
     <div class="mt-8 space-y-[1.4em]">
       <p>{copy.programLead}</p>
       <div>{copy.method.map((m) => <p>{m}</p>)}</div>
@@ -122,7 +123,7 @@ const f = copy.form;
         <p>{copy.how}</p>
       </div>
     </div>
-    <p class="mt-12">{copy.plans[1].price}</p>
+    <p class="mt-12 whitespace-nowrap">{copy.plans[1].price}</p>
     <a href="#register" data-plan="full" class="btn-secondary btn-lg mt-6">
       {copy.programJoin}
     </a>
@@ -166,8 +167,11 @@ const f = copy.form;
             copy.plans.map((p, i) => (
               <label class="flex cursor-pointer items-center gap-3 rounded-2xl border border-bark-300 px-4 py-3 transition-colors has-[:checked]:border-forest-600 has-[:checked]:bg-mint-50">
                 <input type="radio" name={f.fields.track} value={p.value} data-plan-radio={p.id} required checked={i === 0} class="size-4 accent-forest-600" />
-                <span>
-                  {p.name} · <strong class="font-semibold">{p.price}</strong>
+                <span class="flex flex-col">
+                  <span class="font-semibold text-forest-700"><bdi>{p.title}</bdi></span>
+                  <span class="text-bark-700">
+                    {p.subtitle} · <strong class="font-semibold whitespace-nowrap">{p.price}</strong>
+                  </span>
                 </span>
               </label>
             ))

@@ -78,7 +78,7 @@ const { subject, successMessage = s.success, class: className, ...rest } = Astro
         el = document.createElement('p');
         el.id = id;
         el.dataset.errorFor = id;
-        el.className = 'mt-1.5 text-sm font-medium text-red-700';
+        el.className = 'mt-1.5 text-end text-sm font-medium text-red-700';
         anchorOf(f).insertAdjacentElement('afterend', el);
       }
       el.textContent = messageFor(f);

@@ -70,5 +70,10 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - Post bodies are a plain `text` field (the rich-text editor would drop `<video>`, `<iframe>` and `<!-- recipe -->`). Renaming entries is off (file name = URL). New entries need Latin file names (Pages CMS slugify strips Hebrew).
 - Dates are saved as `yyyy-MM-dd'T'HH:mm:ss.SSSXXX`; images as `../../assets/posts/<file>` (media `posts`) or `/src/assets/favorites/<file>` (media `favorites`).
 
+## Content changes need Anna's review
+When you change the wording, structure or images of a recipe/post, add to its frontmatter
+`review: { note: "<Hebrew: what changed and why>", parts: [image|ingredients|instructions|text], approved: false }`.
+The page then shows a purple `ReviewNote` (with a link to the Wix original) and purple marks on the listed parts, tiles get a "לבדיקה" tag, and `/review` lists everything pending. Anna ticks "אישרתי" in the admin panel to clear it. Purple tokens: `review-*` in global.css.
+
 ## Reviews
 Three review subagents live in `.claude/agents/` (`code-reviewer`, `security-reviewer`, `ux-reviewer`); they are discovered when a session starts in the repo root. Treat their findings as claims and verify before acting.

@@ -55,12 +55,12 @@ const challengeSchema = z.object({
   title: text,
   intro: text,
   /** `id` links a plan to its photo and form option (free / full) – not editable. */
+  /** `title` = the program name (Latin, shown isolated so Hebrew around it can't reorder it); `subtitle` = description. */
   plans: z.tuple([
-    z.object({ id: z.literal('free'), name: text, price: text, alt: text }),
-    z.object({ id: z.literal('full'), name: text, price: text, alt: text }),
+    z.object({ id: z.literal('free'), title: text, subtitle: text, price: text, alt: text }),
+    z.object({ id: z.literal('full'), title: text, subtitle: text, price: text, alt: text }),
   ]),
   join: text,
-  programTitle: text,
   programLead: text,
   method: lines,
   expectTitle: text,

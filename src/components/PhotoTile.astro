@@ -22,9 +22,11 @@ interface Props {
   attrs?: Record<string, string | boolean>;
   /** Smaller tile (homepage row): smaller title, image sizes for ~300px. */
   compact?: boolean;
+  /** Claude changed this entry and Anna hasn't approved it yet: purple tag (temporary review aid). */
+  review?: boolean;
 }
 
-const { title, href, image, sticker, chip, eager = false, priority = false, headingLevel = 3, attrs = {}, compact = false } = Astro.props;
+const { title, href, image, sticker, chip, eager = false, priority = false, headingLevel = 3, attrs = {}, compact = false, review = false } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3';
 ---
 
@@ -68,5 +70,6 @@ const Heading = `h${headingLevel}` as 'h2' | 'h3';
       <a href={href} class="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none">{title}</a>
     </Heading>
   </div>
+  {review && <span class="pointer-events-none absolute start-3 top-3 z-[3] rounded-full bg-review-700 px-3 py-1 text-sm font-bold text-white">✎ לבדיקה</span>}
   <span aria-hidden="true" class="pointer-events-none absolute inset-0 z-[3] ring-mustard-400 ring-inset group-has-[a:focus-visible]:ring-4"></span>
 </article>

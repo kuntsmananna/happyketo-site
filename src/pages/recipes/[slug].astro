@@ -6,10 +6,11 @@ import Icon from '@/components/Icon.astro';
 import JsonLd from '@/components/JsonLd.astro';
 import Prose from '@/components/Prose.astro';
 import RecipeBox from '@/components/RecipeBox.astro';
+import ReviewNote from '@/components/ReviewNote.astro';
 import RelatedPosts from '@/components/RelatedPosts.astro';
 import ShareRow from '@/components/ShareRow.astro';
 import SplitContent from '@/components/SplitContent.astro';
-import { categoryLabel, categoryUrl, getRecipes, recipeUrl, type Recipe } from '@/lib/recipes';
+import { categoryLabel, categoryUrl, getRecipes, pendingReview, recipeUrl, type Recipe } from '@/lib/recipes';
 import { recipeJsonLd } from '@/lib/schema';
 
 export async function getStaticPaths() {
@@ -25,6 +26,7 @@ interface Props {
 const { recipe, all } = Astro.props;
 const { title, description, image, imageAlt, category, tags, ingredients, instructions } = recipe.data;
 const hasRecipe = ingredients.length > 0 || instructions.length > 0;
+const review = pendingReview(recipe);
 const { Content } = await render(recipe);
 const url = new URL(recipeUrl(recipe), Astro.site).href;
 
@@ -47,8 +49,9 @@ const related = all
   <JsonLd data={recipeJsonLd(recipe, url, shareImageUrl)} />
 
   <!-- One 740px column, as on the original: title, intro, photo, the recipe, the rest of the post, tags, share, related. -->
-  <article class="mx-auto w-[89%] pt-10 lg:w-[740px] lg:pt-[100px]">
+  <article class:list={['mx-auto w-[89%] pt-10 lg:w-[740px] lg:pt-[100px]', review?.parts.includes('image') && 'review-images']}>
     <h1 data-reveal class="h-section">{title}</h1>
+    {review && <ReviewNote note={review.note} wixUrl={recipe.data.wixUrl} />}
     {
       hasRecipe && (
         <a href="#recipe" data-jump data-reveal class="group btn-secondary btn-sm mt-5 gap-1.5 text-base">
@@ -69,13 +72,13 @@ const related = all
                 width={1480}
                 widths={[480, 740, 1110, 1480]}
                 sizes="(min-width: 1024px) 740px, 89vw"
-                class="!my-0 w-full"
+                class:list={['!my-0 w-full', review?.parts.includes('image') && 'review-photo']}
                 loading="eager"
                 fetchpriority="high"
               />
             )
           }
-          <RecipeBox recipe={recipe} />
+          <RecipeBox recipe={recipe} review={review?.parts} />
         </Fragment>
       </SplitContent>
     </Prose>

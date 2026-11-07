@@ -4,19 +4,20 @@
   "plans": [
     {
       "id": "free",
-      "name": "Keto Kickstart Free 3-Day Plan",
+      "title": "Keto Kickstart",
+      "subtitle": "Free 3-day plan",
       "price": "Free",
       "alt": "Lettuce tacos"
     },
     {
       "id": "full",
-      "name": "Going Keto - 4 weeks",
+      "title": "Going Keto",
+      "subtitle": "4 weeks",
       "price": "₪250.00",
       "alt": "Fried eggs with kale and pecans"
     }
   ],
   "join": "Join",
-  "programTitle": "Going Keto - 4 weeks",
   "programLead": "A ketogenic diet transition plan that suits (very) busy women",
   "method": [
     "A gradual, delicious method that is actually possible to stick with",

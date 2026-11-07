@@ -38,3 +38,6 @@ export function formatMinutes(min: number) {
   const hours = h === 1 ? 'שעה' : h === 2 ? 'שעתיים' : `${h} שעות`;
   return m ? `${hours} ו-${m} דק׳` : hours;
 }
+
+/** Review marks (Claude's changes waiting for Anna): the pending review of an entry, if any. */
+export const pendingReview = (e: Recipe | Post) => (e.data.review && !e.data.review.approved ? e.data.review : undefined);

@@ -1,0 +1,48 @@
+---
+/**
+ * Everything Claude changed in recipes/posts that Anna hasn't approved yet (temporary review aid before launch).
+ * Not linked from the menu, not in the sitemap, noindex.
+ */
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPosts, getRecipes, pendingReview, postUrl, recipeUrl } from '@/lib/recipes';
+
+const partLabel: Record<string, string> = { image: 'תמונה', ingredients: 'מצרכים', instructions: 'אופן ההכנה', text: 'טקסט' };
+const items = [
+  ...(await getRecipes()).map((r) => ({ kind: 'מתכון', title: r.data.title, href: recipeUrl(r), review: pendingReview(r), wix: r.data.wixUrl })),
+  ...(await getPosts()).map((p) => ({ kind: 'בלוג', title: p.data.title, href: postUrl(p), review: pendingReview(p), wix: p.data.wixUrl })),
+].filter((i) => i.review);
+---
+
+<BaseLayout title="שינויים לבדיקה" noindex>
+  <section class="mx-auto w-[89%] py-12 lg:w-[740px] lg:py-20">
+    <h1 class="h-section">שינויים לבדיקה</h1>
+    <p class="text-body mt-3 text-bark-700">
+      מתכונים ופוסטים ש-Claude שינה ועוד לא אישרת. בכל עמוד החלקים שהשתנו מסומנים בסגול, עם קישור לפוסט המקורי ב-Wix.
+      כשמאשרים: בפאנל הניהול פותחים את הפריט ← "שינוי לבדיקה" ← מסמנים "אישרתי" ושומרים.
+    </p>
+    {
+      items.length === 0 ? (
+        <p class="mt-10 rounded-2xl bg-mint-100 px-5 py-4 text-lg text-forest-700">אין שינויים שמחכים לבדיקה 🎉</p>
+      ) : (
+        <ol class="mt-10 space-y-4">
+          {items.map((i) => (
+            <li class="rounded-2xl border-2 border-review-200 bg-white px-5 py-4">
+              <p class="text-sm text-bark-500">
+                {i.kind} · {i.review!.parts.map((p) => partLabel[p]).join(', ')}
+              </p>
+              <a href={i.href} class="mt-1 block text-xl font-bold text-forest-700 underline-offset-4 hover:underline">
+                {i.title}
+              </a>
+              <p class="mt-2 whitespace-pre-line text-base text-review-700">{i.review!.note}</p>
+              {i.wix && (
+                <a href={i.wix} target="_blank" rel="noopener" class="mt-2 inline-block text-sm text-bark-700 underline">
+                  הפוסט המקורי ב-Wix
+                </a>
+              )}
+            </li>
+          ))}
+        </ol>
+      )
+    }
+  </section>
+</BaseLayout>

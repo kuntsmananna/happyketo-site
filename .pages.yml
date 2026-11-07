@@ -139,6 +139,24 @@ content:
         label: טיוטה (לא מופיע באתר)
         type: boolean
         default: false
+      - name: review
+        label: שינוי לבדיקה (של Claude)
+        description: "אם Claude שינה משהו בפריט, ההסבר כאן והחלקים מסומנים בסגול באתר. אחרי שבדקת – לסמן אישרתי ולשמור."
+        type: object
+        fields:
+          - { name: note, label: מה השתנה, type: text, readonly: true }
+          - name: parts
+            label: חלקים מסומנים
+            type: select
+            readonly: true
+            options:
+              multiple: true
+              values:
+                - { value: image, label: תמונה }
+                - { value: ingredients, label: מצרכים }
+                - { value: instructions, label: אופן ההכנה }
+                - { value: text, label: טקסט }
+          - { name: approved, label: אישרתי, type: boolean }
       - name: body
         label: טקסט המתכון
         description: "שורה ריקה = פסקה חדשה. ## בתחילת שורה = כותרת. השורה <!-- recipe --> מסמנת איפה יופיעו המצרכים ואופן ההכנה – להשאיר אותה. אין למחוק שורות שמתחילות ב-< (סרטונים)."
@@ -195,6 +213,24 @@ content:
         label: טיוטה (לא מופיע באתר)
         type: boolean
         default: false
+      - name: review
+        label: שינוי לבדיקה (של Claude)
+        description: "אם Claude שינה משהו בפריט, ההסבר כאן והחלקים מסומנים בסגול באתר. אחרי שבדקת – לסמן אישרתי ולשמור."
+        type: object
+        fields:
+          - { name: note, label: מה השתנה, type: text, readonly: true }
+          - name: parts
+            label: חלקים מסומנים
+            type: select
+            readonly: true
+            options:
+              multiple: true
+              values:
+                - { value: image, label: תמונה }
+                - { value: ingredients, label: מצרכים }
+                - { value: instructions, label: אופן ההכנה }
+                - { value: text, label: טקסט }
+          - { name: approved, label: אישרתי, type: boolean }
       - name: body
         label: טקסט הפוסט
         description: "שורה ריקה = פסקה חדשה. ## בתחילת שורה = כותרת. **מילה** = מודגש. אין למחוק שורות שמתחילות ב-< (סרטונים)."
@@ -362,11 +398,11 @@ content:
             list: true
             fields:
               - { name: id, label: מזהה, type: string, readonly: true }
-              - { name: name, label: שם המסלול, type: string, required: true }
+              - { name: title, label: "שם התוכנית (באנגלית, למשל Going Keto)", type: string, required: true }
+              - { name: subtitle, label: "תיאור (למשל 4 שבועות)", type: string, required: true }
               - { name: price, label: מחיר, type: string, required: true }
               - { name: alt, label: תיאור התמונה, type: string, required: true }
           - { name: join, label: כפתור בכרטיס, type: string, required: true }
-          - { name: programTitle, label: כותרת התוכנית, type: string, required: true }
           - { name: programLead, label: משפט פתיחה, type: text, required: true }
           - { name: method, label: השיטה, type: text, list: true, required: true }
           - { name: expectTitle, label: כותרת "למה לצפות", type: string, required: true }
