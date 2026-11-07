@@ -1,0 +1,22 @@
+---
+/**
+ * ⓘ button that explains the thing next to it: the dashboard's shared tooltip shows `text` on hover, keyboard focus
+ * and tap (script in src/pages/admin/dashboard.astro). Screen readers get the same text from aria-label.
+ * The visible circle is 28px; the hit area is extended to 44px.
+ */
+import Icon from '@/components/Icon.astro';
+interface Props {
+  text: string;
+  label?: string;
+}
+const { text, label = 'הסבר' } = Astro.props;
+---
+
+<button
+  type="button"
+  class="relative inline-grid size-7 shrink-0 cursor-help place-items-center rounded-full text-bark-500 transition-colors after:absolute after:-inset-2 hover:bg-cream-100 hover:text-forest-700 focus-visible:text-forest-700"
+  data-tip={text}
+  aria-label={`${label}: ${text}`}
+>
+  <Icon name="info" size={18} />
+</button>

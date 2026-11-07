@@ -1,0 +1,48 @@
+---
+/**
+ * A share or score against its maximum: one hue (chart-1) on a light track of the same hue, rounded ends, the value
+ * printed beside it (so the hover box only adds the detail). Optional target tick (e.g. 90 for Lighthouse), icon,
+ * ⓘ explanation and a link on the label. Grows from the reading side (right in Hebrew).
+ */
+import Icon, { type IconName } from '@/components/Icon.astro';
+import InfoTip from './InfoTip.astro';
+interface Props {
+  label: string;
+  value: number;
+  max?: number;
+  unit?: string;
+  detail?: string;
+  help?: string;
+  target?: number;
+  href?: string;
+  icon?: IconName;
+}
+const { label, value, max = 100, unit = '', detail, help, target, href, icon } = Astro.props;
+const pct = Math.max(0, Math.min(100, (value / max) * 100));
+const tip = [`${label}: ${value}${unit}`, detail, target != null && `יעד: ${target}${unit}`].filter(Boolean).join(' · ');
+---
+
+<div>
+  <div class="flex items-center justify-between gap-2">
+    <span class="flex min-w-0 items-center gap-1.5">
+      {icon && <Icon name={icon} size={18} class="text-forest-600" />}
+      {href ? <a href={href} class="truncate font-bold text-bark-900 underline-offset-4 hover:underline">{label}</a> : <span class="truncate font-bold text-bark-900">{label}</span>}
+      {help && <InfoTip text={help} label={`מה זה ${label}`} />}
+    </span>
+    <span class="text-lg font-bold text-bark-900 tabular-nums">{value}{unit}</span>
+  </div>
+  <div
+    class="relative mt-1.5 h-2.5 rounded-full bg-chart-1/15"
+    role="meter"
+    aria-label={label}
+    aria-valuemin="0"
+    aria-valuemax={max}
+    aria-valuenow={value}
+    aria-valuetext={`${value}${unit}${detail ? ` (${detail})` : ''}`}
+    data-tip={tip}
+  >
+    <span class="block h-full rounded-full bg-chart-1" style={`width:${pct}%`}></span>
+    {target != null && <span class="absolute -top-1 -bottom-1 w-0.5 rounded-full bg-bark-700" style={`inset-inline-start:${(target / max) * 100}%`} aria-hidden="true"></span>}
+  </div>
+  {detail && <p class="mt-1 text-sm text-bark-600">{detail}</p>}
+</div>

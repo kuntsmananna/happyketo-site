@@ -1,5 +1,6 @@
 ---
-/** A list of checks: status badge, label, detail, and (when something can be improved) the affected items as links. */
+/** A list of checks: status badge, label (+ ⓘ explanation), detail, and (when something can be improved) the affected items as links. */
+import InfoTip from './InfoTip.astro';
 import StatusBadge from './StatusBadge.astro';
 import type { Check } from '@/lib/dashboard';
 interface Props {
@@ -14,7 +15,7 @@ const { checks } = Astro.props;
       <li class="flex flex-col gap-1.5 py-3.5 first:pt-0 last:pb-0">
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
           <StatusBadge status={c.status} />
-          <span class="font-bold text-bark-900">{c.label}</span>
+          <span class="inline-flex items-center gap-1 font-bold text-bark-900">{c.label}{c.help && <InfoTip text={c.help} label={`מה זה ${c.label}`} />}</span>
         </div>
         <p class="text-base text-bark-700">{c.detail}</p>
         {c.items && c.items.length > 0 && (

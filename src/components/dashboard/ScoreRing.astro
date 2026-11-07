@@ -1,0 +1,18 @@
+---
+/** The headline score as a ring meter (one hue on a same-hue track) with the number in the middle. */
+interface Props {
+  value?: number;
+  label: string;
+  size?: number;
+}
+const { value, label, size = 148 } = Astro.props;
+const R = 52, C = 2 * Math.PI * R;
+const dash = value == null ? 0 : (Math.max(0, Math.min(100, value)) / 100) * C;
+---
+
+<svg viewBox="0 0 128 128" width={size} height={size} role="img" aria-label={value == null ? `${label}: עוד לא נמדד` : `${label}: ${value} מתוך 100`} data-tip={value == null ? undefined : `${label}: ${value} מתוך 100 · מעל 90 זה מצוין`}>
+  <circle cx="64" cy="64" r={R} fill="none" stroke="var(--color-chart-1)" stroke-opacity="0.15" stroke-width="12" />
+  {value != null && <circle cx="64" cy="64" r={R} fill="none" stroke="var(--color-chart-1)" stroke-width="12" stroke-linecap="round" stroke-dasharray={`${dash.toFixed(1)} ${C.toFixed(1)}`} transform="rotate(-90 64 64)" />}
+  <text x="64" y="70" text-anchor="middle" font-size="38" font-weight="700" fill="var(--color-bark-900)" style="font-family:system-ui">{value ?? '–'}</text>
+  <text x="64" y="90" text-anchor="middle" font-size="12" fill="var(--color-bark-600)">מתוך 100</text>
+</svg>
