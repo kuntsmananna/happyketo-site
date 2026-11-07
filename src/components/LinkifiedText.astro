@@ -1,0 +1,9 @@
+---
+/** Plain text (a review note) with its web addresses turned into links that open in a new tab. */
+interface Props {
+  text: string;
+}
+const parts = Astro.props.text.split(/(https?:\/\/[^\s<>"]+)/);
+---
+
+{parts.map((part, i) => (i % 2 ? <a href={part} target="_blank" rel="noopener" class="break-all underline">{part}</a> : part))}

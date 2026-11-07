@@ -55,6 +55,9 @@ Same screen, Wix's default values: A (empty host) → `185.230.63.107`, CNAME `w
 
 - [ ] Export from Wix anything that lives only there: newsletter subscribers and contacts
       (Contacts → Export), challenge participants (Online Programs), form submissions.
+- [ ] Decide how program sign-ups (Keto Kickstart, Going Keto) and the Kickstart email sequence continue:
+      they run only on Wix (Online Programs + Automations). Inventory and the email texts:
+      [wix-emails-and-programs.md](wix-emails-and-programs.md).
 - [ ] Preview checked (section 1) and the form emails arrive.
 - [ ] Decide when to cancel the Wix Premium plan. Keep it until the new site has run for a few weeks.
       Check in Wix → Billing that the **domain** renewal is separate from the site plan before cancelling.
