@@ -7,6 +7,7 @@
  * purple marks appear on the site only for Anna; the switch here turns it off/on again.
  */
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import LinkifiedText from '@/components/LinkifiedText.astro';
 import { isInvisiblePart, reviewPartLabel, reviewPartSlugs } from '@/data/review';
 import { entryUrl, getPosts, getRecipes, invisibleReviewTexts, reviewSplit } from '@/lib/recipes';
 
@@ -55,7 +56,7 @@ const unchanged = 'ללא שינוי';
                   {i.kind} · {i.visible.map(reviewPartLabel).join(', ')}
                 </p>
                 <a href={i.href} class="mt-1 block text-xl font-bold text-forest-700 underline-offset-4 hover:underline">{i.title}</a>
-                {i.review.note && <p class="mt-2 whitespace-pre-line text-base text-review-700">{i.review.note}</p>}
+                {i.review.note && <p class="mt-2 whitespace-pre-line text-base text-review-700"><LinkifiedText text={i.review.note} /></p>}
                 {i.wix && <a href={i.wix} target="_blank" rel="noopener" class="mt-2 inline-block text-sm text-bark-700 underline">הפוסט המקורי ב-Wix</a>}
               </li>
             ))}

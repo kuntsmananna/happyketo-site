@@ -5,6 +5,7 @@
  * (Google description, photo alt texts) the box shows their current text. Temporary review aid before launch.
  * Only shown in review mode (`reviewer-only`, see /review): visitors never see it.
  */
+import LinkifiedText from './LinkifiedText.astro';
 import { invisibleReviewTexts, reviewSplit, type Post, type Recipe } from '@/lib/recipes';
 
 interface Props {
@@ -17,7 +18,7 @@ const hint: Record<string, string> = { description: 'מתחת לכותרת בת�
 
 <aside class="reviewer-only mt-5 rounded-2xl border-2 border-review-500 bg-review-50 px-5 py-4 text-base leading-relaxed text-review-700 print:hidden" aria-label="שינוי לבדיקה">
   <p class="font-bold">✎ שינוי של Claude – לבדיקה</p>
-  {review.note && <p class="mt-1 whitespace-pre-line">{review.note}</p>}
+  {review.note && <p class="mt-1 whitespace-pre-line"><LinkifiedText text={review.note} /></p>}
   {
     invisibleReviewTexts(entry).map(({ part, label, texts }) =>
       texts.length > 1 ? (
