@@ -13,24 +13,24 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 1995,
-          "fcp": 1545,
+          "lcp": 1976,
+          "fcp": 1376,
           "tbt": 0,
-          "cls": 0,
-          "weightKb": 594
+          "cls": 0.001,
+          "weightKb": 596
         },
         {
           "path": "/recipes",
           "label": "מתכונים",
-          "performance": 98,
+          "performance": 99,
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 2293,
-          "fcp": 1191,
-          "tbt": 1,
-          "cls": 0.003,
-          "weightKb": 434
+          "lcp": 2126,
+          "fcp": 1526,
+          "tbt": 0,
+          "cls": 0.001,
+          "weightKb": 435
         },
         {
           "path": "/recipes/חטיף-טוויקס-קטוגני",
@@ -39,11 +39,11 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 1997,
-          "fcp": 1397,
+          "lcp": 1977,
+          "fcp": 1377,
           "tbt": 0,
           "cls": 0.001,
-          "weightKb": 266
+          "weightKb": 268
         },
         {
           "path": "/challenge",
@@ -52,11 +52,11 @@
           "accessibility": 100,
           "bestPractices": 100,
           "seo": 100,
-          "lcp": 1394,
-          "fcp": 974,
-          "tbt": 35,
+          "lcp": 1674,
+          "fcp": 967,
+          "tbt": 0,
           "cls": 0.001,
-          "weightKb": 267
+          "weightKb": 268
         }
       ]
     }
