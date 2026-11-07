@@ -10,7 +10,7 @@ import ReviewNote from '@/components/ReviewNote.astro';
 import RelatedPosts from '@/components/RelatedPosts.astro';
 import ShareRow from '@/components/ShareRow.astro';
 import SplitContent from '@/components/SplitContent.astro';
-import { categoryLabel, categoryUrl, getRecipes, pendingReview, recipeUrl, type Recipe } from '@/lib/recipes';
+import { categoryLabel, categoryUrl, entryUrl, getRecipes, pendingReview, type Recipe } from '@/lib/recipes';
 import { recipeJsonLd } from '@/lib/schema';
 import { ogCardFor } from '@/lib/og';
 
@@ -29,7 +29,7 @@ const { title, description, image, imageAlt, category, tags, ingredients, instru
 const hasRecipe = ingredients.length > 0 || instructions.length > 0;
 const review = pendingReview(recipe);
 const { Content } = await render(recipe);
-const url = new URL(recipeUrl(recipe), Astro.site).href;
+const url = new URL(entryUrl(recipe), Astro.site).href;
 
 // Social/structured-data image: a 1200px JPEG of the cover.
 const shareImage = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : undefined;
@@ -113,5 +113,5 @@ const related = all
     <div class="mt-6"><ShareRow url={url} /></div>
   </article>
 
-  {related.length > 0 && <RelatedPosts label="עוד מתכונים" items={related.map((r) => ({ title: r.data.title, href: recipeUrl(r), image: r.data.image }))} />}
+  {related.length > 0 && <RelatedPosts label="עוד מתכונים" items={related.map((r) => ({ title: r.data.title, href: entryUrl(r), image: r.data.image }))} />}
 </BaseLayout>

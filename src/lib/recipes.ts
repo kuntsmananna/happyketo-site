@@ -18,8 +18,8 @@ export async function getPosts(): Promise<Post[]> {
   return (await getCollection('blog', ({ data }) => !data.draft)).sort(byDateDesc);
 }
 
-export const recipeUrl = (r: Recipe) => `/recipes/${r.id}`;
-export const postUrl = (p: Post) => `/blog/${p.id}`;
+/** Page URL of a recipe or post (the collection name is the URL section). */
+export const entryUrl = (e: Recipe | Post) => `/${e.collection}/${e.id}`;
 export const categoryUrl = (slug: RecipeCategorySlug) => `/recipes/category/${slug}`;
 
 export const categoryLabel = (slug: string) => recipeCategories.find((c) => c.slug === slug)?.label ?? slug;
@@ -50,8 +50,6 @@ export function reviewSplit(e: Recipe | Post) {
 }
 /** A pending review that changed something visible on the page: purple marks + the tile tag. */
 export const visibleReview = (e: Recipe | Post) => !!reviewSplit(e)?.visible.length;
-/** Page URL of a recipe or post. */
-export const entryUrl = (e: Recipe | Post) => `/${e.collection === 'recipes' ? 'recipes' : 'blog'}/${e.id}`;
 /** The photos inside the post text (Markdown images), in order. */
 export const bodyImages = (e: Recipe | Post) => [...(e.body ?? '').matchAll(/!\[([^\]]*)\]\(([^)]+)\)/g)].map((m) => ({ alt: m[1].trim(), src: m[2] }));
 export const bodyImageAlts = (e: Recipe | Post) => bodyImages(e).map((i) => i.alt);

@@ -1,5 +1,8 @@
 import { contactContent } from './content';
 
+/** 054-6517951 → 972546517951 (international form for tel: and WhatsApp links). */
+const intlPhone = `972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`;
+
 export const site = {
   name: 'Happy Keto',
   title: 'Happy Keto | תזונה קטוגנית טבעית, פשוטה וטעימה',
@@ -11,8 +14,8 @@ export const site = {
   // Phone, email and Instagram come from src/data/content/contact.json (editable in the admin panel).
   contact: {
     phone: contactContent.phone,
-    phoneHref: `tel:+972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`,
-    whatsappHref: `https://wa.me/972${contactContent.phone.replace(/\D/g, '').replace(/^0/, '')}`,
+    phoneHref: `tel:+${intlPhone}`,
+    whatsappHref: `https://wa.me/${intlPhone}`,
     email: contactContent.email,
     location: contactContent.location,
   },
@@ -21,6 +24,13 @@ export const site = {
   googleSiteVerification: 'FiG60y_2awlNHNWauFG0RQBsbZ19NvhXdALHu-nPQzQ',
   healthDisclaimer: 'אתר זה הוא למידע בלבד ואין לראות בו ייעוץ רפואי.',
 } as const;
+
+/** The <title> of a page: "<title> | Happy Keto", or just the title when the suffix would push it past the
+ * ~60 characters Google shows (it would be cut off with "..." anyway). */
+export const fullTitle = (title: string) => {
+  const withName = `${title} | ${site.name}`;
+  return withName.length > 60 ? title : withName;
+};
 
 /**
  * Web3Forms (https://web3forms.com). The access key is public by design (it is sent

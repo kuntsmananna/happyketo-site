@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+
+/* Review mode (Anna's devices only): BaseLayout's head script adds `reviewer` to <html> once she has opened /review. */
+@custom-variant reviewer (:root.reviewer &);
 
 /*
  * Happy Keto design system — warm, clean, appetizing.
@@ -387,11 +389,16 @@
   }
 }
 
-/* Review marks (see ReviewNote): a replaced photo gets a purple frame and label, also inside post text. */
-@utility review-photo {
-  @apply outline-4 outline-offset-4 outline-review-500;
+/* Review marks (see ReviewNote) – shown only in review mode, so visitors never see them.
+ * `reviewer-only`: elements that exist just for Anna (the purple box, tile and section tags).
+ * A replaced photo gets a purple frame, also the photos inside the post text (the free replacements are unsplash-*). */
+:root:not(.reviewer) .reviewer-only {
+  display: none !important;
 }
-.review-images :is(.prose, [class*="max-w-none"]) img[src*="unsplash-"] {
+@utility review-photo {
+  @apply reviewer:outline-4 reviewer:outline-offset-4 reviewer:outline-review-500;
+}
+:root.reviewer .review-images img[src*="unsplash-"] {
   outline: 4px solid var(--color-review-500);
   outline-offset: 4px;
 }

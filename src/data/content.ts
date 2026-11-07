@@ -116,11 +116,11 @@ function load<T extends z.ZodType>(schema: T, data: unknown, file: string): z.ou
 
 const byLang = <T>(he: T, en: T) => (lang: Lang) => (lang === 'en' ? en : he);
 
-export type HomeCopy = z.output<typeof homeSchema>;
-export const homeContent = byLang(load(homeSchema, homeHe, 'home.he.json'), load(homeSchema, homeEn, 'home.en.json'));
-export const faqContent = byLang(load(faqSchema, faqHe, 'faq.he.json'), load(faqSchema, faqEn, 'faq.en.json'));
+export const homeFor = byLang(load(homeSchema, homeHe, 'home.he.json'), load(homeSchema, homeEn, 'home.en.json'));
+export const faqFor = byLang(load(faqSchema, faqHe, 'faq.he.json'), load(faqSchema, faqEn, 'faq.en.json'));
 export const aboutContent = byLang(load(aboutSchema, aboutHe, 'about.he.json'), load(aboutSchema, aboutEn, 'about.en.json'));
 export const challengeContent = byLang(load(challengeSchema, challengeHe, 'challenge.he.json'), load(challengeSchema, challengeEn, 'challenge.en.json'));
-export const favoritesContent = load(favoritesSchema, favoritesJson, 'favorites.json');
+/** Pantry products; links carry Anna's iHerb referral code (rcode=CGJ130) – keep it when adding products. */
+export const favorites = load(favoritesSchema, favoritesJson, 'favorites.json');
 export const contactContent = load(contactSchema, contactJson, 'contact.json');
 export const accessibilityContent = byLang(load(accessibilitySchema, accessibilityHe, 'accessibility.he.json'), load(accessibilitySchema, accessibilityEn, 'accessibility.en.json'));

@@ -23,5 +23,3 @@ export const recipeCategorySlugs = recipeCategories.map((c) => c.slug) as [
   RecipeCategorySlug,
   ...RecipeCategorySlug[],
 ];
-
-export const getCategory = (slug: string) => recipeCategories.find((c) => c.slug === slug);

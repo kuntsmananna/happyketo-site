@@ -7,10 +7,9 @@
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { recipeCategories } from '@/data/categories';
-import { faqFor } from '@/data/faq';
-import { favorites } from '@/data/favorites';
-import { site } from '@/data/site';
-import { bodyImageAlts, bodyImages, entryUrl, getPosts, getRecipes, reviewSplit, visibleReview, type Post, type Recipe } from './recipes';
+import { faqFor, favorites } from '@/data/content';
+import { fullTitle, site } from '@/data/site';
+import { bodyImageAlts, bodyImages, countByCategory, entryUrl, getPosts, getRecipes, reviewSplit, visibleReview, type Post, type Recipe } from './recipes';
 import speedJson from '@/data/metrics/speed.json';
 import pkg from '../../package.json';
 import type { IconName } from '@/components/Icon.astro';
@@ -84,7 +83,8 @@ export async function getDashboard() {
   const inlineImages = new Set(all.flatMap((e) => bodyImages(e).map((i) => i.src)));
   const coverImages = all.filter((e) => e.data.image).length;
   const videos = all.reduce((n, e) => n + ((e.body ?? '').match(/<(video|iframe)\b/g)?.length ?? 0), 0);
-  const categoryPages = recipeCategories.filter((c) => recipes.some((r) => r.data.category.includes(c.slug))).length;
+  const perCategory = countByCategory(recipes);
+  const categoryPages = recipeCategories.filter((c) => perCategory[c.slug] > 0).length;
   const staticPages = { he: ['/', '/about', '/contact', '/challenge', '/favorites', '/privacy', '/accessibility', '/recipes', '/blog'], en: ['/en', '/en/about', '/en/contact', '/en/challenge', '/en/favorites', '/en/privacy', '/en/accessibility'] };
   const pages = recipes.length + posts.length + categoryPages + staticPages.he.length + staticPages.en.length;
 
@@ -103,7 +103,7 @@ export async function getDashboard() {
 
   // ---------- charts: recipes per category (an entry counts once per category it belongs to), items per year
   const byCategory = recipeCategories
-    .map((c) => ({ label: c.label, value: recipes.filter((r) => r.data.category.includes(c.slug)).length }))
+    .map((c) => ({ label: c.label, value: perCategory[c.slug] }))
     .filter((c) => c.value > 0)
     .sort((a, b) => b.value - a.value);
   const years = [...new Set(all.map((e) => e.data.publishDate.getFullYear()))].sort();
@@ -113,6 +113,7 @@ export async function getDashboard() {
     posts: posts.filter((p) => p.data.publishDate.getFullYear() === y).length,
   }));
   const lastUpdate = new Date(Math.max(...all.map((e) => (e.data.updatedDate ?? e.data.publishDate).getTime())));
+  const daysSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60 * 24);
 
   // ---------- content health
   const noImage = all.filter((e) => !e.data.image);
@@ -150,7 +151,7 @@ export async function getDashboard() {
   ]);
 
   // ---------- SEO
-  const longTitles = all.filter((e) => `${e.data.title} | ${site.name}`.length > 60);
+  const longTitles = all.filter((e) => fullTitle(e.data.title).length > 60);
   const longDesc = all.filter((e) => e.data.description && e.data.description.length > 160);
   const seo: Check[] = withHelp([
     check(!noDescription.length, 'תיאור לגוגל', 'לכל העמודים יש תיאור', `${noDescription.length} פריטים בלי תיאור (או שהתיאור זהה לכותרת) – גוגל ממציא תיאור משלו`, noDescription.map(item)),
@@ -167,29 +168,29 @@ export async function getDashboard() {
   const robots = existsSync(path.join(ROOT, 'public/robots.txt')) ? readFileSync(path.join(ROOT, 'public/robots.txt'), 'utf8') : '';
   const aiBots = ['GPTBot', 'OAI-SearchBot', 'ClaudeBot', 'PerplexityBot', 'Google-Extended'];
   const aiAllowed = aiBots.filter((b) => robots.includes(`User-agent: ${b}`));
-  const completeRecipes = recipes.filter((r) => r.data.image && r.data.ingredients.length && r.data.instructions.length && r.data.description && r.data.description !== r.data.title);
-  const recipeCompleteness = Math.round((completeRecipes.length / Math.max(recipes.length, 1)) * 100);
+  const completeRecipes = recipes.filter((r) => r.data.image && r.data.ingredients.length && r.data.instructions.length && !weakText(r.data.description, r));
+  const recipeCompleteness = pct(completeRecipes.length, recipes.length);
   const geo: Check[] = withHelp([
     check(aiAllowed.length === aiBots.length, 'גישה לבוטים של AI', `ChatGPT, Claude, Perplexity ו-Google AI מורשים במפורש לקרוא את האתר`, `חסרים ב-robots.txt: ${aiBots.filter((b) => !aiAllowed.includes(b)).join(', ')}`),
     { status: 'good', label: 'קובץ llms.txt', detail: 'מפה של האתר לכלי AI – מתעדכנת לבד עם כל מתכון חדש' },
     check(recipeCompleteness >= 90, 'מתכונים מלאים לציטוט', `${recipeCompleteness}% מהמתכונים מלאים (תמונה, תיאור, מצרכים, שלבים)`, `${recipeCompleteness}% מהמתכונים מלאים (תמונה, תיאור, מצרכים ושלבים). מתכון מלא נוח יותר לכלי AI לצטט`, recipes.filter((r) => !completeRecipes.includes(r)).map(item)),
     { status: 'good', label: 'מי כתב את התוכן', detail: `כל מתכון ופוסט מסומן כנכתב ע״י ${site.author}, עם קישור לעמוד האודות ולאינסטגרם` },
     { status: 'good', label: 'שאלות ותשובות', detail: `${kpis.faq} שאלות ותשובות בעמוד הבית, מסומנות לגוגל ולכלי AI` },
-    check(Date.now() - lastUpdate.getTime() < 1000 * 60 * 60 * 24 * 90, 'תוכן עדכני', `התוכן עודכן לאחרונה ב-${lastUpdate.toLocaleDateString('he-IL')}`, `העדכון האחרון היה ב-${lastUpdate.toLocaleDateString('he-IL')} – מנועי חיפוש ו-AI מעדיפים אתרים שמתעדכנים. מתכון חדש פעם בחודש עושה את העבודה`),
+    check(daysSinceUpdate < 90, 'תוכן עדכני', `התוכן עודכן לאחרונה ב-${lastUpdate.toLocaleDateString('he-IL')}`, `העדכון האחרון היה ב-${lastUpdate.toLocaleDateString('he-IL')} – מנועי חיפוש ו-AI מעדיפים אתרים שמתעדכנים. מתכון חדש פעם בחודש עושה את העבודה`),
   ]);
 
   // ---------- speed (weekly Lighthouse runs)
   const runs = (speedJson as { runs: SpeedRun[] }).runs;
   const latest = runs.at(-1);
   const speedPages = latest?.pages ?? [];
-  const avgPerformance = speedPages.length ? Math.round(speedPages.reduce((n, p) => n + p.performance, 0) / speedPages.length) : undefined;
-  const history = (speedPages.length ? speedPages : []).map((p) => ({
+  const history = speedPages.map((p) => ({
     label: p.label,
     path: p.path,
     points: runs.map((r) => ({ date: r.date, value: r.pages.find((x) => x.path === p.path)?.performance })).filter((x): x is { date: string; value: number } => x.value != null),
   }));
   // The four Lighthouse scores, averaged over the measured pages (meters on the speed tab).
   const avg = (k: 'performance' | 'accessibility' | 'bestPractices' | 'seo') => Math.round(speedPages.reduce((n, p) => n + p[k], 0) / Math.max(speedPages.length, 1));
+  const avgPerformance = speedPages.length ? avg('performance') : undefined;
   const scores = speedPages.length
     ? [
         { label: 'ביצועים', icon: 'gauge', value: avg('performance'), help: 'כמה מהר העמוד נטען ומגיב בטלפון. זה הציון שגוגל לוקח בחשבון בדירוג.' },
@@ -214,7 +215,7 @@ export async function getDashboard() {
   if (noDescription.length) tips.push({ text: `לכתוב תיאור קצר (משפט-שניים) ל-${noDescription.length} פריטים – זה מה שמופיע מתחת לכותרת בגוגל`, icon: 'fileText' });
   if (weakAlt.length) tips.push({ text: `לשפר את תיאור ${weakAltCount} תמונות: לתאר מה רואים ("עוגת שוקולד פרוסה על צלחת לבנה")`, icon: 'image' });
   if (noTimes.length > recipes.length / 2) tips.push({ text: 'להוסיף זמן הכנה וכמות למתכונים פופולריים – גוגל מציג אותם בתוצאות מתכונים', icon: 'clock' });
-  if (Date.now() - lastUpdate.getTime() > 1000 * 60 * 60 * 24 * 30) tips.push({ text: 'לפרסם מתכון חדש – אתר שמתעדכן מקבל יותר תנועה מגוגל ומכלי AI', icon: 'sparkles' });
+  if (daysSinceUpdate > 30) tips.push({ text: 'לפרסם מתכון חדש – אתר שמתעדכן מקבל יותר תנועה מגוגל ומכלי AI', icon: 'sparkles' });
   if (avgPerformance != null && avgPerformance < 90) tips.push({ text: 'ציון המהירות ירד מתחת ל-90 – כדאי לבקש מ-Claude לבדוק', icon: 'gauge' });
 
   // ---------- technology

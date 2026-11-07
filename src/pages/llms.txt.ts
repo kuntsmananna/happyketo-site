@@ -5,7 +5,7 @@
 import type { APIRoute } from 'astro';
 import { site } from '@/data/site';
 import { recipeCategories } from '@/data/categories';
-import { getPosts, getRecipes, postUrl, recipeUrl } from '@/lib/recipes';
+import { entryUrl, getPosts, getRecipes } from '@/lib/recipes';
 
 export const GET: APIRoute = async () => {
   const recipes = await getRecipes();
@@ -31,10 +31,10 @@ export const GET: APIRoute = async () => {
     line('בלוג', '/blog', 'מאמרים ומדריכים על תזונה קטוגנית ודלת פחמימות'),
     line('המזווה – מוצרים מומלצים', '/favorites'),
     line('יצירת קשר', '/contact'),
-    ...byCategory.flatMap(({ c, items }) => ['', `## מתכונים: ${c.label}`, ...items.map((r) => line(r.data.title, recipeUrl(r), r.data.description))]),
+    ...byCategory.flatMap(({ c, items }) => ['', `## מתכונים: ${c.label}`, ...items.map((r) => line(r.data.title, entryUrl(r), r.data.description))]),
     '',
     '## בלוג',
-    ...posts.map((p) => line(p.data.title, postUrl(p), p.data.description)),
+    ...posts.map((p) => line(p.data.title, entryUrl(p), p.data.description)),
     '',
     '## English',
     line('Home', '/en', 'Happy Keto – a natural, simple and tasty ketogenic diet'),

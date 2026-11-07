@@ -7,7 +7,7 @@ import ReviewNote from '@/components/ReviewNote.astro';
 import RelatedPosts from '@/components/RelatedPosts.astro';
 import ShareRow from '@/components/ShareRow.astro';
 import Prose from '@/components/Prose.astro';
-import { getPosts, pendingReview, postUrl, type Post } from '@/lib/recipes';
+import { entryUrl, getPosts, pendingReview, type Post } from '@/lib/recipes';
 import { postJsonLd } from '@/lib/schema';
 import { ogCardFor } from '@/lib/og';
 
@@ -25,7 +25,7 @@ const { post, all } = Astro.props;
 const { title, description, image, imageAlt, tags } = post.data;
 const review = pendingReview(post);
 const { Content } = await render(post);
-const url = new URL(postUrl(post), Astro.site).href;
+const url = new URL(entryUrl(post), Astro.site).href;
 const shareImage = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : undefined;
 
 const related = all
@@ -76,5 +76,5 @@ const related = all
     <div class="mt-6"><ShareRow url={url} /></div>
   </article>
 
-  <RelatedPosts label="עוד מהבלוג" items={related.map((p) => ({ title: p.data.title, href: postUrl(p), image: p.data.image }))} />
+  <RelatedPosts label="עוד מהבלוג" items={related.map((p) => ({ title: p.data.title, href: entryUrl(p), image: p.data.image }))} />
 </BaseLayout>

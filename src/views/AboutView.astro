@@ -59,7 +59,8 @@ const storyGroups = copy.storyGroups.map((g) => g.lines);
       </div>
       <h1 data-reveal class="h-display mt-3 lg:mt-6">{copy.name}</h1>
     </div>
-    <div class="relative hidden lg:block">
+    <!-- overflow-hidden: the settle zoom (scale 1.06) would otherwise push the photo past the screen edge on load. -->
+    <div class="relative hidden overflow-hidden lg:block">
       <Image
         src={plate}
         alt={copy.plateAlt}
