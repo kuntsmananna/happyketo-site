@@ -25,6 +25,13 @@ export const site = {
   healthDisclaimer: 'אתר זה הוא למידע בלבד ואין לראות בו ייעוץ רפואי.',
 } as const;
 
+/** The <title> of a page: "<title> | Happy Keto", or just the title when the suffix would push it past the
+ * ~60 characters Google shows (it would be cut off with "..." anyway). */
+export const fullTitle = (title: string) => {
+  const withName = `${title} | ${site.name}`;
+  return withName.length > 60 ? title : withName;
+};
+
 /**
  * Web3Forms (https://web3forms.com). The access key is public by design (it is sent
  * from the browser), so it is safe to commit. PUBLIC_WEB3FORMS_KEY overrides it.

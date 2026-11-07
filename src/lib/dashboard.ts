@@ -8,7 +8,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { recipeCategories } from '@/data/categories';
 import { faqFor, favorites } from '@/data/content';
-import { site } from '@/data/site';
+import { fullTitle, site } from '@/data/site';
 import { bodyImageAlts, bodyImages, countByCategory, entryUrl, getPosts, getRecipes, reviewSplit, visibleReview, type Post, type Recipe } from './recipes';
 import speedJson from '@/data/metrics/speed.json';
 import pkg from '../../package.json';
@@ -151,7 +151,7 @@ export async function getDashboard() {
   ]);
 
   // ---------- SEO
-  const longTitles = all.filter((e) => `${e.data.title} | ${site.name}`.length > 60);
+  const longTitles = all.filter((e) => fullTitle(e.data.title).length > 60);
   const longDesc = all.filter((e) => e.data.description && e.data.description.length > 160);
   const seo: Check[] = withHelp([
     check(!noDescription.length, 'תיאור לגוגל', 'לכל העמודים יש תיאור', `${noDescription.length} פריטים בלי תיאור (או שהתיאור זהה לכותרת) – גוגל ממציא תיאור משלו`, noDescription.map(item)),
