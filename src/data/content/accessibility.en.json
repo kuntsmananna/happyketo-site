@@ -1,0 +1,45 @@
+{
+  "title": "Accessibility Statement",
+  "intro": [
+    "At Happy Keto we want everyone to be able to use this website comfortably, including people with disabilities.",
+    "The site was made accessible in line with the Israeli Equal Rights for Persons with Disabilities (Service Accessibility Adjustments) Regulations, 2013, and Israeli Standard IS 5568, which is based on WCAG 2.0 level AA. In practice the site is tested against the current version, WCAG 2.2 level AA."
+  ],
+  "sections": [
+    {
+      "title": "What we did",
+      "list": [
+        "The whole site can be used with a keyboard alone, with a clear focus indicator and a \"Skip to main content\" link at the top of every page.",
+        "Headings and page structure that screen readers understand, and each page marks its language (Hebrew right-to-left, English left-to-right).",
+        "Images have text alternatives; decorative images are marked so screen readers skip them.",
+        "Text and button colour contrast meets level AA, and text can be enlarged to 200% without losing content.",
+        "The site works on phones and tablets, and buttons and links are large enough to tap.",
+        "Every form field has a label, and clear error messages appear next to the field and are announced to screen readers.",
+        "If your device is set to \"reduce motion\", the site's animations are turned off.",
+        "No pop-ups that block content and no sound that plays automatically."
+      ]
+    },
+    {
+      "title": "How the site was tested",
+      "paragraphs": [
+        "Automated testing (axe) on every type of page, on phone and desktop, plus a manual keyboard check. Last check: November 2026, with no issues found."
+      ]
+    },
+    {
+      "title": "Known limitations",
+      "list": [
+        "Some videos in older posts (YouTube and short clips) have no captions.",
+        "Descriptions of some recipe photos are still being improved.",
+        "Content from other websites that is embedded or linked (YouTube, iHerb, Instagram) is the responsibility of those websites."
+      ]
+    },
+    {
+      "title": "Events and meetings",
+      "paragraphs": [
+        "There is no office open to the public. Keto Cuisine meals and events take place on a rooftop in Jaffa – please contact us before booking about the venue's accessibility and possible adjustments."
+      ]
+    }
+  ],
+  "contactTitle": "Found a problem? Accessibility contact",
+  "contactText": "If anything on the site is not accessible to you, or you have a suggestion, we'd love to hear it and fix it. Accessibility contact: Anna Kuntsman Rosenberg.",
+  "updated": "This statement was last updated in November 2026."
+}

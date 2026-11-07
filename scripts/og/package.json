@@ -1,0 +1,10 @@
+{
+  "name": "happyketo-og",
+  "private": true,
+  "type": "module",
+  "description": "Renders branded share images (installed only by .github/workflows/og-images.yml, not by the site build).",
+  "dependencies": {
+    "playwright": "1.63.0",
+    "yaml": "2.8.1"
+  }
+}

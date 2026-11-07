@@ -16,6 +16,7 @@ const PAIRS: Record<string, string> = {
   '/challenge': '/en/challenge',
   '/favorites': '/en/favorites',
   '/privacy': '/en/privacy',
+  '/accessibility': '/en/accessibility',
   '/thanks': '/en/thanks',
 };
 const REVERSE = Object.fromEntries(Object.entries(PAIRS).map(([he, en]) => [en, he]));

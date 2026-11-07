@@ -455,6 +455,32 @@ content:
               regex: "^https://"
               message: "קישור מלא שמתחיל ב-https://"
 
+      - name: accessibility-he
+        label: הצהרת נגישות (עברית)
+        type: file
+        path: src/data/content/accessibility.he.json
+        format: json
+        fields: &accessibilityFields
+          - { name: title, label: כותרת, type: string, required: true }
+          - { name: intro, label: פתיחה – פסקה בכל שורה, type: text, list: true, required: true }
+          - name: sections
+            label: פרקים
+            type: object
+            list: true
+            fields:
+              - { name: title, label: כותרת הפרק, type: string, required: true }
+              - { name: paragraphs, label: פסקאות, type: text, list: true }
+              - { name: list, label: רשימה (✦), type: text, list: true }
+          - { name: contactTitle, label: כותרת פרטי הקשר, type: string, required: true }
+          - { name: contactText, label: טקסט פרטי הקשר, type: text, required: true }
+          - { name: updated, label: תאריך עדכון, type: string, required: true }
+      - name: accessibility-en
+        label: Accessibility statement (English)
+        type: file
+        path: src/data/content/accessibility.en.json
+        format: json
+        fields: *accessibilityFields
+
       - name: contact
         label: פרטי קשר
         type: file

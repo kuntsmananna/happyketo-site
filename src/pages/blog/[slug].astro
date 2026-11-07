@@ -9,6 +9,7 @@ import ShareRow from '@/components/ShareRow.astro';
 import Prose from '@/components/Prose.astro';
 import { getPosts, pendingReview, postUrl, type Post } from '@/lib/recipes';
 import { postJsonLd } from '@/lib/schema';
+import { ogCardFor } from '@/lib/og';
 
 export async function getStaticPaths() {
   const posts = await getPosts();
@@ -35,7 +36,7 @@ const related = all
   .map((x) => x.p);
 ---
 
-<BaseLayout title={title} description={description || title} ogImage={shareImage?.src} ogType="article">
+<BaseLayout title={title} description={description || title} ogImage={ogCardFor(post) ?? shareImage?.src} ogType="article">
   <JsonLd data={postJsonLd(post, url, shareImage ? new URL(shareImage.src, Astro.site).href : undefined)} />
 
   <!-- One 740px column, as on the original: title, photo, the post, tags, share, related. -->

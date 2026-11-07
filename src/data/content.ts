@@ -15,6 +15,8 @@ import challengeHe from './content/challenge.he.json';
 import challengeEn from './content/challenge.en.json';
 import favoritesJson from './content/favorites.json';
 import contactJson from './content/contact.json';
+import accessibilityHe from './content/accessibility.he.json';
+import accessibilityEn from './content/accessibility.en.json';
 
 const text = z.string().trim().min(1);
 const lines = z.array(text).min(1);
@@ -93,6 +95,15 @@ const contactSchema = z.object({
   instagramUrl: z.url(),
 });
 
+const accessibilitySchema = z.object({
+  title: text,
+  intro: lines,
+  sections: z.array(z.object({ title: text, paragraphs: z.array(text).optional(), list: z.array(text).optional() })).min(1),
+  contactTitle: text,
+  contactText: text,
+  updated: text,
+});
+
 /** Parse one file; on failure name the file and the field so the build log says what to fix. */
 function load<T extends z.ZodType>(schema: T, data: unknown, file: string): z.output<T> {
   const r = schema.safeParse(data);
@@ -112,3 +123,4 @@ export const aboutContent = byLang(load(aboutSchema, aboutHe, 'about.he.json'), 
 export const challengeContent = byLang(load(challengeSchema, challengeHe, 'challenge.he.json'), load(challengeSchema, challengeEn, 'challenge.en.json'));
 export const favoritesContent = load(favoritesSchema, favoritesJson, 'favorites.json');
 export const contactContent = load(contactSchema, contactJson, 'contact.json');
+export const accessibilityContent = byLang(load(accessibilitySchema, accessibilityHe, 'accessibility.he.json'), load(accessibilitySchema, accessibilityEn, 'accessibility.en.json'));

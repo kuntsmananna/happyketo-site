@@ -1,0 +1,47 @@
+---
+/**
+ * Accessibility statement (both languages), styled like the privacy page. Text: src/data/content/accessibility.*.json
+ * (editable in the admin panel); contact details come from contact.json. Keep "how it was tested" current.
+ */
+import { accessibilityContent } from '@/data/content';
+import { site } from '@/data/site';
+import { getLang } from '@/i18n';
+
+const lang = getLang(Astro.url);
+const c = accessibilityContent(lang);
+---
+
+<div class="bg-cream-100 px-[6%] pt-10 pb-16 text-body text-bark-800 lg:px-0 lg:pt-[105px] lg:pb-20">
+  <article data-reveal="fade" class="mx-auto max-w-[760px]">
+    <h1 class="h-section">{c.title}</h1>
+    <div class="mt-4 space-y-3">{c.intro.map((p) => <p>{p}</p>)}</div>
+    {
+      c.sections.map((s) => (
+        <section class="mt-8">
+          <h2 class="h-card font-sans font-bold text-forest-700">{s.title}</h2>
+          {s.paragraphs?.map((p) => <p class="mt-2">{p}</p>)}
+          {s.list && (
+            <ul class="list-star mt-3">
+              {s.list.map((li) => <li>{li}</li>)}
+            </ul>
+          )}
+        </section>
+      ))
+    }
+    <section class="mt-8 rounded-2xl bg-lime-100 px-5 py-5 sm:px-7">
+      <h2 class="h-card font-sans font-bold text-forest-700">{c.contactTitle}</h2>
+      <p class="mt-2">{c.contactText}</p>
+      <ul class="mt-3 space-y-1">
+        <li>
+          {lang === 'he' ? 'טלפון / וואטסאפ: ' : 'Phone / WhatsApp: '}
+          <a href={site.contact.phoneHref} class="underline" dir="ltr">{site.contact.phone}</a>
+        </li>
+        <li>
+          {lang === 'he' ? 'אימייל: ' : 'Email: '}
+          <a href={`mailto:${site.contact.email}`} class="underline">{site.contact.email}</a>
+        </li>
+      </ul>
+    </section>
+    <p class="mt-6 text-base text-bark-600">{c.updated}</p>
+  </article>
+</div>

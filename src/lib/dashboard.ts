@@ -59,7 +59,7 @@ export async function getDashboard() {
   const coverImages = all.filter((e) => e.data.image).length;
   const videos = all.reduce((n, e) => n + ((e.body ?? '').match(/<(video|iframe)\b/g)?.length ?? 0), 0);
   const categoryPages = recipeCategories.filter((c) => recipes.some((r) => r.data.category.includes(c.slug))).length;
-  const staticPages = { he: ['/', '/about', '/contact', '/challenge', '/favorites', '/privacy', '/recipes', '/blog'], en: ['/en', '/en/about', '/en/contact', '/en/challenge', '/en/favorites', '/en/privacy'] };
+  const staticPages = { he: ['/', '/about', '/contact', '/challenge', '/favorites', '/privacy', '/accessibility', '/recipes', '/blog'], en: ['/en', '/en/about', '/en/contact', '/en/challenge', '/en/favorites', '/en/privacy', '/en/accessibility'] };
   const pages = recipes.length + posts.length + categoryPages + staticPages.he.length + staticPages.en.length;
 
   const kpis = {

@@ -12,6 +12,7 @@ import ShareRow from '@/components/ShareRow.astro';
 import SplitContent from '@/components/SplitContent.astro';
 import { categoryLabel, categoryUrl, getRecipes, pendingReview, recipeUrl, type Recipe } from '@/lib/recipes';
 import { recipeJsonLd } from '@/lib/schema';
+import { ogCardFor } from '@/lib/og';
 
 export async function getStaticPaths() {
   const recipes = await getRecipes();
@@ -45,7 +46,7 @@ const related = all
 
 ---
 
-<BaseLayout title={title} description={description || `${title} – מתכון קטוגני ודל פחמימות`} ogImage={shareImage?.src} ogType="article">
+<BaseLayout title={title} description={description || `${title} – מתכון קטוגני ודל פחמימות`} ogImage={ogCardFor(recipe) ?? shareImage?.src} ogType="article">
   <JsonLd data={recipeJsonLd(recipe, url, shareImageUrl)} />
 
   <!-- One 740px column, as on the original: title, intro, photo, the recipe, the rest of the post, tags, share, related. -->
