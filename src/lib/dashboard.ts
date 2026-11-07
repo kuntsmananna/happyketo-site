@@ -9,7 +9,7 @@ import { recipeCategories } from '@/data/categories';
 import { faqFor } from '@/data/faq';
 import { favorites } from '@/data/favorites';
 import { site } from '@/data/site';
-import { bodyImageAlts, entryUrl, getPosts, getRecipes, pendingReview, visibleReview, type Post, type Recipe } from './recipes';
+import { bodyImageAlts, bodyImages, entryUrl, getPosts, getRecipes, reviewSplit, visibleReview, type Post, type Recipe } from './recipes';
 import speedJson from '@/data/metrics/speed.json';
 import pkg from '../../package.json';
 
@@ -49,13 +49,12 @@ const check = (ok: boolean, label: string, good: string, bad: string, items?: It
 });
 
 export async function getDashboard() {
-  const recipes = await getRecipes();
-  const posts = await getPosts();
+  const [recipes, posts] = await Promise.all([getRecipes(), getPosts()]);
   const all = [...recipes, ...posts];
 
   // ---------- content KPIs
   const words = all.reduce((n, e) => n + entryWords(e), 0);
-  const inlineImages = new Set(all.flatMap((e) => [...(e.body ?? '').matchAll(/assets\/posts\/([^)"\s]+)/g)].map((m) => m[1])));
+  const inlineImages = new Set(all.flatMap((e) => bodyImages(e).map((i) => i.src)));
   const coverImages = all.filter((e) => e.data.image).length;
   const videos = all.reduce((n, e) => n + ((e.body ?? '').match(/<(video|iframe)\b/g)?.length ?? 0), 0);
   const categoryPages = recipeCategories.filter((c) => recipes.some((r) => r.data.category.includes(c.slug))).length;
@@ -90,20 +89,23 @@ export async function getDashboard() {
 
   // ---------- content health
   const noImage = all.filter((e) => !e.data.image);
-  // A photo description is weak when it is empty or just repeats the title – main photo and photos inside the text.
-  const weakAltText = (alt: string | undefined, e: Recipe | Post) => !alt || alt.trim() === e.data.title.trim();
-  const weakAlt = all.filter((e) => (e.data.image && weakAltText(e.data.imageAlt, e)) || bodyImageAlts(e).some((a) => weakAltText(a, e)));
-  const weakAltCount = all.reduce((n, e) => n + (e.data.image && weakAltText(e.data.imageAlt, e) ? 1 : 0) + bodyImageAlts(e).filter((a) => weakAltText(a, e)).length, 0);
-  const noDescription = all.filter((e) => !e.data.description || e.data.description.trim() === e.data.title.trim());
+  // A description is weak when it is empty or just repeats the title (Google description and photo alt texts alike).
+  const weakText = (text: string | undefined, e: Recipe | Post) => !text || text.trim() === e.data.title.trim();
+  // Weak photo descriptions per entry, computed once: the main photo's and those of the photos inside the text.
+  const weakAlts = all.map((e) => ({ e, n: [...(e.data.image ? [e.data.imageAlt] : []), ...bodyImageAlts(e)].filter((a) => weakText(a, e)).length }));
+  const weakAlt = weakAlts.filter((x) => x.n).map((x) => x.e);
+  const weakAltCount = weakAlts.reduce((n, x) => n + x.n, 0);
+  const noDescription = all.filter((e) => weakText(e.data.description, e));
   const noRecipeBox = recipes.filter((r) => !r.data.ingredients.length || !r.data.instructions.length);
   const noTimes = recipes.filter((r) => !r.data.prepTime && !r.data.cookTime);
   const drafts = all.filter((e) => e.data.draft);
-  const pageReviews = all.filter((e) => visibleReview(e));
-  const descriptionReviews = all.filter((e) => pendingReview(e) && !visibleReview(e));
+  // Same split as /review: page changes (purple marks) and description drafts; an entry can be in both.
+  const pageReviews = all.filter(visibleReview);
+  const descriptionReviews = all.filter((e) => reviewSplit(e)?.invisible.length);
 
   const health: Check[] = [
     check(!pageReviews.length, 'שינויים של Claude לבדיקה', 'אין שינויים בעמודים שמחכים לבדיקה', `${pageReviews.length} פריטים עם שינויים בעמוד שמחכים לאישור שלך (מסומנים בסגול)`, pageReviews.map(item)),
-    check(!descriptionReviews.length, 'תיאורים של Claude לבדיקה', 'אין תיאורים שמחכים לבדיקה', `${descriptionReviews.length} פריטים שרק התיאור לגוגל או תיאורי התמונות שלהם נכתבו מחדש – לא נראה בעמוד, מופיע בטבלה בעמוד הבדיקה`, descriptionReviews.map(item)),
+    check(!descriptionReviews.length, 'תיאורים של Claude לבדיקה', 'אין תיאורים שמחכים לבדיקה', `${descriptionReviews.length} פריטים עם תיאור חדש לגוגל או תיאורי תמונות חדשים – לא נראה בעמוד, מופיע בטבלה בעמוד הבדיקה`, descriptionReviews.map(item)),
     check(!noImage.length, 'תמונה ראשית', 'לכל המתכונים והפוסטים יש תמונה', `${noImage.length} בלי תמונה – תמונה משפרת הקלקות בגוגל וברשתות`, noImage.map(item)),
     check(!noRecipeBox.length, 'מצרכים ושלבים', 'לכל המתכונים יש מצרכים ושלבים', `${noRecipeBox.length} מתכונים בלי רשימת מצרכים או שלבים (כך גם היה ב-Wix)`, noRecipeBox.map(item)),
     check(noTimes.length <= recipes.length / 2, 'זמני הכנה', `ל-${recipes.length - noTimes.length} מתכונים יש זמן הכנה`, `רק ל-${recipes.length - noTimes.length} מתכונים מתוך ${recipes.length} יש זמן הכנה – גוגל מציג אותו בתוצאות`, noTimes.map(item)),

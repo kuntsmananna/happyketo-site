@@ -3,6 +3,8 @@
 //   npm run build && node scripts/check-dist.mjs
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
+import YAML from 'yaml';
+import { REVIEW_PARTS } from '../src/data/review.ts';
 
 const DIST = path.resolve(import.meta.dirname, '../dist');
 const pages = [];
@@ -64,6 +66,15 @@ for (const dir of readdirSync(CONTENT)) {
       if (!src.startsWith('https://www.youtube-nocookie.com/')) problems.push(`${rel}: iframe from ${src}`);
     }
   }
+}
+// Admin panel: the review "parts" options in .pages.yml must match src/data/review.ts (YAML can't import TS).
+const pagesConfig = YAML.parse(readFileSync(path.resolve(import.meta.dirname, '../.pages.yml'), 'utf8'), { strict: false });
+const expectedParts = Object.entries(REVIEW_PARTS).map(([value, { label }]) => `${value}=${label}`).join(', ');
+for (const name of ['recipes', 'blog']) {
+  const review = pagesConfig.content.find((c) => c.name === name)?.fields.find((f) => f.name === 'review');
+  const values = review?.fields.find((f) => f.name === 'parts')?.options.values ?? [];
+  const actual = values.map((v) => `${v.value}=${v.label}`).join(', ');
+  if (actual !== expectedParts) problems.push(`.pages.yml ${name}.review.parts differs from src/data/review.ts:\n    yml:  ${actual}\n    code: ${expectedParts}`);
 }
 console.log({ pages: pages.length, internalLinks: links, jsonLd: ldTypes });
 if (warnings.length) console.log('warnings:\n  ' + warnings.join('\n  '));

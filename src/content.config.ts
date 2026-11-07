@@ -2,6 +2,7 @@ import { defineCollection, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 import { recipeCategorySlugs } from './data/categories';
+import { reviewPartSlugs } from './data/review';
 
 /** Fields shared by recipes and blog posts (all migrated from Wix). */
 const base = ({ image }: SchemaContext) => ({
@@ -23,7 +24,7 @@ const base = ({ image }: SchemaContext) => ({
   review: z
     .object({
       note: z.string().default(''),
-      parts: z.array(z.enum(['image', 'ingredients', 'instructions', 'text', 'description', 'imageAlt', 'bodyAlts'])).default([]),
+      parts: z.array(z.enum(reviewPartSlugs)).default([]),
       approved: z.boolean().default(false),
     })
     .optional(),

@@ -6,16 +6,17 @@
  * recipe on this device). Printing shows only the title and this box (see the print rules below).
  */
 import Icon from './Icon.astro';
+import type { ReviewPart } from '@/data/review';
 import { formatMinutes, type Recipe } from '@/lib/recipes';
 
 interface Props {
   recipe: Recipe;
   /** Parts Claude changed that Anna hasn't approved yet: shown in purple. */
-  review?: string[];
+  review?: ReviewPart[];
 }
 
 const { recipe, review = [] } = Astro.props;
-const marked = (part: string) => review.includes(part);
+const marked = (part: ReviewPart) => review.includes(part);
 const { ingredients, instructions, prepTime, cookTime, servings } = recipe.data;
 const meta = [
   prepTime && { icon: 'clock', text: `זמן הכנה: ${formatMinutes(prepTime)}` },

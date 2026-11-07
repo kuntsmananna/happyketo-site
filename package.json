@@ -29,7 +29,8 @@
     "cheerio": "^1.2.0",
     "p-limit": "^7.3.3",
     "turndown": "^7.2.5",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "yaml": "^2.9.1"
   },
   "private": true,
   "type": "module",

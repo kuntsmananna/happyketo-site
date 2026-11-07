@@ -4,41 +4,32 @@
  * Wix post to compare, and how to approve. Visible parts are marked purple on the page; for the invisible ones
  * (Google description, photo alt texts) the box shows their current text. Temporary review aid before launch.
  */
-import { bodyImageAlts, isVisiblePart, pendingReview, reviewPartLabel, type Post, type Recipe } from '@/lib/recipes';
+import { invisibleReviewTexts, reviewSplit, type Post, type Recipe } from '@/lib/recipes';
 
 interface Props {
   entry: Recipe | Post;
 }
 const { entry } = Astro.props;
-const review = pendingReview(entry)!;
-const visible = review.parts.filter(isVisiblePart);
-const has = (p: (typeof review.parts)[number]) => review.parts.includes(p);
-const bodyAlts = has('bodyAlts') ? bodyImageAlts(entry) : [];
+const { review, visible } = reviewSplit(entry)!;
+const hint: Record<string, string> = { description: 'מתחת לכותרת בתוצאות החיפוש', imageAlt: 'לקוראי מסך ולחיפוש תמונות' };
 ---
 
 <aside class="mt-5 rounded-2xl border-2 border-review-500 bg-review-50 px-5 py-4 text-base leading-relaxed text-review-700 print:hidden" aria-label="שינוי לבדיקה">
   <p class="font-bold">✎ שינוי של Claude – לבדיקה</p>
   {review.note && <p class="mt-1 whitespace-pre-line">{review.note}</p>}
   {
-    has('description') && (
-      <p class="mt-2">
-        <b>{reviewPartLabel.description}</b> (מתחת לכותרת בתוצאות החיפוש): {entry.data.description}
-      </p>
-    )
-  }
-  {
-    has('imageAlt') && (
-      <p class="mt-1">
-        <b>{reviewPartLabel.imageAlt}</b> (לקוראי מסך ולחיפוש תמונות): {entry.data.imageAlt}
-      </p>
-    )
-  }
-  {
-    bodyAlts.length > 0 && (
-      <div class="mt-1">
-        <b>{reviewPartLabel.bodyAlts}:</b>
-        <ul class="list-disc ps-5">{bodyAlts.map((a) => <li>{a}</li>)}</ul>
-      </div>
+    invisibleReviewTexts(entry).map(({ part, label, texts }) =>
+      texts.length > 1 ? (
+        <div class="mt-1">
+          <b>{label}:</b>
+          <ul class="list-disc ps-5">{texts.map((t) => <li>{t}</li>)}</ul>
+        </div>
+      ) : (
+        <p class="mt-1">
+          <b>{label}</b>
+          {hint[part] && ` (${hint[part]})`}: {texts[0]}
+        </p>
+      ),
     )
   }
   <p class="mt-2 text-sm">
