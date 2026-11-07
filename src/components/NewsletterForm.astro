@@ -9,6 +9,7 @@ import { Image } from 'astro:assets';
 import Web3Form from './Web3Form.astro';
 import { homeFor } from '@/data/content';
 import { dirOf, getLang } from '@/i18n';
+import { t } from '@/i18n/ui';
 import photo from '@/assets/posts/cfc025_e74ea0b6525b430f8abb8afd91247984.jpg';
 import sticker from '@/assets/brand/sticker-happy-keto.png';
 
@@ -34,7 +35,7 @@ const c = homeFor(lang).newsletter;
       <div class="text-forest-600 lg:ms-auto lg:me-[95px] lg:w-[473px]" dir={dirOf(lang)}>
         <h2 id="newsletter-title" class="h-section">{c.title}</h2>
         <p class="text-body mt-3 text-forest-800">{c.text}</p>
-        <Web3Form subject={c.subject} successMessage={c.success} class="mt-10 lg:mt-12">
+        <Web3Form subject={c.subject} kind={t(lang).form.kind.newsletter} successMessage={c.success} class="mt-10 lg:mt-12">
           <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:gap-[13px]">
             <label class="flex-1">
               <span class="sr-only">{c.email}</span>

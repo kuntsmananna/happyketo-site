@@ -12,12 +12,15 @@ import type { HTMLAttributes } from 'astro/types';
 interface Props extends Omit<HTMLAttributes<'form'>, 'action' | 'method'> {
   /** Email subject — lets Anna tell the forms apart in her inbox. */
   subject: string;
+  /** What arrived, in plain words. Sent as the first field, so it is the first line Anna reads under the
+   *  notification's fixed intro ("A new form has been submitted…"; custom intro text is a Web3Forms Pro feature). */
+  kind: string;
   successMessage?: string;
 }
 
 const lang = getLang(Astro.url);
 const s = t(lang).form;
-const { subject, successMessage = s.success, class: className, ...rest } = Astro.props;
+const { subject, kind, successMessage = s.success, class: className, ...rest } = Astro.props;
 ---
 
 <form
@@ -37,6 +40,7 @@ const { subject, successMessage = s.success, class: className, ...rest } = Astro
   <input type="hidden" name="redirect" value={`${site.url}${localized('/thanks', lang)}`} />
   <!-- Honeypot: real people never see or tick this. -->
   <input type="checkbox" name="botcheck" class="hidden" style="display: none" tabindex="-1" autocomplete="off" />
+  <input type="hidden" name={s.kindField} value={kind} />
   <slot />
   <p data-form-status role="status" aria-live="polite" class="mt-3 hidden rounded-xl px-4 py-3 text-sm font-medium"></p>
 </form>

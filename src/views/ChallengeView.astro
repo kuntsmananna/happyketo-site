@@ -10,6 +10,7 @@ import Web3Form from '@/components/Web3Form.astro';
 import { challengeContent } from '@/data/content';
 import { site } from '@/data/site';
 import { getLang } from '@/i18n';
+import { t } from '@/i18n/ui';
 import planFull from '@/assets/home/challenge-eggs-kale.jpg';
 import planFree from '@/assets/home/challenge-lettuce-tacos.jpg';
 
@@ -144,7 +145,7 @@ const f = copy.form;
       </p>
     </div>
 
-    <Web3Form subject={f.subject} successMessage={f.success} class="card space-y-5 p-6 sm:p-8">
+    <Web3Form subject={f.subject} kind={t(lang).form.kind.challenge} successMessage={f.success} class="card space-y-5 p-6 sm:p-8">
       <div class="grid gap-5 sm:grid-cols-2">
         <div>
           <label for="ch-name" class="field-label">{f.name}</label>
