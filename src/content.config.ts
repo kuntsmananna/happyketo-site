@@ -21,7 +21,7 @@ const base = ({ image }: SchemaContext) => ({
   review: z
     .object({
       note: z.string(),
-      parts: z.array(z.enum(['image', 'ingredients', 'instructions', 'text'])).default([]),
+      parts: z.array(z.enum(['image', 'ingredients', 'instructions', 'text', 'seo'])).default([]),
       approved: z.boolean().default(false),
     })
     .optional(),

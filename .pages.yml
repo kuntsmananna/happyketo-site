@@ -167,6 +167,7 @@ content:
                 - { value: ingredients, label: מצרכים }
                 - { value: instructions, label: אופן ההכנה }
                 - { value: text, label: טקסט }
+                - { value: seo, label: תיאורים לגוגל ולתמונה }
           - { name: approved, label: אישרתי, type: boolean }
       - name: body
         label: טקסט המתכון
@@ -241,6 +242,7 @@ content:
                 - { value: ingredients, label: מצרכים }
                 - { value: instructions, label: אופן ההכנה }
                 - { value: text, label: טקסט }
+                - { value: seo, label: תיאורים לגוגל ולתמונה }
           - { name: approved, label: אישרתי, type: boolean }
       - name: body
         label: טקסט הפוסט

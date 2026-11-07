@@ -41,3 +41,5 @@ export function formatMinutes(min: number) {
 
 /** Review marks (Claude's changes waiting for Anna): the pending review of an entry, if any. */
 export const pendingReview = (e: Recipe | Post) => (e.data.review && !e.data.review.approved ? e.data.review : undefined);
+/** A pending review that changed something visible on the page (not only the Google/photo descriptions): tag the tile. */
+export const visibleReview = (e: Recipe | Post) => !!pendingReview(e)?.parts.some((p) => p !== 'seo');

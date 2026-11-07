@@ -1,7 +1,7 @@
 ---
 /** Blog tile: the original's square photo tile with the first tag (or "בלוג דל פחמימות") as the chip. */
 import PhotoTile from './PhotoTile.astro';
-import { pendingReview, postUrl, type Post } from '@/lib/recipes';
+import { postUrl, visibleReview, type Post } from '@/lib/recipes';
 import sticker from '@/assets/brand/sticker-good-to-know.png';
 
 interface Props {
@@ -15,4 +15,4 @@ const { post, eager, priority, headingLevel } = Astro.props;
 const { title, image, tags } = post.data;
 ---
 
-<PhotoTile title={title} href={postUrl(post)} image={image} sticker={sticker} chip={tags[0] ?? 'בלוג דל פחמימות'} eager={eager} priority={priority} headingLevel={headingLevel} review={!!pendingReview(post)} />
+<PhotoTile title={title} href={postUrl(post)} image={image} sticker={sticker} chip={tags[0] ?? 'בלוג דל פחמימות'} eager={eager} priority={priority} headingLevel={headingLevel} review={visibleReview(post)} />

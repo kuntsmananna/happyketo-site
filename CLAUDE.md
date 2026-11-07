@@ -70,6 +70,10 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 - Post bodies are a plain `text` field (the rich-text editor would drop `<video>`, `<iframe>` and `<!-- recipe -->`). Renaming entries is off (file name = URL). New entries need Latin file names (Pages CMS slugify strips Hebrew).
 - Dates are saved as `yyyy-MM-dd'T'HH:mm:ss.SSSXXX`; images as `../../assets/posts/<file>` (media `posts`) or `/src/assets/favorites/<file>` (media `favorites`).
 
+## Share images & accessibility
+- Branded og:image cards: `scripts/og/render-og.mjs` (Chrome via Playwright) → `public/og/<hash>.jpg` + `manifest.json`; `.github/workflows/og-images.yml` re-renders on content pushes. `src/lib/og.ts` uses a card only when its key (title + image + TEMPLATE_VERSION) matches; bump TEMPLATE_VERSION in both files when changing the card design.
+- Accessibility statement: `/accessibility` + `/en/accessibility`, text in `src/data/content/accessibility.*.json`, footer link. Update "how it was tested" after big changes.
+
 ## Dashboard
 - Hidden page `src/pages/dashboard-hk7m2q.astro` (noindex, not in the sitemap, linked only from the admin panel entry `docs/dashboard-link.json` and the guide). Hebrew.
 - Numbers/checks: `src/lib/dashboard.ts` (build time: content KPIs, content health, SEO, GEO, tips, tech). Charts in `src/components/dashboard/` follow the dataviz rules: one hue for magnitude (`chart-1`), the validated categorical order `chart-1..4` (don't add hues), status = icon + word, tooltip via `data-tip`, table view under every chart.
@@ -79,7 +83,7 @@ Happy Keto (happyketoforme.com) — Anna Kuntsman Rosenberg's keto site, rebuilt
 
 ## Content changes need Anna's review
 When you change the wording, structure or images of a recipe/post, add to its frontmatter
-`review: { note: "<Hebrew: what changed and why>", parts: [image|ingredients|instructions|text], approved: false }`.
+`review: { note: "<Hebrew: what changed and why>", parts: [image|ingredients|instructions|text|seo], approved: false }`. Use `seo` for drafted Google descriptions / photo `imageAlt` (put the new texts in the note as lines starting with "תיאור לגוגל:" / "תיאור התמונה:"); seo-only reviews don't tag tiles and are listed as a table on `/review`.
 The page then shows a purple `ReviewNote` (with a link to the Wix original) and purple marks on the listed parts, tiles get a "לבדיקה" tag, and `/review` lists everything pending. Anna ticks "אישרתי" in the admin panel to clear it. Purple tokens: `review-*` in global.css.
 
 ## Reviews
